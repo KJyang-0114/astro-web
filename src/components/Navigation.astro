@@ -12,18 +12,18 @@ const navItems = [
 ];
 ---
 
-<header class="site-header">
+<header class="site-header" transition:name="main-header">
   <div class="container">
     <div class="logo">
-      <a href="/">KJ<span>Y</span>ang</a>
+      <a href="/">KJ<span>y</span>ang</a>
     </div>
 
     <nav class="main-nav">
       <div class="desktop-nav">
         {
           navItems.map(({ name, path }) => (
-            <a 
-              href={path} 
+            <a
+              href={path}
               class={`nav-item ${currentPath === path ? "active" : ""}`}
             >
               {name}
@@ -37,12 +37,12 @@ const navItems = [
       </button>
     </nav>
   </div>
-  
+
   <div class="mobile-nav" id="mobileNav">
     {
       navItems.map(({ name, path }) => (
-        <a 
-          href={path} 
+        <a
+          href={path}
           class={`nav-item ${currentPath === path ? "active" : ""}`}
         >
           {name}
@@ -53,59 +53,99 @@ const navItems = [
 </header>
 
 <script>
-  // 處理行動裝置選單
-  document.addEventListener('DOMContentLoaded', () => {
+  function initMobileMenu() {
     const menuToggle = document.getElementById('mobileMenuToggle');
     const mobileNav = document.getElementById('mobileNav');
-    
-    if (menuToggle && mobileNav) {
-      menuToggle.addEventListener('click', () => {
-        mobileNav.classList.toggle('active');
-        menuToggle.classList.toggle('active');
-        
-        // 改變按鈕圖標
-        const icon = menuToggle.querySelector('i');
-        if (icon) {
-          if (mobileNav.classList.contains('active')) {
-            icon.className = 'fas fa-times';
-          } else {
-            icon.className = 'fas fa-bars';
-          }
-        }
-      });
-      
-      // 點擊導航項目後關閉菜單
-      const mobileNavItems = mobileNav.querySelectorAll('.nav-item');
-      mobileNavItems.forEach(item => {
-        item.addEventListener('click', () => {
-          mobileNav.classList.remove('active');
-          menuToggle.classList.remove('active');
-          if (menuToggle.querySelector('i')) {
-            menuToggle.querySelector('i').className = 'fas fa-bars';
-          }
-        });
-      });
+
+    if (!menuToggle || !mobileNav) {
+      console.error('Mobile menu elements not found');
+      return;
     }
 
-    // 修復頁面跳轉問題
-    document.querySelectorAll('a').forEach(link => {
-      if (link.hostname === window.location.hostname) {
-        link.addEventListener('click', (e) => {
-          // 如果使用者按住 Ctrl 或 Meta 鍵，跳過處理以允許在新標籤中開啟
-          if (e.ctrlKey || e.metaKey) {
-            return;
-          }
+    const toggleMenu = (forceClose = false) => {
+      const navItems = mobileNav.querySelectorAll('.nav-item');
+      const isActive = mobileNav.classList.contains('active');
+      const openMenu = !isActive && !forceClose;
 
-          const href = link.getAttribute('href');
-          if (href && href !== '#' && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
-            e.preventDefault();
-            document.body.classList.add('no-transitions');
-            window.location.href = href;
-          }
+      // Toggle active classes for nav and button
+      if (forceClose) {
+        mobileNav.classList.remove('active');
+        menuToggle.classList.remove('active');
+      } else {
+        mobileNav.classList.toggle('active');
+        menuToggle.classList.toggle('active');
+      }
+
+      // Update icon
+      const icon = menuToggle.querySelector('i');
+      if (icon) {
+        if (openMenu) {
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-times');
+        } else {
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
+      }
+
+      // Handle item animations
+      if (openMenu) {
+        // 1. Reset inline styles to ensure items start from CSS initial state
+        navItems.forEach(item => {
+          const htmlItem = item as HTMLElement;
+          htmlItem.removeAttribute('style'); // Remove any previous inline styles
+        });
+
+        // 2. Trigger staggered animation by setting final styles with delay
+        // Use setTimeout directly after adding 'active' class (which changes display)
+        navItems.forEach((item, index) => {
+          const htmlItem = item as HTMLElement;
+          setTimeout(() => {
+            // Apply final styles directly, relying on CSS transition
+            htmlItem.style.opacity = '1';
+            htmlItem.style.transform = 'translateY(0)';
+          }, 50 + index * 50); // Start first item after 50ms, then stagger
+        });
+      } else {
+        // Reset inline styles when closing
+        navItems.forEach(item => {
+          const htmlItem = item as HTMLElement;
+          htmlItem.removeAttribute('style'); // Reset for next open
         });
       }
+    }; // End of toggleMenu function
+
+    // Event listener for the toggle button
+    menuToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMenu();
     });
-  });
+
+    // Event listener for clicking nav items inside the mobile menu
+    mobileNav.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        if (mobileNav.classList.contains('active')) {
+           toggleMenu(true); // Force close
+        }
+      });
+    });
+
+    // Event listener for clicking outside the menu
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.mobile-nav') && !target.closest('.mobile-menu-toggle') && mobileNav.classList.contains('active')) {
+         toggleMenu(true); // Force close
+      }
+    });
+
+  } // End of initMobileMenu function
+
+  // Ensure DOM is ready before initializing
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileMenu);
+  } else {
+    initMobileMenu();
+  }
 </script>
 
 <style>
@@ -154,7 +194,7 @@ const navItems = [
     font-size: 1.1rem;
     color: var(--text-muted);
     text-decoration: none;
-    transition: all var(--transition-normal);
+    transition: color var(--transition-normal); /* Only transition color by default */
     position: relative;
   }
 
@@ -190,15 +230,15 @@ const navItems = [
   .mobile-menu-toggle:hover {
     color: var(--text-color);
   }
-  
+
   .mobile-menu-toggle.active {
     color: var(--primary-color);
   }
 
   .mobile-nav {
-    display: none;
+    display: none; /* Initially hidden */
     position: fixed;
-    top: 76px;
+    top: 76px; /* Adjust based on header height */
     left: 0;
     right: 0;
     background: var(--card-background);
@@ -207,18 +247,30 @@ const navItems = [
     gap: 1.5rem;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    transform: translateY(-100%);
+    transform: translateY(-10px); /* Slight initial offset for the container */
     opacity: 0;
-    transition: all var(--transition-normal);
+    transition: opacity 0.3s ease, transform 0.3s ease; /* Container transition */
     pointer-events: none;
-    z-index: 99;
+    z-index: 101;
+    overflow: hidden; /* Hide overflowing items during transition */
+  }
+
+  /* Style for individual items inside mobile nav - Base State & Transition Definition */
+  .mobile-nav .nav-item {
+    opacity: 0;
+    transform: translateY(10px);
+    /* Define transition properties here, ensure delay is 0 initially */
+    transition: opacity 0.3s ease 0s, transform 0.3s ease 0s;
   }
 
   .mobile-nav.active {
-    transform: translateY(0);
+    display: flex; /* Make it visible when active */
+    transform: translateY(0); /* Bring container into view */
     opacity: 1;
     pointer-events: auto;
   }
+
+  /* Remove any rules targeting .mobile-nav.active .nav-item or :nth-child delays */
 
   @media (max-width: 768px) {
     .desktop-nav {
@@ -229,8 +281,6 @@ const navItems = [
       display: block;
     }
 
-    .mobile-nav {
-      display: flex;
-    }
+    /* No need to set display: flex here anymore, .active class handles it */
   }
 </style>

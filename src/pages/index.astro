@@ -31,77 +31,197 @@ const projects = [
 ---
 
 <Layout title="首頁 - KJyang">
-  <section class="hero-section">
-    <div class="hero-content">
-      <div class="hero-text-container">
-        <h1 class="hero-title">我是<span class="highlight">KJyang</span></h1>
-        <h2 class="hero-subtitle">一個用AI創造奇蹟的高中生</h2>
-        <p class="hero-description">代碼是我的超能力，Debug 是我的日常生活 🚀</p>
-        
-        <div class="hero-specialties">
-          <p class="specialty">專長：把簡單問題複雜化，然後優雅地解決它們 💻</p>
-          <p class="specialty">熱愛在凌晨三點被靈感砸中，然後忘記睡覺</p>
-          <p class="specialty">咖啡因驅動型開發者 - 一杯咖啡，一行代碼，無限可能！☕</p>
+  <div class="smooth-wrapper">
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-text-container">
+          <h1 class="hero-title">我是<span class="highlight">KJyang</span></h1>
+          <h2 class="hero-subtitle">一個用AI創造奇蹟的高中生</h2>
+          <p class="hero-description">代碼是我的超能力，Debug 是我的日常生活 🚀</p>
+          
+          <div class="hero-specialties">
+            <p class="specialty">專長：把簡單問題複雜化，然後優雅地解決它們 💻</p>
+            <p class="specialty">熱愛在凌晨三點被靈感砸中，然後忘記睡覺</p>
+            <p class="specialty">咖啡因驅動型開發者 - 一杯咖啡，一行代碼，無限可能！☕</p>
+          </div>
+          
+          <div class="hero-links">
+            <a href="/projects" class="primary-button">查看作品</a>
+            <a href="/contact" class="secondary-button">聯絡我</a>
+          </div>
         </div>
         
-        <div class="hero-links">
-          <a href="/projects" class="primary-button">查看作品</a>
-          <a href="/contact" class="secondary-button">聯絡我</a>
-        </div>
-      </div>
-      
-      <div class="hero-image-container">
-        <div class="profile-image">
-          <div class="profile-placeholder">
-            <span class="profile-emoji">👨‍💻</span>
+        <div class="hero-image-container">
+          <div class="profile-image" id="secret-game-trigger">
+            <div class="profile-placeholder">
+              <span class="profile-emoji">👨‍💻</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    
-    <div class="scroll-hint" id="scroll-hint">
-      <p class="scroll-text">往下滾動查看更多</p>
-      <i class="fas fa-chevron-down scroll-icon"></i>
-    </div>
-  </section>
+      
+      <div class="scroll-hint" id="scroll-hint">
+        <p class="scroll-text">往下滾動查看更多</p>
+        <i class="fas fa-chevron-down scroll-icon"></i>
+      </div>
+    </section>
 
-  <section class="projects-section">
-    <h2 class="section-title">精選作品</h2>
-    <div class="projects-grid">
-      {projects.map(project => (
-        <ProjectCard
-          name={project.name}
-          description={project.description}
-          tags={project.tags}
-          github={project.github}
-          demo={project.demo}
-        />
-      ))}
-    </div>
-    
-    <div class="projects-cta">
-      <a href="/projects" class="outline-button">
-        查看所有作品 <i class="fas fa-arrow-right"></i>
-      </a>
-    </div>
-  </section>
+    <section class="projects-section">
+      <div class="section-header">
+        <h2 class="section-title">精選作品</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="projects-grid">
+        {projects.map((project, index) => (
+          <div class="project-item" data-index={index}>
+            <ProjectCard
+              name={project.name}
+              description={project.description}
+              tags={project.tags}
+              github={project.github}
+              demo={project.demo}
+            />
+          </div>
+        ))}
+      </div>
+      
+      <div class="projects-cta">
+        <a href="/projects" class="outline-button">
+          查看所有作品 <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </section>
+  </div>
 </Layout>
 
 <script>
-  const scrollHint = document.getElementById('scroll-hint');
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
   
+  // 註冊GSAP插件
+  gsap.registerPlugin(ScrollTrigger);
+  
+  // 滾動提示動畫 - 完全使用CSS動畫
+  const scrollHint = document.getElementById('scroll-hint');
   if (scrollHint) {
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 100) {
+      if (window.scrollY > 50) {
         scrollHint.classList.add('hidden');
       } else {
         scrollHint.classList.remove('hidden');
       }
     });
   }
+  
+  // 首頁小彩蛋 - 點擊頭像進入秘密游戲
+  const secretGameTrigger = document.getElementById('secret-game-trigger');
+  if (secretGameTrigger) {
+    // 點擊次數計數器
+    let clickCount = 0;
+    const requiredClicks = 5; // 需要連續點擊5次才會觸發
+    let clickTimer;
+    
+    // 添加游標為可點擊樣式
+    secretGameTrigger.style.cursor = 'pointer';
+    
+    // 為了視覺反饋，添加懸停效果
+    secretGameTrigger.addEventListener('mouseenter', () => {
+      gsap.to(secretGameTrigger, {
+        scale: 1.05,
+        duration: 0.3,
+        ease: 'power1.out'
+      });
+    });
+    
+    secretGameTrigger.addEventListener('mouseleave', () => {
+      gsap.to(secretGameTrigger, {
+        scale: 1,
+        duration: 0.3,
+        ease: 'power1.out'
+      });
+    });
+    
+    secretGameTrigger.addEventListener('click', () => {
+      console.log('頭像被點擊了！計數：', clickCount + 1);
+      clickCount++;
+      
+      // 清除先前的計時器
+      if (clickTimer) {
+        clearTimeout(clickTimer);
+      }
+      
+      // 如果在2秒內完成了所需點擊次數，則觸發彩蛋
+      if (clickCount >= requiredClicks) {
+        console.log('觸發彩蛋！即將跳轉到秘密游戲');
+        window.location.href = '/secret-game';
+        clickCount = 0; // 重置計數器
+        return;
+      }
+      
+      // 如果這是第一次點擊，顯示提示
+      if (clickCount === 1) {
+        const tooltip = document.createElement('div');
+        tooltip.className = 'secret-tooltip';
+        tooltip.textContent = '繼續點擊...有驚喜！';
+        document.body.appendChild(tooltip);
+        
+        // 獲取頭像位置
+        const rect = secretGameTrigger.getBoundingClientRect();
+        tooltip.style.left = `${rect.left + window.scrollX + rect.width / 2}px`;
+        tooltip.style.top = `${rect.top + window.scrollY - 40}px`;
+        
+        // 2秒後移除提示
+        setTimeout(() => {
+          tooltip.classList.add('fade-out');
+          setTimeout(() => {
+            document.body.removeChild(tooltip);
+          }, 500);
+        }, 1500);
+      }
+      
+      // 如果2秒內沒有達到所需點擊次數，則重置計數器
+      clickTimer = setTimeout(() => {
+        clickCount = 0;
+      }, 2000);
+      
+      // 添加微小動畫反饋
+      gsap.to(secretGameTrigger, {
+        scale: 1.05,
+        duration: 0.1,
+        yoyo: true,
+        repeat: 1,
+        ease: 'power1.inOut'
+      });
+    });
+  }
+  
+  // 頁面加載後執行動畫
+  document.addEventListener('DOMContentLoaded', () => {
+    // 確保所有元素都是可見的
+    gsap.set(['.hero-title', '.hero-subtitle', '.hero-description', '.specialty', '.hero-links a', '.profile-image', '.project-item', '.section-title', '.section-line'], {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      clearProps: 'all'
+    });
+    
+    // 首頁的簡單淡入效果（無彈跳）
+    const mainContent = document.querySelector('main');
+    if (mainContent) {
+      gsap.fromTo(mainContent, 
+        { opacity: 0 }, 
+        { opacity: 1, duration: 0.5, ease: 'power1.inOut' }
+      );
+    }
+  });
 </script>
 
 <style>
+  .smooth-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
   .hero-section {
     min-height: 100vh;
     display: flex;
@@ -129,6 +249,8 @@ const projects = [
     font-size: 3.5rem;
     font-weight: 800;
     margin-bottom: 1rem;
+    overflow: hidden;
+    opacity: 1;
   }
 
   .highlight {
@@ -143,12 +265,14 @@ const projects = [
     font-weight: 600;
     color: var(--text-color);
     margin-bottom: 1rem;
+    opacity: 1;
   }
 
   .hero-description {
     font-size: 1.5rem;
     color: var(--text-muted);
     margin-bottom: 2rem;
+    opacity: 1;
   }
 
   .hero-specialties {
@@ -162,6 +286,7 @@ const projects = [
     transition: all 0.3s ease;
     position: relative;
     padding-left: 1.5rem;
+    opacity: 1;
   }
   
   .specialty::before {
@@ -215,7 +340,7 @@ const projects = [
   }
 
   .hero-image-container {
-    flex: 1;
+    flex: 0 0 40%;
     max-width: 400px;
     display: flex;
     justify-content: center;
@@ -223,92 +348,143 @@ const projects = [
   }
 
   .profile-image {
-    width: 300px;
-    height: 300px;
+    width: 280px;
+    height: 280px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.2));
     border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
     overflow: hidden;
-    border: 4px solid rgba(255, 255, 255, 0.1);
-    background: radial-gradient(circle at center, var(--primary-color), var(--secondary-color));
+    opacity: 1;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
+  .profile-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+  }
+  
+  .profile-image::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    background: var(--card-background);
+    border-radius: 50%;
+    z-index: 1;
+  }
+  
   .profile-placeholder {
-    width: 100%;
-    height: 100%;
+    position: relative;
+    z-index: 2;
     display: flex;
-    align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.2);
+    align-items: center;
   }
 
   .profile-emoji {
     font-size: 8rem;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
   }
 
   .scroll-hint {
-    position: fixed;
-    bottom: 10vh;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    animation: bounce 2s infinite;
+    position: absolute;
+    bottom: 2rem;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 100%;
+    max-width: max-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
     transition: opacity 0.3s ease;
+    text-align: center;
+    pointer-events: none;
   }
 
   .scroll-hint.hidden {
     opacity: 0;
-    pointer-events: none;
+    visibility: hidden;
   }
 
   .scroll-text {
-    font-size: 1rem;
-    color: var(--text-muted);
+    font-size: 0.875rem;
     margin-bottom: 0.5rem;
+    color: var(--text-muted);
+    text-align: center;
+    white-space: nowrap;
   }
 
   .scroll-icon {
     font-size: 1.2rem;
-    color: var(--text-muted);
+    color: var(--primary-color);
+    animation: floatAnimation 1.5s ease-in-out infinite;
+    display: inline-block;
+    line-height: 1;
   }
-
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateX(-50%) translateY(0);
+  
+  @keyframes floatAnimation {
+    0% {
+      transform: translateY(0);
     }
-    40% {
-      transform: translateX(-50%) translateY(-10px);
+    50% {
+      transform: translateY(8px);
     }
-    60% {
-      transform: translateX(-50%) translateY(-5px);
+    100% {
+      transform: translateY(0);
     }
   }
 
   .projects-section {
-    padding: 4rem 2rem;
+    padding: 5rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
   }
-
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
   .section-title {
     font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 3rem;
-    text-align: center;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    opacity: 1;
+  }
+  
+  .section-line {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 2px;
+    opacity: 1;
   }
 
   .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .project-item {
+    opacity: 1; /* 確保初始可見 */
   }
 
   .projects-cta {
-    margin-top: 3rem;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
   }
 
   .outline-button {
@@ -324,47 +500,77 @@ const projects = [
     background: rgba(59, 130, 246, 0.1);
     transform: translateY(-3px);
   }
-
-  @media (max-width: 1024px) {
+  
+  @media (max-width: 900px) {
     .hero-content {
-      flex-direction: column-reverse;
+      flex-direction: column;
       text-align: center;
       gap: 2rem;
+      margin-bottom: 5rem; /* 增加底部間距以避免與 scroll-hint 重疊 */
     }
-
+    
+    .hero-text-container {
+      order: 2;
+    }
+    
+    .hero-image-container {
+      order: 1;
+      margin-top: 2rem;
+    }
+    
+    .specialty {
+      text-align: left;
+    }
+    
     .hero-links {
       justify-content: center;
     }
-
-    .projects-grid {
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     .hero-title {
-      font-size: 2.5rem;
+      font-size: 2.8rem;
     }
-
+    
     .hero-subtitle {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
     }
-
+    
     .hero-description {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
     }
-
-    .profile-image {
-      width: 200px;
-      height: 200px;
-    }
-
-    .profile-emoji {
-      font-size: 6rem;
-    }
-
+    
     .projects-grid {
       grid-template-columns: 1fr;
     }
+  }
+  
+  /* 彩蛋提示樣式 */
+  .secret-tooltip {
+    position: fixed;
+    background: var(--card-background);
+    color: var(--primary-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    pointer-events: none;
+    animation: tooltipAppear 0.3s forwards;
+  }
+  
+  .secret-tooltip.fade-out {
+    animation: tooltipFadeOut 0.5s forwards;
+  }
+  
+  @keyframes tooltipAppear {
+    0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+  
+  @keyframes tooltipFadeOut {
+    0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
   }
 </style>

@@ -34,6 +34,38 @@ body {
   margin: 0;
   padding: 0;
   position: relative; /* 這對修復布局跳動很重要 */
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Lenis平滑滾動樣式 */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* 確保內容始終可見 */
+h1, h2, h3, h4, h5, h6, p, a, div, span, li, img, button, input, textarea, .hero-title, 
+.hero-subtitle, .hero-description, .section-title, .specialty, .profile-image, 
+.project-item, .section-line {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
 }
 
 /* 主容器樣式 */
@@ -41,6 +73,9 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: 100%;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 main {
@@ -145,6 +180,24 @@ img {
   animation: fadeIn 0.5s ease forwards;
 }
 
+/* GSAP 動畫相關樣式 */
+.animate-on-scroll {
+  opacity: 0;
+}
+
+.gsap-marker-scroller-start,
+.gsap-marker-scroller-end,
+.gsap-marker-start,
+.gsap-marker-end {
+  display: none !important;
+}
+
+/* 分割字符動畫樣式 */
+.split-char {
+  display: inline-block;
+  transform-origin: center bottom;
+}
+
 /* 滾動條樣式 */
 ::-webkit-scrollbar {
   width: 10px;
@@ -168,6 +221,13 @@ img {
 button, input, textarea, select {
   font-family: inherit;
   font-size: inherit;
+}
+
+/* 確保GSAP/Lenis動畫不會隱藏內容 */
+.no-animation * {
+  transition: none !important;
+  animation: none !important;
+  transform: none !important;
 }
 
 /* 響應式設計 */

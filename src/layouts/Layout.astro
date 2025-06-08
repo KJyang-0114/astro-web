@@ -1,4 +1,5 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
 import '../styles/global.css';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
@@ -25,7 +26,7 @@ const version = Date.now();
     <link rel="icon" type="image/svg+xml" href={`/favicon.svg?v=${version}`} />
     
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     
     <!-- SEO 標籤 -->
     <meta name="author" content="KJYang" />
@@ -40,6 +41,22 @@ const version = Date.now();
     <meta http-equiv="Expires" content="0" />
     
     <title>{title}</title>
+    <ViewTransitions />
+    
+    <!-- 初始可見樣式 - 防止FOUC (Flash of Unstyled Content) -->
+    <style>
+      body {
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+      .site-container {
+        opacity: 1 !important;
+      }
+      h1, h2, h3, p, .hero-title, .hero-subtitle, .hero-description, .section-title {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    </style>
   </head>
   <body>
     <div class="site-container">
@@ -53,53 +70,109 @@ const version = Date.now();
 </html>
 
 <script>
-  // 修復可能的閃爍問題
-  document.addEventListener('DOMContentLoaded', () => {
-    document.documentElement.classList.add('loaded');
+  // 導入動畫配置文件
+  import { initLenis, initScrollAnimations } from '../scripts/animation.js'; // 移除了不再使用的 initPageTransitions, handlePageTransition
+
+  // --- View Transitions 方向性動畫處理 ---
+  document.addEventListener('astro:before-swap', (event) => {
+    const rawPath = event.to.pathname;
+    const toPath = rawPath.replace(/\/$/, "") || "/"; // 標準化路徑
+    const htmlElement = document.documentElement;
+
+    console.log(`[astro:before-swap] Navigating to raw path: "${rawPath}", standardized path: "${toPath}"`); // 加入 Log
+
+    // 清除可能殘留的舊 class
+    htmlElement.classList.remove('transition-to-about', 'transition-to-projects', 'transition-to-contact');
+
+    // 根據目標路徑添加新的 class
+    let addedClass: string | null = null; // 修正：明確指定類型
+    if (toPath === '/about') {
+      htmlElement.classList.add('transition-to-about');
+      addedClass = 'transition-to-about';
+    } else if (toPath === '/projects') {
+      htmlElement.classList.add('transition-to-projects');
+      addedClass = 'transition-to-projects';
+    } else if (toPath === '/contact') {
+      htmlElement.classList.add('transition-to-contact');
+      addedClass = 'transition-to-contact';
+    }
+    // 如果是其他頁面（例如首頁），則不添加特定 class，使用 CSS 中定義的預設動畫
+    console.log(`[astro:before-swap] Added class: ${addedClass || 'none (using default)'}`); // 加入 Log
   });
 
-  // 檢測頁面載入完成後應用動畫效果
-  document.addEventListener('DOMContentLoaded', () => {
-    // 使用 Intersection Observer 實現滾動顯示動畫
-    const animateElements = document.querySelectorAll('.fade-in, h1, h2, .section-title, .animate-on-scroll');
-    
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, {
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
-      });
+  // 在轉換完成後清除 class，避免影響後續樣式
+  document.addEventListener('astro:after-swap', () => {
+    document.documentElement.classList.remove('transition-to-about', 'transition-to-projects', 'transition-to-contact');
+  });
+  // --- View Transitions 方向性動畫處理結束 ---
 
-      animateElements.forEach(el => {
-        el.classList.add('animate-element');
-        observer.observe(el);
+  document.addEventListener('DOMContentLoaded', () => {
+    // 頁面載入完成後設置加載類
+    document.documentElement.classList.add('loaded');
+    
+    // 初始化平滑滾動
+    // const lenis = initLenis(); // 已移除絲滑滾動
+    
+    // 初始化頁面過渡效果
+    // initPageTransitions(); // 由 Astro View Transitions 取代
+    
+    // 初始化滾動動畫
+    initScrollAnimations();
+    
+    // 處理頁面切換
+    // handlePageTransition(); // 由 Astro View Transitions 取代
+    
+    // 檢測頁面視窗大小變化，觸發ScrollTrigger更新
+    window.addEventListener('resize', () => {
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+      }, 100);
+    });
+  });
+  
+  // 監聽自定義事件，處理內容更新後的初始化
+  window.addEventListener('content-updated', () => {
+    // 重新初始化滾動動畫
+    initScrollAnimations();
+    
+    // 重新綁定元素事件
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = this.getAttribute('href');
+        if (target && target !== '#') {
+          const element = document.querySelector(target);
+          if (element) {
+            element.scrollIntoView({
+              behavior: 'smooth'
+            });
+          }
+        }
       });
-    } else {
-      // 瀏覽器不支援 Intersection Observer 時的備用方案
-      animateElements.forEach(el => {
-        el.classList.add('visible');
-      });
-    }
+    });
+    
+    // 重新初始化平滑滾動
+    // initLenis(); // 已移除絲滑滾動
+    
+    // 更新頁面載入狀態
+    document.documentElement.classList.add('loaded');
+  });
+  
+  // 監聽頁面內容加載事件
+  window.addEventListener('page-content-loaded', () => {
+    // 重新應用任何需要的樣式或行為
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', currentTheme);
   });
 </script>
 
 <style is:global>
-  /* 避免在全域樣式檔中重複定義，這裡定義與動畫相關的樣式 */
-  .animate-element {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-
-  .animate-element.visible {
-    opacity: 1;
-    transform: translateY(0);
+  /* 動畫相關的樣式 */
+  .gsap-marker-scroller-start,
+  .gsap-marker-scroller-end,
+  .gsap-marker-start,
+  .gsap-marker-end {
+    display: none !important;
   }
 
   /* 確保容器結構正確 */
@@ -108,6 +181,63 @@ const version = Date.now();
     flex-direction: column;
     min-height: 100vh;
     width: 100%;
+    opacity: 1;
+  }
+  
+  /* 自訂 View Transitions 動畫 */
+  
+  /* 舊頁面統一向下淡出 */
+  @keyframes fade-out-down {
+    to {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+  
+  /* 新頁面進入動畫 */
+  @keyframes fade-in-left {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+  }
+  
+  @keyframes fade-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+  }
+  
+  @keyframes fade-in-bottom {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+  }
+  
+  /* --- 應用動畫 --- */
+  
+  /* 舊頁面固定向下淡出 */
+  ::view-transition-old(root) {
+    animation: fade-out-down 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    /* 稍微加長一點時間並使用不同緩和曲線 */
+  }
+  
+  /* 新頁面根據 html class 決定動畫 */
+  /* 預設 (例如首頁或其他未指定頁面) */
+  ::view-transition-new(root) {
+    animation: fade-in-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  /* 修正：為每個方向使用完整的 animation 屬性 */
+  html.transition-to-about ::view-transition-new(root) {
+    animation: fade-in-left 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  html.transition-to-projects ::view-transition-new(root) {
+    animation: fade-in-right 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  html.transition-to-contact ::view-transition-new(root) {
+    animation: fade-in-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; /* 雖然預設也是 bottom，但明確指定更佳 */
   }
 
   main {
@@ -118,10 +248,15 @@ const version = Date.now();
   /* 防止頁面跳動 */
   html.loaded {
     height: 100%;
-    overflow-y: scroll;
+    overflow: auto;
   }
   
   .no-transitions * {
     transition: none !important;
+  }
+  
+  /* 確保文字在初始載入時可見 */
+  h1, h2, h3, p {
+    opacity: 1 !important;
   }
 </style>
