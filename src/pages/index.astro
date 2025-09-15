@@ -20,12 +20,18 @@ const projects = [
     demo: null
   },
   {
-    id: 3,
-    name: 'Element Remover Pro',
-    description: '一個 JavaScript 瀏覽器擴充功能，用於移除網頁上不需要的元素。支援點擊選擇要移除的元素，並可以保存設定',
-    tags: ['JavaScript', 'Browser Extension', 'DOM Manipulation', 'Open Source'],
-    github: 'https://github.com/KJyang-0114/element-remover-pro',
-    demo: null
+    id: 14,
+    name: 'OnlineClipboard',
+    description: 'Vite+Tailwind+TypeScript 打造的線上剪貼簿/協作平台。',
+    tags: [
+      'Collaboration Tool',
+      'TypeScript',
+      'PWA',
+      'Realtime Sync',
+      'Open Source'
+    ],
+    github: 'https://github.com/kjyang-0114/online-clipboard',
+    demo: 'https://kjyang-0114.github.io/online-clipboard/'
   }
 ];
 ---
@@ -33,11 +39,24 @@ const projects = [
 <Layout title="首頁 - KJyang">
   <div class="smooth-wrapper">
     <section class="hero-section">
+      <!-- 簡化的背景層 -->
+      <div class="hero-bg">
+        <div class="bg-gradient"></div>
+      </div>
+      
+      <!-- 主要內容 -->
       <div class="hero-content">
         <div class="hero-text-container">
-          <h1 class="hero-title">我是<span class="highlight">KJyang</span></h1>
-          <h2 class="hero-subtitle">一個用AI創造奇蹟的高中生</h2>
-          <p class="hero-description">代碼是我的超能力，Debug 是我的日常生活 🚀</p>
+          <h1 class="hero-title">
+            <span class="static-text">我是</span>
+            <span class="highlight dynamic-text" id="dynamic-name">KJyang</span>
+          </h1>
+          <h2 class="hero-subtitle">
+            <span class="subtitle-text" id="subtitle-text">一個用AI創造奇蹟的高中生</span>
+          </h2>
+          <p class="hero-description">
+            <span class="description-text" id="description-text">代碼是我的超能力，Debug 是我的日常生活 🚀</span>
+          </p>
           
           <div class="hero-specialties">
             <p class="specialty">專長：把簡單問題複雜化，然後優雅地解決它們 💻</p>
@@ -51,18 +70,13 @@ const projects = [
           </div>
         </div>
         
-        <div class="hero-image-container">
+        <div class="hero-visual-container">
           <div class="profile-image" id="secret-game-trigger">
             <div class="profile-placeholder">
               <span class="profile-emoji">👨‍💻</span>
             </div>
           </div>
         </div>
-      </div>
-      
-      <div class="scroll-hint" id="scroll-hint">
-        <p class="scroll-text">往下滾動查看更多</p>
-        <i class="fas fa-chevron-down scroll-icon"></i>
       </div>
     </section>
 
@@ -100,18 +114,6 @@ const projects = [
   
   // 註冊GSAP插件
   gsap.registerPlugin(ScrollTrigger);
-  
-  // 滾動提示動畫 - 完全使用CSS動畫
-  const scrollHint = document.getElementById('scroll-hint');
-  if (scrollHint) {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        scrollHint.classList.add('hidden');
-      } else {
-        scrollHint.classList.remove('hidden');
-      }
-    });
-  }
   
   // 首頁小彩蛋 - 點擊頭像進入秘密游戲
   const secretGameTrigger = document.getElementById('secret-game-trigger');
@@ -197,6 +199,32 @@ const projects = [
   
   // 頁面加載後執行動畫
   document.addEventListener('DOMContentLoaded', () => {
+    // 打字機效果
+    const dynamicName = document.getElementById('dynamic-name');
+    const subtitleText = document.getElementById('subtitle-text');
+    const descriptionText = document.getElementById('description-text');
+    
+    if (dynamicName) {
+      const nameText = 'KJyang';
+      let nameIndex = 0;
+      
+      function typeName() {
+        if (nameIndex < nameText.length) {
+          dynamicName.textContent = nameText.slice(0, nameIndex + 1);
+          nameIndex++;
+          setTimeout(typeName, 150);
+        } else {
+          // 打字完成後，移除游標
+          setTimeout(() => {
+            dynamicName.classList.add('typing-complete');
+          }, 500);
+        }
+      }
+      
+      // 延遲開始打字
+      setTimeout(typeName, 500);
+    }
+    
     // 確保所有元素都是可見的
     gsap.set(['.hero-title', '.hero-subtitle', '.hero-description', '.specialty', '.hero-links a', '.profile-image', '.project-item', '.section-title', '.section-line'], {
       opacity: 1,
@@ -205,7 +233,7 @@ const projects = [
       clearProps: 'all'
     });
     
-    // 首頁的簡單淡入效果（無彈跳）
+    // 首頁的簡單淡入效果
     const mainContent = document.querySelector('main');
     if (mainContent) {
       gsap.fromTo(mainContent, 
@@ -213,6 +241,45 @@ const projects = [
         { opacity: 1, duration: 0.5, ease: 'power1.inOut' }
       );
     }
+    
+    // 添加滾动觸發動畫
+    const scrollElements = document.querySelectorAll('.project-item, .specialty');
+    
+    const elementInView = (el, dividend = 1) => {
+      const elementTop = el.getBoundingClientRect().top;
+      return (
+        elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend
+      );
+    };
+
+    const elementOutofView = (el) => {
+      const elementTop = el.getBoundingClientRect().top;
+      return (
+        elementTop > (window.innerHeight || document.documentElement.clientHeight)
+      );
+    };
+
+    const displayScrollElement = (element) => {
+      element.classList.add('scrolled');
+    };
+
+    const hideScrollElement = (element) => {
+      element.classList.remove('scrolled');
+    };
+
+    const handleScrollAnimation = () => {
+      scrollElements.forEach((el) => {
+        if (elementInView(el, 1.25)) {
+          displayScrollElement(el);
+        } else if (elementOutofView(el)) {
+          hideScrollElement(el);
+        }
+      });
+    };
+
+    window.addEventListener('scroll', () => {
+      handleScrollAnimation();
+    });
   });
 </script>
 
@@ -232,6 +299,26 @@ const projects = [
     position: relative;
   }
 
+  .hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+  }
+
+  .bg-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 30% 30%, rgba(102, 126, 234, 0.08) 0%, transparent 60%),
+      radial-gradient(circle at 70% 70%, rgba(240, 147, 251, 0.08) 0%, transparent 60%);
+  }
+
   .hero-content {
     width: 100%;
     max-width: 1200px;
@@ -239,56 +326,75 @@ const projects = [
     align-items: center;
     justify-content: space-between;
     gap: 4rem;
+    z-index: 1;
   }
 
   .hero-text-container {
     flex: 1;
+    max-width: 600px;
   }
 
   .hero-title {
     font-size: 3.5rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
-    overflow: hidden;
-    opacity: 1;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    line-height: 1.1;
   }
 
-  .highlight {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  .static-text {
+    color: var(--text-color);
+  }
+
+  .dynamic-text {
+    background: var(--primary-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    position: relative;
+  }
+
+  .dynamic-text::after {
+    content: '';
+    position: absolute;
+    right: -2px;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: var(--primary-color);
+    animation: blink 1s infinite;
   }
 
   .hero-subtitle {
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--text-color);
-    margin-bottom: 1rem;
-    opacity: 1;
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
   }
 
   .hero-description {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: var(--text-muted);
-    margin-bottom: 2rem;
-    opacity: 1;
+    margin-bottom: 3rem;
+    line-height: 1.6;
   }
 
   .hero-specialties {
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
   }
 
   .specialty {
-    font-size: 1.1rem;
-    color: var(--text-muted);
-    margin-bottom: 0.75rem;
-    transition: all 0.3s ease;
-    position: relative;
+    margin-bottom: 1rem;
     padding-left: 1.5rem;
-    opacity: 1;
+    position: relative;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
   }
-  
+
+  .specialty:nth-child(1) { animation-delay: 0.2s; }
+  .specialty:nth-child(2) { animation-delay: 0.4s; }
+  .specialty:nth-child(3) { animation-delay: 0.6s; }
+
   .specialty::before {
     content: '▹';
     position: absolute;
@@ -296,60 +402,25 @@ const projects = [
     color: var(--primary-color);
     font-size: 1.2rem;
   }
-  
-  .specialty:hover {
-    transform: translateX(5px);
-    color: var(--text-color);
-  }
 
   .hero-links {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
   }
 
-  .primary-button, .secondary-button, .outline-button {
-    display: inline-block;
-    padding: 0.8rem 2rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: var(--border-radius);
-    transition: all var(--transition-normal);
-    cursor: pointer;
-  }
-
-  .primary-button {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
-    border: none;
-  }
-
-  .primary-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  }
-
-  .secondary-button {
-    background: transparent;
-    color: var(--text-color);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-
-  .secondary-button:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-3px);
-  }
-
-  .hero-image-container {
-    flex: 0 0 40%;
-    max-width: 400px;
+  .hero-visual-container {
+    flex: 0 0 35%;
+    max-width: 350px;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
   }
 
   .profile-image {
-    width: 280px;
-    height: 280px;
+    width: 250px;
+    height: 250px;
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.2));
     border-radius: 50%;
     display: flex;
@@ -357,26 +428,14 @@ const projects = [
     align-items: center;
     position: relative;
     overflow: hidden;
-    opacity: 1;
     cursor: pointer;
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
   }
 
   .profile-image:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
   }
-  
-  .profile-image::before {
-    content: '';
-    position: absolute;
-    inset: 5px;
-    background: var(--card-background);
-    border-radius: 50%;
-    z-index: 1;
-  }
-  
+
   .profile-placeholder {
     position: relative;
     z-index: 2;
@@ -386,191 +445,194 @@ const projects = [
   }
 
   .profile-emoji {
-    font-size: 8rem;
+    font-size: 6rem;
   }
 
-  .scroll-hint {
-    position: absolute;
-    bottom: 2rem;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    width: 100%;
-    max-width: max-content;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
-    text-align: center;
-    pointer-events: none;
-  }
-
-  .scroll-hint.hidden {
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .scroll-text {
-    font-size: 0.875rem;
-    margin-bottom: 0.5rem;
-    color: var(--text-muted);
-    text-align: center;
-    white-space: nowrap;
-  }
-
-  .scroll-icon {
-    font-size: 1.2rem;
-    color: var(--primary-color);
-    animation: floatAnimation 1.5s ease-in-out infinite;
-    display: inline-block;
-    line-height: 1;
-  }
-  
-  @keyframes floatAnimation {
-    0% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(8px);
-    }
-    100% {
-      transform: translateY(0);
-    }
-  }
-
+  /* 項目區域樣式 */
   .projects-section {
     padding: 5rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
   }
-  
+
   .section-header {
     text-align: center;
-    margin-bottom: 3rem;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin-bottom: 4rem;
   }
-  
+
   .section-title {
     font-size: 2.5rem;
-    font-weight: 800;
+    font-weight: 700;
     margin-bottom: 1rem;
-    opacity: 1;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-  
+
   .section-line {
     width: 80px;
     height: 4px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    background: var(--primary-gradient);
+    margin: 0 auto;
     border-radius: 2px;
-    opacity: 1;
   }
 
   .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
-    margin-bottom: 3rem;
+    margin-top: 3rem;
   }
 
   .project-item {
-    opacity: 1; /* 確保初始可見 */
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+  }
+
+  .project-item.scrolled {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .projects-cta {
-    display: flex;
-    justify-content: center;
-    margin-top: 2rem;
+    text-align: center;
+    margin-top: 4rem;
   }
 
-  .outline-button {
-    background: transparent;
-    color: var(--primary-color);
-    border: 1px solid var(--primary-color);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
+  /* 動畫 */
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
   }
 
-  .outline-button:hover {
-    background: rgba(59, 130, 246, 0.1);
-    transform: translateY(-3px);
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  
-  @media (max-width: 900px) {
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+    60% {
+      transform: translateY(-5px);
+    }
+  }
+
+  /* 響應式設計 */
+  @media (max-width: 768px) {
+    .smooth-wrapper {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    .hero-section {
+      padding: 1rem;
+      width: 100%;
+      max-width: 100vw;
+      box-sizing: border-box;
+    }
+
     .hero-content {
       flex-direction: column;
       text-align: center;
-      gap: 2rem;
-      margin-bottom: 5rem; /* 增加底部間距以避免與 scroll-hint 重疊 */
+      gap: 3rem;
+      width: 100%;
+      max-width: 100vw;
+      padding: 0 1rem;
+      box-sizing: border-box;
     }
-    
+
     .hero-text-container {
-      order: 2;
+      width: 100%;
+      max-width: 100%;
     }
-    
-    .hero-image-container {
-      order: 1;
-      margin-top: 2rem;
+
+    .hero-title {
+      font-size: 2.5rem;
+      width: 100%;
+      word-wrap: break-word;
     }
-    
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      width: 100%;
+      word-wrap: break-word;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      width: 100%;
+      word-wrap: break-word;
+    }
+
+    .hero-specialties {
+      width: 100%;
+    }
+
     .specialty {
-      text-align: left;
+      width: 100%;
+      text-align: center;
+      word-wrap: break-word;
     }
-    
+
     .hero-links {
       justify-content: center;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
     }
-  }
 
-  @media (max-width: 600px) {
-    .hero-title {
-      font-size: 2.8rem;
+    .hero-visual-container {
+      width: 100%;
+      max-width: 100%;
     }
-    
-    .hero-subtitle {
-      font-size: 1.6rem;
+
+    .profile-image {
+      width: 200px;
+      height: 200px;
+      max-width: 90vw;
     }
-    
-    .hero-description {
-      font-size: 1.2rem;
+
+    .profile-emoji {
+      font-size: 4rem;
     }
-    
+
+    .projects-section {
+      padding: 3rem 1rem;
+      width: 100%;
+      max-width: 100vw;
+      box-sizing: border-box;
+    }
+
     .projects-grid {
       grid-template-columns: 1fr;
+      gap: 2rem;
+      width: 100%;
+      padding: 0;
     }
-  }
-  
-  /* 彩蛋提示樣式 */
-  .secret-tooltip {
-    position: fixed;
-    background: var(--card-background);
-    color: var(--primary-color);
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    z-index: 100;
-    transform: translateX(-50%);
-    font-size: 0.9rem;
-    pointer-events: none;
-    animation: tooltipAppear 0.3s forwards;
-  }
-  
-  .secret-tooltip.fade-out {
-    animation: tooltipFadeOut 0.5s forwards;
-  }
-  
-  @keyframes tooltipAppear {
-    0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
-    100% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  }
-  
-  @keyframes tooltipFadeOut {
-    0% { opacity: 1; transform: translateX(-50%) translateY(0); }
-    100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+
+    .project-item {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      width: 100%;
+      word-wrap: break-word;
+    }
   }
 </style>

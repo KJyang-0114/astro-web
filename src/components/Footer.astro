@@ -120,24 +120,33 @@ const randomQuote = programmerQuotes[Math.floor(Math.random() * programmerQuotes
   .footer-section ul a {
     color: var(--text-muted);
     text-decoration: none;
-    transition: color var(--transition-normal);
+    transition: all 0.3s ease;
     position: relative;
-    padding-left: 0;
-    transition: padding-left 0.2s ease, color 0.2s ease;
+    display: inline-flex; /* 使用 Flexbox 佈局 */
+    align-items: center; /* 垂直居中 */
+    gap: 10px; /* 控制箭頭和文字的間距 */
+  }
+  
+  /* 正常狀態的箭頭 - 隱藏 */
+  .footer-section ul a::before {
+    content: '→';
+    color: var(--primary-color);
+    opacity: 0; /* 正常狀態隱藏 */
+    transform: translateX(-3px); /* 稍微往左偏移 */
+    font-size: 0.9rem;
+    transition: all 0.3s ease; /* 確保箭頭也有平滑動畫 */
+    /* 移除絕對定位和 top/left */
   }
   
   .footer-section ul a:hover {
     color: var(--primary-color);
-    padding-left: 8px;
+    /* 移除 transform，因為 Flex gap 會處理間距 */
   }
   
+  /* hover狀態的箭頭 - 顯示並移動到正確位置 */
   .footer-section ul a:hover::before {
-    content: '>';
-    position: absolute;
-    left: -8px;
-    color: var(--primary-color);
-    opacity: 0.7;
-    font-size: 0.9rem;
+    opacity: 0.8; /* 顯示箭頭 */
+    transform: translateX(0); /* 移動到正確位置 */
   }
   
   .social-icons {
