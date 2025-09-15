@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>題庫總覽</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: "Noto Sans TC", Arial, sans-serif; background: #f7f7fa; margin: 0; }
+    .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 12px #0001; padding: 32px 24px; }
+    h1 { text-align: center; color: #2d3a4b; margin-bottom: 32px; }
+    .question-card { border-bottom: 1px solid #e0e0e0; padding: 24px 0; }
+    .question-card:last-child { border-bottom: none; }
+    .q-title { font-size: 1.15em; font-weight: bold; color: #1a2233; margin-bottom: 12px; }
+    .options { margin-bottom: 10px; }
+    .option { background: #f3f6fa; border-radius: 6px; padding: 8px 14px; margin: 4px 0; border: 2px solid transparent; transition: border 0.2s; }
+    .option.correct { border: 2px solid #43a047; background: #e8f5e9; }
+    .answer { display: none; }
+    .explanation { color: #666; font-size: 0.98em; margin-bottom: 6px; }
+    pre, code {
+      background: none;
+      color: inherit;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 1em;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    img { max-width: 100%; margin: 8px 0; border-radius: 4px; }
+    @media (max-width: 600px) {
+      .container { padding: 10px 2vw; }
+      h1 { font-size: 1.3em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>程式設計題庫總覽</h1>
+    <div id="questions"></div>
+  </div>
+  <script>
+    async function loadQuestions() {
+      const res = await fetch('../output.json');
+      const data = await res.json();
+      const container = document.getElementById('questions');
+      data.forEach((q, idx) => {
+        // 處理選項，若為圖片網址則顯示圖片
+        const codeLike = s => typeof s === 'string' && (
+          /[;{}=<>]/.test(s) && s.length < 80 ||
+          /^(\s*#include|\s*int\s+\w+|\s*cout\s*<<|\s*cin\s*>>)/.test(s)
+        );
+        const escape = s => s.replace(/</g, "<").replace(/>/g, ">");
+        // 過濾掉選項陣列最後一項若等於詳解
+        let optionsArr = Array.isArray(q.選項) ? [...q.選項] : [];
+        if (
+          optionsArr.length > 0 &&
+          q.詳解 &&
+          optionsArr[optionsArr.length - 1] &&
+          typeof optionsArr[optionsArr.length - 1] === "string" &&
+          optionsArr[optionsArr.length - 1].replace(/\s/g, '') === q.詳解.replace(/\s/g, '')
+        ) {
+          optionsArr.pop();
+        }
+        // 判斷正確答案
+        const answerSet = new Set((q.答案 || []).map(a => (typeof a === "string" ? a.replace(/\s/g, '') : a)));
+        const optionsHtml = optionsArr.map(opt => {
+          let isCorrect = answerSet.has((typeof opt === "string" ? opt.replace(/\s/g, '') : opt));
+          let optionClass = "option" + (isCorrect ? " correct" : "");
+          if (typeof opt === 'string' && opt.match(/^https?:\/\/.+\.(jpg|png|gif)$/i)) {
+            return `<div class="${optionClass}"><img src="${opt}" alt="選項圖片"></div>`;
+          }
+          if (codeLike(opt)) {
+            return `<div class="${optionClass}"><pre><code>${escape(opt)}</code></pre></div>`;
+          }
+          return `<div class="${optionClass}">${opt}</div>`;
+        }).join('');
+        // 答案只顯示文字
+        const answerHtml = q.答案 && q.答案.length
+          ? `<div class="answer">答案：${q.答案.map(a => `<span>${a}</span>`).join(', ')}</div>`
+          : '';
+        // 詳解若像程式碼才加 code
+        let explanationHtml = '';
+        if (q.詳解) {
+          explanationHtml = codeLike(q.詳解)
+            ? `<div class="explanation">詳解：<pre><code>${escape(q.詳解)}</code></pre></div>`
+            : `<div class="explanation">詳解：${q.詳解}</div>`;
+        }
+        // 題目若像程式碼才加 code，否則純文字
+        let qTitle = q.題目.replace(/`([^`]+)`/g, '<code>$1</code>');
+        if (codeLike(q.題目)) {
+          qTitle = `<pre><code>${escape(q.題目)}</code></pre>`;
+        }
+        container.innerHTML += `
+          <div class="question-card">
+            <div class="q-title">${idx + 1}. ${qTitle}</div>
+            <div class="options">${optionsHtml}</div>
+            ${explanationHtml || ""}
+          </div>
+        `;
+      });
+    }
+    loadQuestions();
+  </script>
+</body>
+</html>

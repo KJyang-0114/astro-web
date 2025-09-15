@@ -8,8 +8,8 @@ const navItems = [
   { name: "首頁", path: "/" },
   { name: "關於我", path: "/about" },
   { name: "作品集", path: "/projects" },
-  { name: "AI 探索", path: "/ai" },
   { name: "聯絡我", path: "/contact" },
+  { name: "AI 探索", path: "/ai" },
 ];
 ---
 
@@ -156,7 +156,7 @@ const navItems = [
     padding: 1.5rem 0;
     width: 100%;
     backdrop-filter: blur(10px);
-    background: rgba(18, 18, 18, 0.8);
+    background: rgba(26, 26, 26, 0.85); /* 使用更明亮的背景色 */
     z-index: 100;
     transition: all var(--transition-normal);
   }
@@ -219,21 +219,49 @@ const navItems = [
   }
 
   .mobile-menu-toggle {
-    display: none;
-    background: none;
-    border: none;
+    display: none; /* 桌面端隱藏 */
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
     color: var(--text-muted);
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     cursor: pointer;
-    transition: color var(--transition-normal);
+    transition: all var(--transition-normal);
+    padding: 0.5rem;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mobile-menu-toggle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+    transition: left 0.5s;
   }
 
   .mobile-menu-toggle:hover {
     color: var(--text-color);
+    border-color: rgba(102, 126, 234, 0.3);
+    transform: scale(1.05);
+  }
+
+  .mobile-menu-toggle:hover::before {
+    left: 100%;
   }
 
   .mobile-menu-toggle.active {
     color: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
   }
 
   .mobile-nav {
@@ -274,14 +302,42 @@ const navItems = [
   /* Remove any rules targeting .mobile-nav.active .nav-item or :nth-child delays */
 
   @media (max-width: 768px) {
+    .container {
+      padding: 0 1rem;
+    }
+
+    .logo a {
+      font-size: 1.5rem;
+    }
+
     .desktop-nav {
       display: none;
     }
 
     .mobile-menu-toggle {
-      display: block;
+      display: flex;
+      z-index: 102; /* 確保在最上層 */
     }
 
-    /* No need to set display: flex here anymore, .active class handles it */
+    .mobile-nav {
+      top: 80px; /* 調整頂部間距 */
+      left: 1rem;
+      right: 1rem;
+      margin: 0 auto;
+      max-width: calc(100vw - 2rem);
+      border-radius: 12px;
+    }
+
+    .mobile-nav .nav-item {
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-nav .nav-item:hover {
+      background: var(--glass-bg);
+      transform: translateY(-2px);
+    }
   }
 </style>

@@ -1,26 +1,23 @@
-# build output
-dist/
+# Ignore everything by default
+/*
 
-# generated types
-.astro/
+# Keep git metadata and this file
+!/.gitignore
+!/.gitattributes
 
-# dependencies
-node_modules/
+# --- Whitelist website files (allow these into git) ---
+!/src/
+!/public/
+!/astro.config.mjs
+!/package.json
+!/package-lock.json
+!/pnpm-lock.yaml
+!/yarn.lock
+!/vite.config.js
+!/README.md
 
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
+# If you add other config files you need, whitelist them here
 
-# environment variables
-.env
-.env.production
-
-# macOS-specific files
-.DS_Store
-test
-# jetbrains setting folder
-.idea/
-website.log
-website.pid
+# Notes:
+# - Everything else in the repo root is ignored unless explicitly whitelisted above.
+# - Build outputs, caches, node_modules, logs, editor settings are therefore ignored.
