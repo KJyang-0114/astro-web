@@ -1,638 +1,194 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 
-const projects = [
-  {
-    id: 1,
-    name: '個人網站 (Astro 版)',
-    description: '使用 Astro 框架開發的個人網站，具有更快的頁面載入速度和改進的使用者體驗。深色主題設計，完整的響應式布局。',
-    tags: ['Astro', 'JavaScript', 'CSS', 'Static Site Generation', 'Open Source'],
-    github: 'https://github.com/kjyang-0114/KJyang-website-astro',
-    demo: null
-  },
-  {
-    id: 2,
-    name: 'BridgeMaster',
-    description: '一個優化建橋控制和操作的Minecraft Forge模組 簡稱速疊',
-    tags: ['Java', 'Game Development', 'Minecraft Mod', 'Open Source'],
-    github: 'https://github.com/KJyang-0114/BridgeMaster',
-    demo: null
-  },
-  {
-    id: 14,
-    name: 'OnlineClipboard',
-    description: 'Vite+Tailwind+TypeScript 打造的線上剪貼簿/協作平台。',
-    tags: [
-      'Collaboration Tool',
-      'TypeScript',
-      'PWA',
-      'Realtime Sync',
-      'Open Source'
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "dateModified": "2026-02-18",
+  "mainEntity": {
+    "@type": "Person",
+    "name": "楊凱捷",
+    "alternateName": ["KJyang", "kjyang", "imw1nt0r"],
+    "url": "https://kjyang0114.dev",
+    "jobTitle": "全端開發者",
+    "description": "鶯歌工商資訊科，擅長用 AI 和新技術做有趣的東西",
+    "knowsAbout": ["LLM", "AI", "Web Development", "Python", "React", "TypeScript", "Java", "強化學習"],
+    "sameAs": [
+      "https://github.com/KJyang-0114",
+      "https://www.instagram.com/imw1nt0r/",
+      "https://discord.gg/sZbn6Dw3Bx"
     ],
-    github: 'https://github.com/kjyang-0114/online-clipboard',
-    demo: 'https://kjyang-0114.github.io/online-clipboard/'
+    "affiliation": {
+      "@type": "EducationalOrganization",
+      "name": "新北市立鶯歌工商",
+      "alternateName": ["鶯歌工商", "YKVS"],
+      "department": { "@type": "EducationalOrganization", "name": "資訊科" }
+    }
   }
+};
+
+const techStack = [
+  { name: "AI / LLM", items: ["Prompt Engineering", "Grok API", "LLM 整合應用", "強化學習", "AI Agent"], icon: "🧠" },
+  { name: "前端", items: ["React", "Vue", "Astro", "TypeScript", "Tailwind CSS"], icon: "🖥️" },
+  { name: "後端 & 工具", items: ["Python", "FastAPI", "Node.js", "Docker", "Git"], icon: "⚙️" },
+  { name: "其他", items: ["Java", "Minecraft Forge", "Swift", "Linux"], icon: "🎮" },
 ];
 ---
 
-<Layout title="首頁 - KJyang">
-  <div class="smooth-wrapper">
-    <section class="hero-section">
-      <!-- 簡化的背景層 -->
-      <div class="hero-bg">
-        <div class="bg-gradient"></div>
-      </div>
-      
-      <!-- 主要內容 -->
-      <div class="hero-content">
-        <div class="hero-text-container">
-          <h1 class="hero-title">
-            <span class="static-text">我是</span>
-            <span class="highlight dynamic-text" id="dynamic-name">KJyang</span>
-          </h1>
-          <h2 class="hero-subtitle">
-            <span class="subtitle-text" id="subtitle-text">一個用AI創造奇蹟的高中生</span>
-          </h2>
-          <p class="hero-description">
-            <span class="description-text" id="description-text">代碼是我的超能力，Debug 是我的日常生活 🚀</span>
-          </p>
-          
-          <div class="hero-specialties">
-            <p class="specialty">專長：把簡單問題複雜化，然後優雅地解決它們 💻</p>
-            <p class="specialty">熱愛在凌晨三點被靈感砸中，然後忘記睡覺</p>
-            <p class="specialty">咖啡因驅動型開發者 - 一杯咖啡，一行代碼，無限可能！☕</p>
-          </div>
-          
-          <div class="hero-links">
-            <a href="/projects" class="primary-button">查看作品</a>
-            <a href="/contact" class="secondary-button">聯絡我</a>
-          </div>
-        </div>
-        
-        <div class="hero-visual-container">
-          <div class="profile-image" id="secret-game-trigger">
-            <div class="profile-placeholder">
-              <span class="profile-emoji">👨‍💻</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+<Layout
+  title="KJyang — 鶯歌工商資訊科 | 全端開發 · AI 應用"
+  description="KJyang，鶯歌工商資訊科。專注 AI / LLM 應用開發、全端 Web 架構。GitHub 13+ 開源專案。"
+  jsonLd={jsonLd}
+>
 
-    <section class="projects-section">
-      <div class="section-header">
-        <h2 class="section-title">精選作品</h2>
-        <div class="section-line"></div>
+  <!-- Hero -->
+  <section class="relative min-h-[90vh] flex items-center pt-20" aria-label="KJyang 首頁">
+    <div class="section-container w-full">
+      <div class="max-w-3xl">
+        <div class="animate-on-scroll inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand/10 border border-brand/20 text-brand text-sm font-medium mb-8">
+          <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span>
+          鶯歌工商 · 資訊科
+        </div>
+
+        <h1 class="animate-on-scroll delay-1 text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-6">
+          Hey, 我是 <span class="text-gradient">KJyang</span>
+        </h1>
+
+        <p class="animate-on-scroll delay-2 text-xl sm:text-2xl text-zinc-300 mb-4 font-medium">
+          寫全端、玩 AI、做有趣的東西。
+        </p>
+
+        <p class="animate-on-scroll delay-2 text-base sm:text-lg text-zinc-400 max-w-2xl mb-10 leading-relaxed">
+          平常在研究怎麼用 LLM 和各種新技術搞事情，
+          偶爾寫寫全端，偶爾改改 Minecraft mod。
+          GitHub 上有 13+ 個開源專案，歡迎逛逛。
+        </p>
+
+        <div class="animate-on-scroll delay-3 flex flex-wrap gap-4">
+          <a href="/projects" class="inline-flex items-center gap-2 px-6 py-3 bg-brand hover:bg-brand-dark text-white font-semibold rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-brand/25">
+            看我做了什麼
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </a>
+          <a href="/about" class="inline-flex items-center gap-2 px-6 py-3 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-zinc-100 font-semibold rounded-lg transition-all duration-200">
+            更了解我
+          </a>
+          <a href="https://github.com/KJyang-0114" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-zinc-100 font-semibold rounded-lg transition-all duration-200">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
+            GitHub
+          </a>
+        </div>
       </div>
-      <div class="projects-grid">
-        {projects.map((project, index) => (
-          <div class="project-item" data-index={index}>
-            <ProjectCard
-              name={project.name}
-              description={project.description}
-              tags={project.tags}
-              github={project.github}
-              demo={project.demo}
-            />
+    </div>
+
+    <div class="absolute top-0 right-0 w-1/2 h-full opacity-30 pointer-events-none" aria-hidden="true">
+      <div class="absolute top-20 right-20 w-72 h-72 bg-brand/20 rounded-full blur-[120px]"></div>
+      <div class="absolute bottom-20 right-40 w-56 h-56 bg-accent/20 rounded-full blur-[100px]"></div>
+    </div>
+  </section>
+
+  <!-- What I Do -->
+  <section class="py-20" aria-label="技術能力">
+    <div class="section-container">
+      <h2 class="animate-on-scroll text-3xl sm:text-4xl font-bold mb-4">
+        我在搞什麼
+      </h2>
+      <p class="animate-on-scroll delay-1 text-zinc-400 mb-12 max-w-2xl">
+        主力是 <strong class="text-zinc-200">AI / LLM 應用</strong> — 我很會利用 AI 工具來加速學習和開發。
+        不只是會用，是真的有在研究怎麼整合進產品裡面。
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {techStack.map((group, i) => (
+          <div class={`animate-on-scroll delay-${i + 1} p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50`}>
+            <span class="text-2xl mb-3 block" aria-hidden="true">{group.icon}</span>
+            <h3 class="text-lg font-semibold text-zinc-200 mb-4">{group.name}</h3>
+            <div class="flex flex-wrap gap-2">
+              {group.items.map(skill => (
+                <span class="px-3 py-1.5 text-sm rounded-lg bg-zinc-800 text-zinc-300 border border-zinc-700/50">
+                  {skill}
+                </span>
+              ))}
+            </div>
           </div>
         ))}
       </div>
-      
-      <div class="projects-cta">
-        <a href="/projects" class="outline-button">
-          查看所有作品 <i class="fas fa-arrow-right"></i>
-        </a>
+    </div>
+  </section>
+
+  <!-- Recent Stuff -->
+  <section class="py-20" aria-label="最近在做的事">
+    <div class="section-container">
+      <h2 class="animate-on-scroll text-3xl sm:text-4xl font-bold mb-4">
+        最近在忙的
+      </h2>
+      <p class="animate-on-scroll delay-1 text-zinc-400 mb-12 max-w-2xl">
+        隨便挑幾個有在動的東西。完整的去 <a href="/projects" class="text-brand hover:text-brand-light underline underline-offset-4">作品集</a> 看。
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <article class="animate-on-scroll delay-1 group p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50 hover:border-purple-500/30 transition-all duration-300">
+          <span class="px-3 py-1 text-xs font-mono rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20">AI</span>
+          <h3 class="text-xl font-bold text-zinc-100 mt-4 mb-2 group-hover:text-brand transition-colors">Simple-2048-RL</h3>
+          <p class="text-zinc-400 text-sm mb-4 leading-relaxed">
+            用 DQN 訓練 AI 玩 2048。從環境建置到訓練 pipeline 全部自己刻，想試試看強化學習到底能不能打出高分。
+          </p>
+          <a href="https://github.com/KJyang-0114/Simple-2048-RL" target="_blank" rel="noopener noreferrer" class="text-sm text-zinc-500 hover:text-zinc-200 transition-colors font-mono">→ GitHub</a>
+        </article>
+
+        <article class="animate-on-scroll delay-2 group p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50 hover:border-cyan-500/30 transition-all duration-300">
+          <span class="px-3 py-1 text-xs font-mono rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">工具</span>
+          <h3 class="text-xl font-bold text-zinc-100 mt-4 mb-2 group-hover:text-brand transition-colors">Vox-Summary-Tool</h3>
+          <p class="text-zinc-400 text-sm mb-4 leading-relaxed">
+            錄音或丟音檔進去，Whisper 轉文字再用 GPT 整理成重點摘要。Flask + Docker 部署。
+          </p>
+          <a href="https://github.com/KJyang-0114/Vox-Summary-Tool" target="_blank" rel="noopener noreferrer" class="text-sm text-zinc-500 hover:text-zinc-200 transition-colors font-mono">→ GitHub</a>
+        </article>
+
+        <article class="animate-on-scroll delay-3 group p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50 hover:border-yellow-500/30 transition-all duration-300">
+          <span class="px-3 py-1 text-xs font-mono rounded-full bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">遊戲</span>
+          <h3 class="text-xl font-bold text-zinc-100 mt-4 mb-2 group-hover:text-brand transition-colors">BridgeMaster</h3>
+          <p class="text-zinc-400 text-sm mb-4 leading-relaxed">
+            Minecraft Forge mod，自動幫你蓋橋。路徑演算法 + 遊戲開發的混血產物。
+          </p>
+          <a href="https://github.com/KJyang-0114/BridgeMaster" target="_blank" rel="noopener noreferrer" class="text-sm text-zinc-500 hover:text-zinc-200 transition-colors font-mono">→ GitHub</a>
+        </article>
+
+        <article class="animate-on-scroll delay-4 group p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50 hover:border-green-500/30 transition-all duration-300">
+          <span class="px-3 py-1 text-xs font-mono rounded-full bg-green-500/10 text-green-400 border border-green-500/20">AI</span>
+          <h3 class="text-xl font-bold text-zinc-100 mt-4 mb-2 group-hover:text-brand transition-colors">Nyx-Core</h3>
+          <p class="text-zinc-400 text-sm mb-4 leading-relaxed">
+            AI Vision Engine — 基於 YOLO 的物件偵測框架，支援 TensorRT 加速與 GUI 操作介面。5 人共同開發。
+          </p>
+          <a href="https://github.com/KJyang-0114/Nyx-Core" target="_blank" rel="noopener noreferrer" class="text-sm text-zinc-500 hover:text-zinc-200 transition-colors font-mono">→ GitHub</a>
+        </article>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20" aria-label="聯絡方式">
+    <div class="section-container">
+      <div class="animate-on-scroll relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand/10 to-accent/10 border border-brand/20 p-10 sm:p-16 text-center">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+          聊聊？
+        </h2>
+        <p class="text-zinc-400 mb-8 max-w-lg mx-auto">
+          想合作專案、聊技術、或有什麼有趣的想法，都歡迎找我。
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/contact" class="inline-flex items-center gap-2 px-8 py-4 bg-brand hover:bg-brand-dark text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-brand/25 text-lg">
+            聯絡我
+          </a>
+          <a href="https://github.com/KJyang-0114" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-8 py-4 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-zinc-100 font-semibold rounded-xl transition-all duration-200 text-lg">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
+            GitHub
+          </a>
+        </div>
+
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-brand/10 rounded-full blur-[60px]" aria-hidden="true"></div>
+        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-accent/10 rounded-full blur-[50px]" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
 </Layout>
-
-<script>
-  import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  
-  // 註冊GSAP插件
-  gsap.registerPlugin(ScrollTrigger);
-  
-  // 首頁小彩蛋 - 點擊頭像進入秘密游戲
-  const secretGameTrigger = document.getElementById('secret-game-trigger');
-  if (secretGameTrigger) {
-    // 點擊次數計數器
-    let clickCount = 0;
-    const requiredClicks = 5; // 需要連續點擊5次才會觸發
-    let clickTimer;
-    
-    // 添加游標為可點擊樣式
-    secretGameTrigger.style.cursor = 'pointer';
-    
-    // 為了視覺反饋，添加懸停效果
-    secretGameTrigger.addEventListener('mouseenter', () => {
-      gsap.to(secretGameTrigger, {
-        scale: 1.05,
-        duration: 0.3,
-        ease: 'power1.out'
-      });
-    });
-    
-    secretGameTrigger.addEventListener('mouseleave', () => {
-      gsap.to(secretGameTrigger, {
-        scale: 1,
-        duration: 0.3,
-        ease: 'power1.out'
-      });
-    });
-    
-    secretGameTrigger.addEventListener('click', () => {
-      console.log('頭像被點擊了！計數：', clickCount + 1);
-      clickCount++;
-      
-      // 清除先前的計時器
-      if (clickTimer) {
-        clearTimeout(clickTimer);
-      }
-      
-      // 如果在2秒內完成了所需點擊次數，則觸發彩蛋
-      if (clickCount >= requiredClicks) {
-        console.log('觸發彩蛋！即將跳轉到秘密游戲');
-        window.location.href = '/secret-game';
-        clickCount = 0; // 重置計數器
-        return;
-      }
-      
-      // 如果這是第一次點擊，顯示提示
-      if (clickCount === 1) {
-        const tooltip = document.createElement('div');
-        tooltip.className = 'secret-tooltip';
-        tooltip.textContent = '繼續點擊...有驚喜！';
-        document.body.appendChild(tooltip);
-        
-        // 獲取頭像位置
-        const rect = secretGameTrigger.getBoundingClientRect();
-        tooltip.style.left = `${rect.left + window.scrollX + rect.width / 2}px`;
-        tooltip.style.top = `${rect.top + window.scrollY - 40}px`;
-        
-        // 2秒後移除提示
-        setTimeout(() => {
-          tooltip.classList.add('fade-out');
-          setTimeout(() => {
-            document.body.removeChild(tooltip);
-          }, 500);
-        }, 1500);
-      }
-      
-      // 如果2秒內沒有達到所需點擊次數，則重置計數器
-      clickTimer = setTimeout(() => {
-        clickCount = 0;
-      }, 2000);
-      
-      // 添加微小動畫反饋
-      gsap.to(secretGameTrigger, {
-        scale: 1.05,
-        duration: 0.1,
-        yoyo: true,
-        repeat: 1,
-        ease: 'power1.inOut'
-      });
-    });
-  }
-  
-  // 頁面加載後執行動畫
-  document.addEventListener('DOMContentLoaded', () => {
-    // 打字機效果
-    const dynamicName = document.getElementById('dynamic-name');
-    const subtitleText = document.getElementById('subtitle-text');
-    const descriptionText = document.getElementById('description-text');
-    
-    if (dynamicName) {
-      const nameText = 'KJyang';
-      let nameIndex = 0;
-      
-      function typeName() {
-        if (nameIndex < nameText.length) {
-          dynamicName.textContent = nameText.slice(0, nameIndex + 1);
-          nameIndex++;
-          setTimeout(typeName, 150);
-        } else {
-          // 打字完成後，移除游標
-          setTimeout(() => {
-            dynamicName.classList.add('typing-complete');
-          }, 500);
-        }
-      }
-      
-      // 延遲開始打字
-      setTimeout(typeName, 500);
-    }
-    
-    // 確保所有元素都是可見的
-    gsap.set(['.hero-title', '.hero-subtitle', '.hero-description', '.specialty', '.hero-links a', '.profile-image', '.project-item', '.section-title', '.section-line'], {
-      opacity: 1,
-      y: 0,
-      x: 0,
-      clearProps: 'all'
-    });
-    
-    // 首頁的簡單淡入效果
-    const mainContent = document.querySelector('main');
-    if (mainContent) {
-      gsap.fromTo(mainContent, 
-        { opacity: 0 }, 
-        { opacity: 1, duration: 0.5, ease: 'power1.inOut' }
-      );
-    }
-    
-    // 添加滾动觸發動畫
-    const scrollElements = document.querySelectorAll('.project-item, .specialty');
-    
-    const elementInView = (el, dividend = 1) => {
-      const elementTop = el.getBoundingClientRect().top;
-      return (
-        elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend
-      );
-    };
-
-    const elementOutofView = (el) => {
-      const elementTop = el.getBoundingClientRect().top;
-      return (
-        elementTop > (window.innerHeight || document.documentElement.clientHeight)
-      );
-    };
-
-    const displayScrollElement = (element) => {
-      element.classList.add('scrolled');
-    };
-
-    const hideScrollElement = (element) => {
-      element.classList.remove('scrolled');
-    };
-
-    const handleScrollAnimation = () => {
-      scrollElements.forEach((el) => {
-        if (elementInView(el, 1.25)) {
-          displayScrollElement(el);
-        } else if (elementOutofView(el)) {
-          hideScrollElement(el);
-        }
-      });
-    };
-
-    window.addEventListener('scroll', () => {
-      handleScrollAnimation();
-    });
-  });
-</script>
-
-<style>
-  .smooth-wrapper {
-    position: relative;
-    width: 100%;
-  }
-
-  .hero-section {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    position: relative;
-  }
-
-  .hero-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-  }
-
-  .bg-gradient {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-      radial-gradient(circle at 30% 30%, rgba(102, 126, 234, 0.08) 0%, transparent 60%),
-      radial-gradient(circle at 70% 70%, rgba(240, 147, 251, 0.08) 0%, transparent 60%);
-  }
-
-  .hero-content {
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 4rem;
-    z-index: 1;
-  }
-
-  .hero-text-container {
-    flex: 1;
-    max-width: 600px;
-  }
-
-  .hero-title {
-    font-size: 3.5rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
-    line-height: 1.1;
-  }
-
-  .static-text {
-    color: var(--text-color);
-  }
-
-  .dynamic-text {
-    background: var(--primary-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    position: relative;
-  }
-
-  .dynamic-text::after {
-    content: '';
-    position: absolute;
-    right: -2px;
-    top: 0;
-    width: 2px;
-    height: 100%;
-    background: var(--primary-color);
-    animation: blink 1s infinite;
-  }
-
-  .hero-subtitle {
-    font-size: 2rem;
-    font-weight: 500;
-    color: var(--text-color);
-    margin-bottom: 1.5rem;
-    line-height: 1.3;
-  }
-
-  .hero-description {
-    font-size: 1.2rem;
-    color: var(--text-muted);
-    margin-bottom: 3rem;
-    line-height: 1.6;
-  }
-
-  .hero-specialties {
-    margin-bottom: 3rem;
-  }
-
-  .specialty {
-    margin-bottom: 1rem;
-    padding-left: 1.5rem;
-    position: relative;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-  }
-
-  .specialty:nth-child(1) { animation-delay: 0.2s; }
-  .specialty:nth-child(2) { animation-delay: 0.4s; }
-  .specialty:nth-child(3) { animation-delay: 0.6s; }
-
-  .specialty::before {
-    content: '▹';
-    position: absolute;
-    left: 0;
-    color: var(--primary-color);
-    font-size: 1.2rem;
-  }
-
-  .hero-links {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  .hero-visual-container {
-    flex: 0 0 35%;
-    max-width: 350px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
-
-  .profile-image {
-    width: 250px;
-    height: 250px;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.2));
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-
-  .profile-image:hover {
-    transform: scale(1.05);
-  }
-
-  .profile-placeholder {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .profile-emoji {
-    font-size: 6rem;
-  }
-
-  /* 項目區域樣式 */
-  .projects-section {
-    padding: 5rem 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .section-header {
-    text-align: center;
-    margin-bottom: 4rem;
-  }
-
-  .section-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    background: var(--primary-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .section-line {
-    width: 80px;
-    height: 4px;
-    background: var(--primary-gradient);
-    margin: 0 auto;
-    border-radius: 2px;
-  }
-
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
-  }
-
-  .project-item {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.6s ease;
-  }
-
-  .project-item.scrolled {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .projects-cta {
-    text-align: center;
-    margin-top: 4rem;
-  }
-
-  /* 動畫 */
-  @keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateY(0);
-    }
-    40% {
-      transform: translateY(-10px);
-    }
-    60% {
-      transform: translateY(-5px);
-    }
-  }
-
-  /* 響應式設計 */
-  @media (max-width: 768px) {
-    .smooth-wrapper {
-      width: 100%;
-      max-width: 100vw;
-      overflow-x: hidden;
-    }
-
-    .hero-section {
-      padding: 1rem;
-      width: 100%;
-      max-width: 100vw;
-      box-sizing: border-box;
-    }
-
-    .hero-content {
-      flex-direction: column;
-      text-align: center;
-      gap: 3rem;
-      width: 100%;
-      max-width: 100vw;
-      padding: 0 1rem;
-      box-sizing: border-box;
-    }
-
-    .hero-text-container {
-      width: 100%;
-      max-width: 100%;
-    }
-
-    .hero-title {
-      font-size: 2.5rem;
-      width: 100%;
-      word-wrap: break-word;
-    }
-
-    .hero-subtitle {
-      font-size: 1.5rem;
-      width: 100%;
-      word-wrap: break-word;
-    }
-
-    .hero-description {
-      font-size: 1.1rem;
-      width: 100%;
-      word-wrap: break-word;
-    }
-
-    .hero-specialties {
-      width: 100%;
-    }
-
-    .specialty {
-      width: 100%;
-      text-align: center;
-      word-wrap: break-word;
-    }
-
-    .hero-links {
-      justify-content: center;
-      width: 100%;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .hero-visual-container {
-      width: 100%;
-      max-width: 100%;
-    }
-
-    .profile-image {
-      width: 200px;
-      height: 200px;
-      max-width: 90vw;
-    }
-
-    .profile-emoji {
-      font-size: 4rem;
-    }
-
-    .projects-section {
-      padding: 3rem 1rem;
-      width: 100%;
-      max-width: 100vw;
-      box-sizing: border-box;
-    }
-
-    .projects-grid {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-      width: 100%;
-      padding: 0;
-    }
-
-    .project-item {
-      width: 100%;
-      max-width: 100%;
-    }
-
-    .section-title {
-      font-size: 2rem;
-      width: 100%;
-      word-wrap: break-word;
-    }
-  }
-</style>

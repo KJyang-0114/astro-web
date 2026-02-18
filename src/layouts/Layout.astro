@@ -1,267 +1,101 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
-import '../styles/global.css';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 
-export interface Props {
+interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  ogType?: string;
+  canonical?: string;
+  jsonLd?: object;
+  noNav?: boolean;
+  noFooter?: boolean;
 }
 
-const { title, description = "高中生程式設計師的個人網站 - 分享程式開發和學習之旅" } = Astro.props;
+const {
+  title,
+  description = "KJyang — 高中生全端開發者，專注 Web 開發與 AI 應用。來自鶯歌工商資訊科，用程式碼創造無限可能。",
+  ogImage = "/og-default.png",
+  ogType = "website",
+  canonical,
+  jsonLd,
+  noNav = false,
+  noFooter = false,
+} = Astro.props;
 
-// 生成版本號以防止快取問題
-const version = Date.now();
+const siteUrl = "https://kjyang0114.dev";
+const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
+const ogImageUrl = ogImage.startsWith("http") ? ogImage : new URL(ogImage, siteUrl).href;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-TW">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- SEO -->
+    <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="author" content="KJyang" />
+    <meta name="robots" content="index, follow" />
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href={`/favicon.svg?v=${version}`} />
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- SEO 標籤 -->
-    <meta name="author" content="KJYang" />
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="KJYang 個人網站" />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:site_name" content="KJyang — 開發者作品集" />
+    <meta property="og:locale" content="zh_TW" />
     
-    <!-- 防止快取問題 -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
     
-    <title>{title}</title>
-    <ViewTransitions />
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     
-    <!-- 初始可見樣式 - 防止FOUC (Flash of Unstyled Content) -->
-    <style>
-      body {
-        visibility: visible !important;
-        opacity: 1 !important;
-      }
-      .site-container {
-        opacity: 1 !important;
-      }
-      h1, h2, h3, p, .hero-title, .hero-subtitle, .hero-description, .section-title {
-        opacity: 1 !important;
-        transform: none !important;
-      }
-    </style>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    
+    <!-- JSON-LD -->
+    {jsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    )}
   </head>
-  <body>
-    <div class="site-container">
-      <Navigation />
-      <main>
-        <slot />
-      </main>
-      <Footer />
-    </div>
+  <body class="bg-zinc-950 text-zinc-100 antialiased font-sans">
+    {!noNav && <Navigation />}
+    <main>
+      <slot />
+    </main>
+    {!noFooter && <Footer />}
+
+    <!-- Global CSS -->
+    <style is:global>
+      @import '../styles/global.css';
+    </style>
+
+    <!-- Scroll Animation Observer -->
+    <script is:inline>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+      );
+      document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
+    </script>
   </body>
 </html>
-
-<script>
-  // 導入動畫配置文件
-  import { initLenis, initScrollAnimations } from '../scripts/animation.js'; // 移除了不再使用的 initPageTransitions, handlePageTransition
-
-  // --- View Transitions 方向性動畫處理 ---
-  document.addEventListener('astro:before-swap', (event) => {
-    const rawPath = event.to.pathname;
-    const toPath = rawPath.replace(/\/$/, "") || "/"; // 標準化路徑
-    const htmlElement = document.documentElement;
-
-    console.log(`[astro:before-swap] Navigating to raw path: "${rawPath}", standardized path: "${toPath}"`); // 加入 Log
-
-    // 清除可能殘留的舊 class
-    htmlElement.classList.remove('transition-to-about', 'transition-to-projects', 'transition-to-contact');
-
-    // 根據目標路徑添加新的 class
-    let addedClass: string | null = null; // 修正：明確指定類型
-    if (toPath === '/about') {
-      htmlElement.classList.add('transition-to-about');
-      addedClass = 'transition-to-about';
-    } else if (toPath === '/projects') {
-      htmlElement.classList.add('transition-to-projects');
-      addedClass = 'transition-to-projects';
-    } else if (toPath === '/contact') {
-      htmlElement.classList.add('transition-to-contact');
-      addedClass = 'transition-to-contact';
-    }
-    // 如果是其他頁面（例如首頁），則不添加特定 class，使用 CSS 中定義的預設動畫
-    console.log(`[astro:before-swap] Added class: ${addedClass || 'none (using default)'}`); // 加入 Log
-  });
-
-  // 在轉換完成後清除 class，避免影響後續樣式
-  document.addEventListener('astro:after-swap', () => {
-    document.documentElement.classList.remove('transition-to-about', 'transition-to-projects', 'transition-to-contact');
-  });
-  // --- View Transitions 方向性動畫處理結束 ---
-
-  document.addEventListener('DOMContentLoaded', () => {
-    // 頁面載入完成後設置加載類
-    document.documentElement.classList.add('loaded');
-    
-    // 初始化平滑滾動
-    // const lenis = initLenis(); // 已移除絲滑滾動
-    
-    // 初始化頁面過渡效果
-    // initPageTransitions(); // 由 Astro View Transitions 取代
-    
-    // 初始化滾動動畫
-    initScrollAnimations();
-    
-    // 處理頁面切換
-    // handlePageTransition(); // 由 Astro View Transitions 取代
-    
-    // 檢測頁面視窗大小變化，觸發ScrollTrigger更新
-    window.addEventListener('resize', () => {
-      setTimeout(() => {
-        window.dispatchEvent(new Event('resize'));
-      }, 100);
-    });
-  });
-  
-  // 監聽自定義事件，處理內容更新後的初始化
-  window.addEventListener('content-updated', () => {
-    // 重新初始化滾動動畫
-    initScrollAnimations();
-    
-    // 重新綁定元素事件
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = this.getAttribute('href');
-        if (target && target !== '#') {
-          const element = document.querySelector(target);
-          if (element) {
-            element.scrollIntoView({
-              behavior: 'smooth'
-            });
-          }
-        }
-      });
-    });
-    
-    // 重新初始化平滑滾動
-    // initLenis(); // 已移除絲滑滾動
-    
-    // 更新頁面載入狀態
-    document.documentElement.classList.add('loaded');
-  });
-  
-  // 監聽頁面內容加載事件
-  window.addEventListener('page-content-loaded', () => {
-    // 重新應用任何需要的樣式或行為
-    const currentTheme = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', currentTheme);
-  });
-</script>
-
-<style is:global>
-  /* 動畫相關的樣式 */
-  .gsap-marker-scroller-start,
-  .gsap-marker-scroller-end,
-  .gsap-marker-start,
-  .gsap-marker-end {
-    display: none !important;
-  }
-
-  /* 確保容器結構正確 */
-  .site-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    width: 100%;
-    opacity: 1;
-  }
-  
-  /* 自訂 View Transitions 動畫 */
-  
-  /* 舊頁面統一向下淡出 */
-  @keyframes fade-out-down {
-    to {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-  }
-  
-  /* 新頁面進入動畫 */
-  @keyframes fade-in-left {
-    from {
-      opacity: 0;
-      transform: translateX(-30px);
-    }
-  }
-  
-  @keyframes fade-in-right {
-    from {
-      opacity: 0;
-      transform: translateX(30px);
-    }
-  }
-  
-  @keyframes fade-in-bottom {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-  }
-  
-  /* --- 應用動畫 --- */
-  
-  /* 舊頁面固定向下淡出 */
-  ::view-transition-old(root) {
-    animation: fade-out-down 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    /* 稍微加長一點時間並使用不同緩和曲線 */
-  }
-  
-  /* 新頁面根據 html class 決定動畫 */
-  /* 預設 (例如首頁或其他未指定頁面) */
-  ::view-transition-new(root) {
-    animation: fade-in-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  }
-  /* 修正：為每個方向使用完整的 animation 屬性 */
-  html.transition-to-about ::view-transition-new(root) {
-    animation: fade-in-left 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  }
-  html.transition-to-projects ::view-transition-new(root) {
-    animation: fade-in-right 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  }
-  html.transition-to-contact ::view-transition-new(root) {
-    animation: fade-in-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; /* 雖然預設也是 bottom，但明確指定更佳 */
-  }
-
-  main {
-    flex: 1;
-    width: 100%;
-  }
-
-  /* 防止頁面跳動 */
-  html.loaded {
-    height: 100%;
-    overflow: auto;
-  }
-  
-  .no-transitions * {
-    transition: none !important;
-  }
-  
-  /* 確保文字在初始載入時可見 */
-  h1, h2, h3, p {
-    opacity: 1 !important;
-  }
-</style>

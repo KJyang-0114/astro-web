@@ -1,149 +1,176 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 
-// 精心篩選的專業作品集 - 只保留最具代表性和完整度的專案
 const projects = [
   {
-    id: 1,
-    name: 'AI 自動化內容創作系統',
-    description: '整合 Grok API 的全自動化創作流程，能每日自動生成情感短文，轉換為精美圖片並一鍵發布至 Instagram。展現了 AI 應用、API 整合與自動化流程的完整技術能力。',
-    tags: ['AI 應用', 'API 整合', '自動化', 'FastAPI'],
-    github: null,
-    demo: null
+    title: "Simple-2048-RL",
+    description: "DQN 強化學習訓練 AI 玩 2048。環境建置、神經網路、訓練 pipeline 全部從頭刻。想驗證強化學習在策略遊戲上到底能走多遠。",
+    tags: ["Python", "DQN", "強化學習", "AI"],
+    category: "AI",
+    color: "purple",
+    github: "https://github.com/KJyang-0114/Simple-2048-RL",
   },
   {
-    id: 2,
-    name: 'AI 程式學習輔助平台',
-    description: '創新的教育科技專案，運用大型語言模型自動生成帶錯誤的程式碼供學生練習，並提供智能批改與反饋。前後端分離架構，支援教師管理與學生學習的完整流程。',
-    tags: ['AI 教育', '全端開發', '教育科技', 'LLM'],
-    github: null,
-    demo: null
+    title: "Vox-Summary-Tool",
+    description: "網頁語音摘要工具。直接在瀏覽器錄音或上傳音檔，用 OpenAI Whisper 轉文字，再用 GPT 自動整理成重點摘要。",
+    tags: ["Flask", "OpenAI Whisper", "GPT", "Docker"],
+    category: "AI",
+    color: "cyan",
+    github: "https://github.com/KJyang-0114/Vox-Summary-Tool",
   },
   {
-    id: 3,
-    name: '深度強化學習訓練平台',
-    description: '專業的 DQN 強化學習訓練環境，提供視覺化訓練過程、即時動畫回放、模型效能比較等功能。讓複雜的 AI 訓練過程變得直觀易懂。',
-    tags: ['深度學習', '強化學習', '數據視覺化', 'AI 訓練'],
-    github: null,
-    demo: null
+    title: "Nyx-Core",
+    description: "AI Vision Engine — 基於 YOLO 的物件偵測框架，支援 TensorRT 加速、CustomTkinter GUI 操作介面、滑鼠控制驅動。5 位貢獻者共同開發。",
+    tags: ["Python", "YOLO", "TensorRT", "AI"],
+    category: "AI",
+    color: "green",
+    github: "https://github.com/KJyang-0114/Nyx-Core",
   },
   {
-    id: 4,
-    name: 'OnlineClipboard 協作平台',
-    description: '支援多人即時同步的線上剪貼簿工具。採用現代化技術棧 (Vite + TypeScript + PWA)，讓跨裝置內容分享變得無縫便利。',
-    tags: ['協作工具', 'TypeScript', 'PWA', '即時同步'],
-    github: 'https://github.com/kjyang-0114/online-clipboard',
-    demo: 'https://kjyang-0114.github.io/online-clipboard/'
+    title: "OmniRestore",
+    description: "亂碼修復工具（Mojibake Fixer）。自動偵測文字編碼並轉換成正確的 UTF-8，解決各種編碼錯誤造成的亂碼問題。",
+    tags: ["Flask", "chardet", "Python", "編碼處理"],
+    category: "工具",
+    color: "cyan",
+    github: "https://github.com/KJyang-0114/OmniRestore",
   },
   {
-    id: 5,
-    name: 'BridgeMaster - Minecraft 優化模組',
-    description: '為 Minecraft 開發的 Forge 模組，透過演算法優化遊戲內建橋操作，大幅提升建築效率。在開源社群獲得良好迴響，展現遊戲開發與演算法應用能力。',
-    tags: ['遊戲開發', 'Java', '演算法優化', '開源專案'],
-    github: 'https://github.com/KJyang-0114/BridgeMaster',
-    demo: null
+    title: "BridgeMaster",
+    description: "Minecraft 1.8.9 Forge mod。自動蓋橋，內建邊緣偵測、動態 CPS（7-12 正常 / 11-16 跳躍）、平滑旋轉，支援多種方塊類型。",
+    tags: ["Java", "Forge", "Minecraft", "遊戲開發"],
+    category: "遊戲",
+    color: "yellow",
+    github: "https://github.com/KJyang-0114/BridgeMaster",
   },
   {
-    id: 6,
-    name: '個人網站 (本站)',
-    description: '使用 Astro 框架打造的現代化個人網站，實現極致的載入速度、流暢的頁面轉換動畫，以及優秀的 SEO 表現。展現前端開發與 UI/UX 設計能力。',
-    tags: ['Astro', '前端開發', 'UI/UX', '效能優化'],
-    github: 'https://github.com/kjyang-0114/KJyang-website-astro',
-    demo: '/'
-  }
+    title: "Online Clipboard",
+    description: "跨裝置即時同步剪貼簿。不用登入，24 小時自動過期，支援三種語言（中/英/日）。A 手機複製，B 電腦貼上。",
+    tags: ["React", "TypeScript", "Firebase", "i18n"],
+    category: "工具",
+    color: "pink",
+    github: "https://github.com/KJyang-0114/online-clipboard",
+    demo: "https://kjyang-0114.github.io/online-clipboard/",
+  },
+  {
+    title: "Element Remover Pro",
+    description: "Chrome 擴充套件，點一下就能把網頁上不想看的元素刪掉。支援三種模式（單選/多選/相似），可撤銷重做，多語言介面。",
+    tags: ["JavaScript", "CSS", "Chrome Extension", "多語言"],
+    category: "工具",
+    color: "pink",
+    github: "https://github.com/KJyang-0114/element-remover-pro",
+  },
+  {
+    title: "Character Studio",
+    description: "角色克隆工作室 — 上傳聊天紀錄（LINE/Discord/JSON），自動分析語言風格與性格特徵，生成角色扮演 bot 的提示詞。支援 Gemini/OpenAI/Claude。",
+    tags: ["FastAPI", "React", "LLM", "Prompt Engineering"],
+    category: "AI",
+    color: "purple",
+    github: "https://github.com/KJyang-0114/character-studio",
+  },
 ];
+
+const colorClasses: Record<string, { badge: string; border: string }> = {
+  cyan: { badge: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20", border: "hover:border-cyan-500/30" },
+  purple: { badge: "bg-purple-500/10 text-purple-400 border-purple-500/20", border: "hover:border-purple-500/30" },
+  green: { badge: "bg-green-500/10 text-green-400 border-green-500/20", border: "hover:border-green-500/30" },
+  yellow: { badge: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20", border: "hover:border-yellow-500/30" },
+  pink: { badge: "bg-pink-500/10 text-pink-400 border-pink-500/20", border: "hover:border-pink-500/30" },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "KJyang 的作品集",
+  "description": "KJyang 的開源專案集合 — AI 應用、全端開發、遊戲模組、實用工具。",
+  "url": "https://kjyang0114.dev/projects",
+  "author": { "@type": "Person", "name": "楊凱捷", "alternateName": "KJyang" }
+};
 ---
 
-<Layout title="作品集 - KJyang" description="探索 KJyang 的精選專案作品集 - AI 應用、全端開發、遊戲開發等創新專案。">
-  <div class="container">
-    <header class="page-header">
-      <h1 class="page-title">我的作品集</h1>
-      <p class="page-subtitle">精選專案，展現從 AI 應用到全端開發的技術廣度與深度</p>
-    </header>
+<Layout
+  title="作品集 — KJyang | AI 應用 · 全端開發 · 開源專案"
+  description="KJyang 的作品集：強化學習 AI、語音摘要工具、Minecraft Mod、跨裝置剪貼簿等 13+ 個 GitHub 開源專案。鶯歌工商資訊科出品。"
+  jsonLd={jsonLd}
+>
 
-    <div class="projects-grid">
-      {projects.map(project => (
-        <ProjectCard
-          name={project.name}
-          description={project.description}
-          tags={project.tags}
-          github={project.github}
-          demo={project.demo}
-        />
-      ))}
+  <section class="pt-32 pb-16">
+    <div class="section-container">
+      <h1 class="animate-on-scroll text-4xl sm:text-5xl font-black mb-6">
+        作品集
+      </h1>
+      <p class="animate-on-scroll delay-1 text-lg text-zinc-400 max-w-2xl leading-relaxed">
+        全部開源在 GitHub 上。有些是認真做的，有些是突然想到就寫的，
+        但每個都有學到東西。
+      </p>
     </div>
-  </div>
+  </section>
+
+  <section class="pb-20" aria-label="楊凱捷的開源專案">
+    <div class="section-container">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {projects.map((project, i) => {
+          const colors = colorClasses[project.color] || colorClasses.cyan;
+          return (
+            <article class={`animate-on-scroll delay-${(i % 4) + 1} group relative p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50 ${colors.border} transition-all duration-300`}>
+              <div class="flex items-start justify-between mb-4">
+                <span class={`px-3 py-1 text-xs font-mono rounded-full border ${colors.badge}`}>
+                  {project.category}
+                </span>
+              </div>
+
+              <h2 class="text-xl font-bold text-zinc-100 mb-3 group-hover:text-brand-light transition-colors">
+                {project.title}
+              </h2>
+
+              <p class="text-zinc-400 text-sm mb-5 leading-relaxed">
+                {project.description}
+              </p>
+
+              <div class="flex flex-wrap gap-2 mb-5">
+                {project.tags.map(tag => (
+                  <span class="text-xs font-mono text-zinc-500 px-2 py-1 rounded bg-zinc-800/50">{tag}</span>
+                ))}
+              </div>
+
+              <div class="flex gap-3">
+                {project.github && (
+                  <a href={project.github} target="_blank" rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
+                    aria-label={`${project.title} 原始碼`}>
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
+                    原始碼
+                  </a>
+                )}
+                {project.demo && (
+                  <a href={project.demo} target="_blank" rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 text-sm text-brand hover:text-brand-light transition-colors"
+                    aria-label={`${project.title} 線上展示`}>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                    線上展示
+                  </a>
+                )}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-20" aria-label="GitHub">
+    <div class="section-container text-center">
+      <div class="animate-on-scroll p-10 rounded-3xl bg-zinc-900/30 border border-zinc-800/50">
+        <h2 class="text-2xl font-bold mb-4">GitHub 上還有更多</h2>
+        <p class="text-zinc-400 mb-6 max-w-md mx-auto">
+          這裡只放了一部分。有些實驗性質的小東西就沒特別列出來了。
+        </p>
+        <a href="https://github.com/KJyang-0114" target="_blank" rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-100 font-semibold rounded-lg transition-all duration-200">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
+          去 GitHub 逛逛
+        </a>
+      </div>
+    </div>
+  </section>
+
 </Layout>
-
-<style>
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-  }
-
-  .page-header {
-    text-align: center;
-    margin-bottom: 5rem;
-  }
-
-  .page-title {
-    font-size: 3.5rem;
-    font-weight: 800;
-    margin-bottom: 1.5rem;
-    background: var(--primary-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1.2;
-  }
-
-  .page-subtitle {
-    font-size: 1.3rem;
-    color: var(--text-muted);
-    max-width: 700px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
-
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-    gap: 3rem;
-    margin-top: 2rem;
-  }
-
-  @media (max-width: 768px) {
-    .container {
-      padding: 3rem 1rem;
-    }
-
-    .page-header {
-      margin-bottom: 3rem;
-    }
-
-    .page-title {
-      font-size: 2.8rem;
-    }
-
-    .page-subtitle {
-      font-size: 1.1rem;
-    }
-
-    .projects-grid {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .page-title {
-      font-size: 2.3rem;
-    }
-    
-    .projects-grid {
-      gap: 1.5rem;
-    }
-  }
-</style>
