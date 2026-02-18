@@ -38,30 +38,36 @@ const timeline = [
   jsonLd={jsonLd}
 >
 
-  <section class="pt-32 pb-16">
-    <div class="section-container">
-      <h1 class="animate-on-scroll text-4xl sm:text-5xl font-black mb-6">
+  <section class="pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-grid opacity-30 pointer-events-none"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-brand/10 rounded-full blur-[100px] pointer-events-none"></div>
+    
+    <div class="section-container relative z-10">
+      <h1 class="animate-on-scroll text-5xl sm:text-6xl font-black mb-6 tracking-tight">
         關於我
       </h1>
-      <p class="animate-on-scroll delay-1 text-lg text-zinc-400 max-w-2xl leading-relaxed">
-        網路上叫 KJyang，IG 叫 <a href="https://www.instagram.com/imw1nt0r/" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-light">@imw1nt0r</a>。鶯歌工商資訊科。
+      <p class="animate-on-scroll delay-1 text-xl text-zinc-400 max-w-2xl leading-relaxed font-medium">
+        網路上叫 KJyang，IG 叫 <a href="https://www.instagram.com/imw1nt0r/" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-light transition-colors">@imw1nt0r</a>。鶯歌工商資訊科。
       </p>
     </div>
   </section>
 
   <!-- The Real Story -->
-  <section class="py-16" aria-label="我的故事">
+  <section class="py-16 relative" aria-label="我的故事">
     <div class="section-container">
       <div class="grid grid-cols-1 lg:grid-cols-5 gap-12">
         <div class="lg:col-span-3">
-          <h2 class="animate-on-scroll text-2xl font-bold mb-6">我是誰</h2>
-          <div class="animate-on-scroll delay-1 space-y-4 text-zinc-300 leading-relaxed">
+          <h2 class="animate-on-scroll text-3xl font-bold mb-8 flex items-center gap-3">
+            <span class="w-2 h-8 bg-brand rounded-full"></span>
+            我是誰
+          </h2>
+          <div class="animate-on-scroll delay-1 space-y-6 text-lg text-zinc-300 leading-relaxed">
             <p>
               高中生，讀鶯歌工商資訊科。但老實說在學校學的跟我自己在外面學的差蠻多的 — 
               學校教基礎，我自己研究比較前沿的東西。兩邊互補，我覺得這樣蠻好的。
             </p>
             <p>
-              我最強的地方大概是<strong class="text-zinc-100">學東西很快</strong>。
+              我最強的地方大概是<strong class="text-white font-semibold">學東西很快</strong>。
               不是那種天才型的快，是我很會利用工具。LLM 出來之後我的學習效率直接翻倍 — 
               遇到不懂的直接問，看文件看不懂就叫 AI 解釋，然後自己動手寫驗證。
               這套方法讓我可以短時間上手一個全新的框架或語言。
@@ -69,7 +75,7 @@ const timeline = [
             <p>
               技術面來說，我什麼都碰一點。前端 React、Vue 寫過，後端 Python FastAPI 也行，
               AI 方面從 Prompt Engineering 到強化學習都有在玩。
-              最近比較專注在 <strong class="text-zinc-100">LLM 的實際應用</strong> — 
+              最近比較專注在 <strong class="text-white font-semibold">LLM 的實際應用</strong> — 
               不是那種只會 call API 的，是真的有在想怎麼把 AI 整合進實際的產品流程裡面。
             </p>
             <p>
@@ -86,32 +92,40 @@ const timeline = [
         </div>
 
         <aside class="lg:col-span-2">
-          <div class="animate-on-scroll delay-2 p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50">
-            <h3 class="text-lg font-semibold mb-6 text-zinc-200">基本資料</h3>
-            <dl class="space-y-4">
-              <div>
-                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider">暱稱</dt>
-                <dd class="mt-1 text-zinc-200">KJyang</dd>
+          <div class="animate-on-scroll delay-2 p-8 rounded-3xl glass-card border border-white/5 sticky top-24">
+            <h3 class="text-xl font-bold mb-8 text-zinc-100 flex items-center gap-2">
+              <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+              基本資料
+            </h3>
+            <dl class="space-y-6">
+              <div class="group">
+                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider mb-1 group-hover:text-brand transition-colors">暱稱</dt>
+                <dd class="text-lg font-medium text-zinc-200">KJyang</dd>
               </div>
-              <div>
-                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider">學校</dt>
-                <dd class="mt-1 text-zinc-200">鶯歌工商 · 資訊科</dd>
+              <div class="w-full h-px bg-white/5"></div>
+              <div class="group">
+                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider mb-1 group-hover:text-brand transition-colors">學校</dt>
+                <dd class="text-lg font-medium text-zinc-200">鶯歌工商 · 資訊科</dd>
               </div>
-              <div>
-                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider">擅長</dt>
-                <dd class="mt-1 text-zinc-200">AI / LLM 應用 · 全端開發</dd>
+              <div class="w-full h-px bg-white/5"></div>
+              <div class="group">
+                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider mb-1 group-hover:text-brand transition-colors">擅長</dt>
+                <dd class="text-lg font-medium text-zinc-200">AI / LLM 應用 · 全端開發</dd>
               </div>
-              <div>
-                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider">主力語言</dt>
-                <dd class="mt-1 text-zinc-200">Python · TypeScript · Java</dd>
+              <div class="w-full h-px bg-white/5"></div>
+              <div class="group">
+                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider mb-1 group-hover:text-brand transition-colors">主力語言</dt>
+                <dd class="text-lg font-medium text-zinc-200">Python · TypeScript · Java</dd>
               </div>
-              <div>
-                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider">追星</dt>
-                <dd class="mt-1 text-zinc-200">aespa 🖤</dd>
+              <div class="w-full h-px bg-white/5"></div>
+              <div class="group">
+                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider mb-1 group-hover:text-brand transition-colors">追星</dt>
+                <dd class="text-lg font-medium text-zinc-200 flex items-center gap-2">aespa 🖤 <span class="text-xs bg-zinc-800 px-2 py-0.5 rounded-full text-zinc-400">MY</span></dd>
               </div>
-              <div>
-                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider">地點</dt>
-                <dd class="mt-1 text-zinc-200">新北市</dd>
+              <div class="w-full h-px bg-white/5"></div>
+              <div class="group">
+                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider mb-1 group-hover:text-brand transition-colors">地點</dt>
+                <dd class="text-lg font-medium text-zinc-200">新北市</dd>
               </div>
             </dl>
           </div>
@@ -121,20 +135,24 @@ const timeline = [
   </section>
 
   <!-- Timeline -->
-  <section class="py-16" aria-label="學習歷程">
-    <div class="section-container">
-      <h2 class="animate-on-scroll text-2xl font-bold mb-10">到目前為止</h2>
+  <section class="py-20 relative" aria-label="學習歷程">
+    <div class="absolute inset-0 bg-zinc-900/20 skew-y-3 transform origin-bottom-right"></div>
+    <div class="section-container relative z-10">
+      <h2 class="animate-on-scroll text-3xl font-bold mb-16 flex items-center gap-3">
+        <span class="w-2 h-8 bg-accent rounded-full"></span>
+        到目前為止
+      </h2>
 
-      <div class="relative">
-        <div class="absolute left-4 top-0 bottom-0 w-px bg-zinc-800" aria-hidden="true"></div>
+      <div class="relative max-w-3xl mx-auto">
+        <div class="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-brand via-accent to-transparent" aria-hidden="true"></div>
 
-        <div class="space-y-10">
+        <div class="space-y-16">
           {timeline.map((item, i) => (
-            <div class={`animate-on-scroll delay-${i + 1} relative pl-12`}>
-              <div class="absolute left-2.5 top-1.5 w-3 h-3 rounded-full bg-brand border-2 border-zinc-950" aria-hidden="true"></div>
-              <span class="text-xs font-mono text-brand uppercase tracking-wider">{item.period}</span>
-              <h3 class="text-lg font-semibold text-zinc-100 mt-1 mb-2">{item.title}</h3>
-              <p class="text-zinc-400 text-sm leading-relaxed">{item.note}</p>
+            <div class={`animate-on-scroll delay-${i + 1} relative pl-16 group`}>
+              <div class="absolute left-1.5 top-2 w-5 h-5 rounded-full bg-zinc-950 border-4 border-brand group-hover:border-accent transition-colors shadow-[0_0_15px_rgba(99,102,241,0.5)]" aria-hidden="true"></div>
+              <span class="inline-block px-3 py-1 mb-2 text-xs font-mono font-bold text-brand bg-brand/10 rounded-full group-hover:text-accent group-hover:bg-accent/10 transition-colors">{item.period}</span>
+              <h3 class="text-2xl font-bold text-zinc-100 mb-3">{item.title}</h3>
+              <p class="text-zinc-400 text-lg leading-relaxed">{item.note}</p>
             </div>
           ))}
         </div>
@@ -143,40 +161,43 @@ const timeline = [
   </section>
 
   <!-- What I Believe -->
-  <section class="py-16" aria-label="我的想法">
+  <section class="py-20" aria-label="我的想法">
     <div class="section-container">
-      <h2 class="animate-on-scroll text-2xl font-bold mb-10">我怎麼看事情</h2>
+      <h2 class="animate-on-scroll text-3xl font-bold mb-10 flex items-center gap-3">
+        <span class="w-2 h-8 bg-zinc-600 rounded-full"></span>
+        我怎麼看事情
+      </h2>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div class="animate-on-scroll delay-1 p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50">
-          <h3 class="text-lg font-semibold text-zinc-100 mb-2">工具用好就是實力</h3>
-          <p class="text-zinc-400 text-sm leading-relaxed">
+        <div class="animate-on-scroll delay-1 p-8 rounded-3xl glass-card border border-white/5 hover:bg-zinc-900/80 transition-colors">
+          <h3 class="text-xl font-bold text-zinc-100 mb-4">工具用好就是實力</h3>
+          <p class="text-zinc-400 leading-relaxed">
             有人覺得用 AI 輔助寫 code 是作弊。我覺得不是 — 
             知道怎麼問、怎麼驗證、怎麼整合，這本身就是一種能力。
             重點是你能不能交出東西。
           </p>
         </div>
 
-        <div class="animate-on-scroll delay-2 p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50">
-          <h3 class="text-lg font-semibold text-zinc-100 mb-2">先做再說</h3>
-          <p class="text-zinc-400 text-sm leading-relaxed">
+        <div class="animate-on-scroll delay-2 p-8 rounded-3xl glass-card border border-white/5 hover:bg-zinc-900/80 transition-colors">
+          <h3 class="text-xl font-bold text-zinc-100 mb-4">先做再說</h3>
+          <p class="text-zinc-400 leading-relaxed">
             想太多不如直接開幹。遇到問題再解決。
             我大部分的專案都是「欸感覺可以做」然後就開始寫了，
             寫到一半發現比想像中複雜，但也因為已經開始了所以會想辦法做完。
           </p>
         </div>
 
-        <div class="animate-on-scroll delay-3 p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50">
-          <h3 class="text-lg font-semibold text-zinc-100 mb-2">不設限</h3>
-          <p class="text-zinc-400 text-sm leading-relaxed">
+        <div class="animate-on-scroll delay-3 p-8 rounded-3xl glass-card border border-white/5 hover:bg-zinc-900/80 transition-colors">
+          <h3 class="text-xl font-bold text-zinc-100 mb-4">不設限</h3>
+          <p class="text-zinc-400 leading-relaxed">
             前端、後端、AI、遊戲開發、甚至 iOS — 什麼有趣就學什麼。
             高中生的優勢就是時間還多，現在不多嘗試什麼時候試？
           </p>
         </div>
 
-        <div class="animate-on-scroll delay-4 p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50">
-          <h3 class="text-lg font-semibold text-zinc-100 mb-2">開源是基本</h3>
-          <p class="text-zinc-400 text-sm leading-relaxed">
+        <div class="animate-on-scroll delay-4 p-8 rounded-3xl glass-card border border-white/5 hover:bg-zinc-900/80 transition-colors">
+          <h3 class="text-xl font-bold text-zinc-100 mb-4">開源是基本</h3>
+          <p class="text-zinc-400 leading-relaxed">
             我的東西全部放 GitHub。一方面是給自己記錄，一方面是希望別人也能從中學到什麼。
             反正藏起來也不會比較值錢。
           </p>
@@ -186,12 +207,13 @@ const timeline = [
   </section>
 
   <!-- CTA -->
-  <section class="py-16">
+  <section class="py-20">
     <div class="section-container text-center">
-      <div class="animate-on-scroll p-10 rounded-3xl bg-zinc-900/30 border border-zinc-800/50">
-        <h2 class="text-2xl font-bold mb-4">想看實際成果？</h2>
-        <p class="text-zinc-400 mb-6">文字說再多不如直接看 code。</p>
-        <a href="/projects" class="inline-flex items-center gap-2 px-6 py-3 bg-brand hover:bg-brand-dark text-white font-semibold rounded-lg transition-all duration-200">
+      <div class="animate-on-scroll p-12 rounded-3xl bg-gradient-to-br from-brand/20 to-accent/20 border border-white/10 relative overflow-hidden">
+        <div class="absolute inset-0 bg-grid opacity-20"></div>
+        <h2 class="text-3xl font-bold mb-4 relative z-10">想看實際成果？</h2>
+        <p class="text-zinc-300 mb-8 text-lg relative z-10">文字說再多不如直接看 code。</p>
+        <a href="/projects" class="relative z-10 inline-flex items-center gap-2 px-8 py-4 bg-white text-zinc-950 font-bold rounded-full hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/10">
           作品集
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
         </a>

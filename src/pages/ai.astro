@@ -61,49 +61,54 @@ const guidelines = [
 >
 
   <!-- Hero -->
-  <section class="pt-32 pb-16">
-    <div class="section-container">
-      <div class="animate-on-scroll inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand/10 border border-brand/20 text-brand text-sm font-medium mb-8">
+  <section class="pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-grid opacity-30 pointer-events-none"></div>
+    <div class="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-brand/10 rounded-full blur-[120px] pointer-events-none"></div>
+    
+    <div class="section-container relative z-10 text-center">
+      <div class="animate-on-scroll inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand/10 border border-brand/20 text-brand text-sm font-medium mb-8 backdrop-blur-sm">
         <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span>
         AI 探索
       </div>
-      <h1 class="animate-on-scroll delay-1 text-4xl sm:text-5xl font-black mb-6">
-        探索 <span class="text-gradient">AI</span> 宇宙
+      <h1 class="animate-on-scroll delay-1 text-5xl sm:text-6xl lg:text-7xl font-black mb-8 tracking-tight">
+        探索 <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-light via-white to-accent-light">AI</span> 宇宙
       </h1>
-      <p class="animate-on-scroll delay-2 text-lg text-zinc-400 max-w-2xl leading-relaxed">
+      <p class="animate-on-scroll delay-2 text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed font-medium">
         從基礎概念到未來展望，一次搞懂人工智慧到底在紅什麼。
       </p>
     </div>
   </section>
 
   <!-- 01 AI 基礎概念 -->
-  <section class="py-16" aria-label="AI 基礎概念">
+  <section class="py-20 relative" aria-label="AI 基礎概念">
     <div class="section-container">
-      <div class="flex items-center gap-4 mb-8">
-        <span class="animate-on-scroll text-sm font-mono text-brand bg-brand/10 border border-brand/20 px-3 py-1 rounded-full">01</span>
-        <h2 class="animate-on-scroll text-2xl sm:text-3xl font-bold">AI 基礎概念</h2>
+      <div class="flex items-center gap-6 mb-12">
+        <span class="animate-on-scroll text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-brand to-transparent opacity-50">01</span>
+        <div>
+           <h2 class="animate-on-scroll text-3xl font-bold text-zinc-100">AI 基礎概念</h2>
+           <p class="animate-on-scroll delay-1 text-zinc-400 mt-2">什麼是人工智慧？</p>
+        </div>
       </div>
-      <p class="animate-on-scroll delay-1 text-zinc-400 mb-10 max-w-2xl">什麼是人工智慧？</p>
 
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div class="animate-on-scroll delay-1 p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50">
-          <span class="text-3xl mb-4 block">🧠</span>
-          <h3 class="text-lg font-semibold text-zinc-100 mb-2">簡單來說</h3>
-          <p class="text-zinc-400 text-sm leading-relaxed">
+        <div class="animate-on-scroll delay-1 p-8 rounded-3xl glass-card border border-white/5 hover:bg-zinc-900/80 transition-all duration-300">
+          <span class="text-4xl mb-6 block">🧠</span>
+          <h3 class="text-xl font-bold text-zinc-100 mb-3">簡單來說</h3>
+          <p class="text-zinc-400 leading-relaxed">
             AI 就像一個超級聰明的助手，能夠學習、思考和解決問題。想像一下，如果你的電腦突然會思考了！
           </p>
         </div>
-        <div class="animate-on-scroll delay-2 p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50">
-          <span class="text-3xl mb-4 block">⚙️</span>
-          <h3 class="text-lg font-semibold text-zinc-100 mb-2">技術角度</h3>
-          <p class="text-zinc-400 text-sm leading-relaxed">
+        <div class="animate-on-scroll delay-2 p-8 rounded-3xl glass-card border border-white/5 hover:bg-zinc-900/80 transition-all duration-300">
+          <span class="text-4xl mb-6 block">⚙️</span>
+          <h3 class="text-xl font-bold text-zinc-100 mb-3">技術角度</h3>
+          <p class="text-zinc-400 leading-relaxed">
             AI 是讓機器模擬人類智慧的技術，包括機器學習、深度學習、自然語言處理等多個領域。
           </p>
         </div>
-        <div class="animate-on-scroll delay-3 p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50">
-          <span class="text-3xl mb-4 block">💡</span>
-          <h3 class="text-lg font-semibold text-zinc-100 mb-2">生活應用</h3>
-          <p class="text-zinc-400 text-sm leading-relaxed">
+        <div class="animate-on-scroll delay-3 p-8 rounded-3xl glass-card border border-white/5 hover:bg-zinc-900/80 transition-all duration-300">
+          <span class="text-4xl mb-6 block">💡</span>
+          <h3 class="text-xl font-bold text-zinc-100 mb-3">生活應用</h3>
+          <p class="text-zinc-400 leading-relaxed">
             從手機的語音助手到推薦系統，AI 已經悄悄融入我們的日常生活中。
           </p>
         </div>
@@ -112,19 +117,21 @@ const guidelines = [
   </section>
 
   <!-- 02 AI 的超能力 -->
-  <section class="py-16" aria-label="AI 的能力">
+  <section class="py-20 bg-zinc-900/20" aria-label="AI 的能力">
     <div class="section-container">
-      <div class="flex items-center gap-4 mb-8">
-        <span class="animate-on-scroll text-sm font-mono text-brand bg-brand/10 border border-brand/20 px-3 py-1 rounded-full">02</span>
-        <h2 class="animate-on-scroll text-2xl sm:text-3xl font-bold">AI 能做什麼</h2>
+      <div class="flex items-center gap-6 mb-12">
+        <span class="animate-on-scroll text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-accent to-transparent opacity-50">02</span>
+        <div>
+           <h2 class="animate-on-scroll text-3xl font-bold text-zinc-100">AI 能做什麼</h2>
+           <p class="animate-on-scroll delay-1 text-zinc-400 mt-2">目前 AI 已經能做到的事情。</p>
+        </div>
       </div>
-      <p class="animate-on-scroll delay-1 text-zinc-400 mb-10 max-w-2xl">目前 AI 已經能做到的事情。</p>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {abilities.map((a, i) => (
-          <div class={`animate-on-scroll delay-${(i % 4) + 1} p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50 hover:border-brand/30 transition-all duration-300`}>
-            <span class="text-2xl mb-3 block">{a.icon}</span>
-            <h3 class="text-base font-semibold text-zinc-200 mb-2">{a.title}</h3>
+          <div class={`animate-on-scroll delay-${(i % 4) + 1} p-6 rounded-2xl bg-zinc-950 border border-zinc-800/50 hover:border-brand/50 hover:shadow-lg hover:shadow-brand/5 transition-all duration-300 group`}>
+            <span class="text-3xl mb-4 block transform group-hover:scale-110 transition-transform origin-left">{a.icon}</span>
+            <h3 class="text-lg font-bold text-zinc-200 mb-2 group-hover:text-brand-light transition-colors">{a.title}</h3>
             <p class="text-zinc-400 text-sm leading-relaxed">{a.desc}</p>
           </div>
         ))}
@@ -133,20 +140,22 @@ const guidelines = [
   </section>
 
   <!-- 03 AI 的限制 -->
-  <section class="py-16" aria-label="AI 的限制">
+  <section class="py-20" aria-label="AI 的限制">
     <div class="section-container">
-      <div class="flex items-center gap-4 mb-8">
-        <span class="animate-on-scroll text-sm font-mono text-brand bg-brand/10 border border-brand/20 px-3 py-1 rounded-full">03</span>
-        <h2 class="animate-on-scroll text-2xl sm:text-3xl font-bold">AI 的限制</h2>
+      <div class="flex items-center gap-6 mb-12">
+        <span class="animate-on-scroll text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-transparent opacity-50">03</span>
+        <div>
+           <h2 class="animate-on-scroll text-3xl font-bold text-zinc-100">AI 的限制</h2>
+           <p class="animate-on-scroll delay-1 text-zinc-400 mt-2">AI 不是萬能的，了解它的邊界很重要。</p>
+        </div>
       </div>
-      <p class="animate-on-scroll delay-1 text-zinc-400 mb-10 max-w-2xl">AI 不是萬能的，了解它的邊界很重要。</p>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {limitations.map((l, i) => (
-          <div class={`animate-on-scroll delay-${(i % 4) + 1} flex items-start gap-4 p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50`}>
-            <span class="text-xl mt-0.5 flex-shrink-0">⚠️</span>
+          <div class={`animate-on-scroll delay-${(i % 4) + 1} flex items-start gap-4 p-6 rounded-2xl glass-card border border-white/5`}>
+            <span class="text-2xl mt-0.5 flex-shrink-0">⚠️</span>
             <div>
-              <h3 class="text-base font-semibold text-zinc-200 mb-2">{l.title}</h3>
+              <h3 class="text-lg font-bold text-zinc-200 mb-2">{l.title}</h3>
               <p class="text-zinc-400 text-sm leading-relaxed">{l.desc}</p>
             </div>
           </div>
@@ -156,24 +165,26 @@ const guidelines = [
   </section>
 
   <!-- 04 迷思破解 -->
-  <section class="py-16" aria-label="迷思破解">
+  <section class="py-20 bg-zinc-900/20" aria-label="迷思破解">
     <div class="section-container">
-      <div class="flex items-center gap-4 mb-8">
-        <span class="animate-on-scroll text-sm font-mono text-brand bg-brand/10 border border-brand/20 px-3 py-1 rounded-full">04</span>
-        <h2 class="animate-on-scroll text-2xl sm:text-3xl font-bold">迷思破解</h2>
+      <div class="flex items-center gap-6 mb-12">
+         <span class="animate-on-scroll text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-yellow-500 to-transparent opacity-50">04</span>
+         <div>
+            <h2 class="animate-on-scroll text-3xl font-bold text-zinc-100">迷思破解</h2>
+            <p class="animate-on-scroll delay-1 text-zinc-400 mt-2">常見的 AI 誤解，一次澄清。</p>
+         </div>
       </div>
-      <p class="animate-on-scroll delay-1 text-zinc-400 mb-10 max-w-2xl">常見的 AI 誤解，一次澄清。</p>
 
-      <div class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         {myths.map((m, i) => (
-          <div class={`animate-on-scroll delay-${(i % 4) + 1} p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50`}>
-            <div class="flex items-center gap-3 mb-3 text-red-400">
-              <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-              <span class="text-sm font-medium"><strong>迷思：</strong>{m.myth}</span>
+          <div class={`animate-on-scroll delay-${(i % 4) + 1} p-8 rounded-3xl bg-zinc-950 border border-zinc-800`}>
+            <div class="mb-6 pb-6 border-b border-zinc-800">
+              <span class="text-xs font-mono font-bold text-red-400 uppercase tracking-wider mb-2 block">Myth</span>
+              <p class="text-lg font-medium text-zinc-300">{m.myth}</p>
             </div>
-            <div class="flex items-center gap-3 text-green-400">
-              <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-              <span class="text-sm font-medium"><strong>實際：</strong>{m.fact}</span>
+            <div>
+              <span class="text-xs font-mono font-bold text-green-400 uppercase tracking-wider mb-2 block">Fact</span>
+              <p class="text-zinc-400 leading-relaxed">{m.fact}</p>
             </div>
           </div>
         ))}
@@ -182,20 +193,23 @@ const guidelines = [
   </section>
 
   <!-- 05 發展歷程 -->
-  <section class="py-16" aria-label="AI 發展歷程">
+  <section class="py-20" aria-label="AI 發展歷程">
     <div class="section-container">
-      <div class="flex items-center gap-4 mb-8">
-        <span class="animate-on-scroll text-sm font-mono text-brand bg-brand/10 border border-brand/20 px-3 py-1 rounded-full">05</span>
-        <h2 class="animate-on-scroll text-2xl sm:text-3xl font-bold">AI 發展歷程</h2>
+      <div class="flex items-center gap-6 mb-12">
+        <span class="animate-on-scroll text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-purple-500 to-transparent opacity-50">05</span>
+        <div>
+           <h2 class="animate-on-scroll text-3xl font-bold text-zinc-100">AI 發展歷程</h2>
+           <p class="animate-on-scroll delay-1 text-zinc-400 mt-2">從過去到現在。</p>
+        </div>
       </div>
 
-      <div class="relative pl-8 border-l-2 border-zinc-800 space-y-10">
+      <div class="relative pl-8 md:pl-12 border-l-2 border-zinc-800 space-y-12">
         {timeline.map((t, i) => (
           <div class={`animate-on-scroll delay-${(i % 4) + 1} relative`}>
-            <div class="absolute -left-[calc(2rem+5px)] top-1.5 w-3 h-3 rounded-full bg-brand border-2 border-zinc-950" aria-hidden="true"></div>
-            <span class="text-xs font-mono text-brand uppercase tracking-wider">{t.year}</span>
-            <h3 class="text-lg font-semibold text-zinc-100 mt-1 mb-2">{t.title}</h3>
-            <p class="text-zinc-400 text-sm leading-relaxed">{t.desc}</p>
+            <div class="absolute -left-[calc(2rem+5px)] md:-left-[calc(3rem+5px)] top-2 w-3 h-3 rounded-full bg-brand border-4 border-zinc-950 shadow-[0_0_15px_rgba(99,102,241,0.5)]" aria-hidden="true"></div>
+            <span class="inline-block px-3 py-1 mb-3 text-xs font-mono font-bold text-brand bg-brand/10 rounded-full border border-brand/20">{t.year}</span>
+            <h3 class="text-xl font-bold text-zinc-100 mb-2">{t.title}</h3>
+            <p class="text-zinc-400 leading-relaxed">{t.desc}</p>
           </div>
         ))}
       </div>
@@ -203,19 +217,20 @@ const guidelines = [
   </section>
 
   <!-- 06 未來展望 -->
-  <section class="py-16" aria-label="未來展望">
-    <div class="section-container">
-      <div class="flex items-center gap-4 mb-8">
-        <span class="animate-on-scroll text-sm font-mono text-brand bg-brand/10 border border-brand/20 px-3 py-1 rounded-full">∞</span>
-        <h2 class="animate-on-scroll text-2xl sm:text-3xl font-bold">未來展望</h2>
+  <section class="py-20 relative overflow-hidden" aria-label="未來展望">
+     <div class="absolute inset-0 bg-gradient-to-t from-brand/5 to-transparent pointer-events-none"></div>
+    <div class="section-container relative z-10">
+      <div class="text-center mb-16">
+        <span class="animate-on-scroll inline-block text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-zinc-700 to-transparent opacity-30 mb-4">∞</span>
+        <h2 class="animate-on-scroll text-4xl font-bold text-zinc-100">未來展望</h2>
+        <p class="animate-on-scroll delay-1 text-zinc-400 mt-4 max-w-2xl mx-auto">AI 的明天會是什麼樣子？</p>
       </div>
-      <p class="animate-on-scroll delay-1 text-zinc-400 mb-10 max-w-2xl">AI 的明天會是什麼樣子？</p>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {future.map((f, i) => (
-          <div class={`animate-on-scroll delay-${(i % 4) + 1} p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50 hover:border-accent/30 transition-all duration-300 text-center`}>
-            <span class="text-3xl mb-4 block">{f.icon}</span>
-            <h3 class="text-base font-semibold text-zinc-200 mb-2">{f.title}</h3>
+          <div class={`animate-on-scroll delay-${(i % 4) + 1} p-8 rounded-3xl glass-card border border-white/5 hover:border-brand/30 transition-all duration-300 text-center group`}>
+            <span class="text-4xl mb-6 block transform group-hover:scale-110 transition-transform duration-300">{f.icon}</span>
+            <h3 class="text-lg font-bold text-zinc-100 mb-3">{f.title}</h3>
             <p class="text-zinc-400 text-sm leading-relaxed">{f.desc}</p>
           </div>
         ))}
@@ -224,15 +239,15 @@ const guidelines = [
   </section>
 
   <!-- 使用須知 -->
-  <section class="py-16" aria-label="AI 使用須知">
+  <section class="py-20 bg-zinc-950" aria-label="AI 使用須知">
     <div class="section-container">
-      <h2 class="animate-on-scroll text-2xl sm:text-3xl font-bold mb-10 text-center">使用 AI 的注意事項</h2>
+      <h2 class="animate-on-scroll text-3xl font-bold mb-12 text-center">使用 AI 的注意事項</h2>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {guidelines.map((g, i) => (
-          <div class={`animate-on-scroll delay-${(i % 4) + 1} p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50 text-center`}>
+          <div class={`animate-on-scroll delay-${(i % 4) + 1} p-6 rounded-2xl bg-zinc-900 border border-zinc-800 text-center`}>
             <span class="text-3xl mb-4 block">{g.icon}</span>
-            <h3 class="text-base font-semibold text-zinc-200 mb-2">{g.title}</h3>
+            <h3 class="text-base font-bold text-zinc-200 mb-2">{g.title}</h3>
             <p class="text-zinc-400 text-sm leading-relaxed">{g.desc}</p>
           </div>
         ))}

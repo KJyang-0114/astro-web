@@ -93,12 +93,15 @@ const jsonLd = {
   jsonLd={jsonLd}
 >
 
-  <section class="pt-32 pb-16">
-    <div class="section-container">
-      <h1 class="animate-on-scroll text-4xl sm:text-5xl font-black mb-6">
+  <section class="pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 bg-grid opacity-30 pointer-events-none"></div>
+    <div class="absolute top-20 right-0 w-96 h-96 bg-brand/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+    <div class="section-container relative z-10">
+      <h1 class="animate-on-scroll text-5xl sm:text-6xl font-black mb-6 tracking-tight">
         作品集
       </h1>
-      <p class="animate-on-scroll delay-1 text-lg text-zinc-400 max-w-2xl leading-relaxed">
+      <p class="animate-on-scroll delay-1 text-xl text-zinc-400 max-w-2xl leading-relaxed font-medium">
         全部開源在 GitHub 上。有些是認真做的，有些是突然想到就寫的，
         但每個都有學到東西。
       </p>
@@ -111,44 +114,37 @@ const jsonLd = {
         {projects.map((project, i) => {
           const colors = colorClasses[project.color] || colorClasses.cyan;
           return (
-            <article class={`animate-on-scroll delay-${(i % 4) + 1} group relative p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50 ${colors.border} transition-all duration-300`}>
-              <div class="flex items-start justify-between mb-4">
-                <span class={`px-3 py-1 text-xs font-mono rounded-full border ${colors.badge}`}>
+            <article class={`animate-on-scroll delay-${(i % 4) + 1} group relative p-8 rounded-3xl glass-card border border-white/5 hover:border-white/10 transition-all duration-300`}>
+              <div class="flex items-start justify-between mb-6">
+                <span class={`px-3 py-1 text-xs font-mono font-bold tracking-wider rounded-full border ${colors.badge}`}>
                   {project.category}
                 </span>
+                <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                   {project.github && (
+                      <a href={project.github} target="_blank" rel="noopener noreferrer" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors" aria-label="GitHub">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
+                      </a>
+                   )}
+                   {project.demo && (
+                      <a href={project.demo} target="_blank" rel="noopener noreferrer" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-brand hover:text-brand-light transition-colors" aria-label="Demo">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                      </a>
+                   )}
+                </div>
               </div>
 
-              <h2 class="text-xl font-bold text-zinc-100 mb-3 group-hover:text-brand-light transition-colors">
+              <h2 class="text-2xl font-bold text-zinc-100 mb-3 group-hover:text-brand-light transition-colors">
                 {project.title}
               </h2>
 
-              <p class="text-zinc-400 text-sm mb-5 leading-relaxed">
+              <p class="text-zinc-400 text-sm mb-6 leading-relaxed">
                 {project.description}
               </p>
 
-              <div class="flex flex-wrap gap-2 mb-5">
+              <div class="flex flex-wrap gap-2">
                 {project.tags.map(tag => (
-                  <span class="text-xs font-mono text-zinc-500 px-2 py-1 rounded bg-zinc-800/50">{tag}</span>
+                  <span class="text-xs font-medium text-zinc-500 px-2.5 py-1 rounded-md bg-zinc-800/50 border border-zinc-700/30">{tag}</span>
                 ))}
-              </div>
-
-              <div class="flex gap-3">
-                {project.github && (
-                  <a href={project.github} target="_blank" rel="noopener noreferrer"
-                    class="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
-                    aria-label={`${project.title} 原始碼`}>
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
-                    原始碼
-                  </a>
-                )}
-                {project.demo && (
-                  <a href={project.demo} target="_blank" rel="noopener noreferrer"
-                    class="inline-flex items-center gap-2 text-sm text-brand hover:text-brand-light transition-colors"
-                    aria-label={`${project.title} 線上展示`}>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                    線上展示
-                  </a>
-                )}
               </div>
             </article>
           );
@@ -159,13 +155,13 @@ const jsonLd = {
 
   <section class="pb-20" aria-label="GitHub">
     <div class="section-container text-center">
-      <div class="animate-on-scroll p-10 rounded-3xl bg-zinc-900/30 border border-zinc-800/50">
+      <div class="animate-on-scroll p-12 rounded-3xl glass-card bg-gradient-to-br from-zinc-900/50 to-zinc-950/50">
         <h2 class="text-2xl font-bold mb-4">GitHub 上還有更多</h2>
-        <p class="text-zinc-400 mb-6 max-w-md mx-auto">
+        <p class="text-zinc-400 mb-8 max-w-md mx-auto">
           這裡只放了一部分。有些實驗性質的小東西就沒特別列出來了。
         </p>
         <a href="https://github.com/KJyang-0114" target="_blank" rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-100 font-semibold rounded-lg transition-all duration-200">
+          class="inline-flex items-center gap-2 px-8 py-3 bg-white text-zinc-950 hover:bg-zinc-200 font-bold rounded-full transition-all duration-200 hover:scale-105 active:scale-95">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
           去 GitHub 逛逛
         </a>
