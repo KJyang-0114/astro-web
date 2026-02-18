@@ -8,13 +8,19 @@
   --color-accent: #06b6d4;
   --color-accent-light: #22d3ee;
   
+  /* Modern Dark Theme Palette */
+  --color-surface-950: #09090b; /* Zinc 950 */
+  --color-surface-900: #18181b; /* Zinc 900 */
+  --color-surface-800: #27272a; /* Zinc 800 */
+  
   /* Typography */
-  --font-sans: 'Noto Sans TC', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Inter', 'Noto Sans TC', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
   
   /* Animations */
   --animate-fade-in: fade-in 0.6s ease-out both;
   --animate-slide-up: slide-up 0.6s ease-out both;
+  --animate-float: float 6s ease-in-out infinite;
   
   @keyframes fade-in {
     from { opacity: 0; }
@@ -25,17 +31,28 @@
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
   }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 5rem;
+    background-color: var(--color-surface-950);
+    color: #e4e4e7; /* Zinc 200 */
   }
   
   body {
     @apply leading-relaxed;
     overflow-x: hidden;
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 100% 0%, rgba(6, 182, 212, 0.1) 0%, transparent 30%);
+    min-height: 100vh;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -55,19 +72,37 @@
 
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand to-accent;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-light to-accent-light;
   }
   
   .section-container {
     @apply max-w-6xl mx-auto px-6 sm:px-8 lg:px-12;
+  }
+  
+  /* Glassmorphism */
+  .glass {
+    @apply bg-zinc-950/70 backdrop-blur-md border border-zinc-800/50;
+  }
+  
+  .glass-card {
+    @apply bg-zinc-900/40 backdrop-blur-sm border border-zinc-800/60 hover:bg-zinc-900/60 hover:border-zinc-700/60 transition-all duration-300;
+  }
+  
+  /* Grid Background Pattern */
+  .bg-grid {
+    background-size: 40px 40px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
   }
 }
 
 /* Scroll-triggered animations */
 .animate-on-scroll {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: opacity, transform;
 }
 .animate-on-scroll.is-visible {
   opacity: 1;
