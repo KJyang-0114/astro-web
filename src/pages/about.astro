@@ -1,261 +1,202 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const skills = [
-  {
-    icon: '🐛',
-    title: 'Bug 製造',
-    level: 100,
-  },
-  {
-    icon: '🔍',
-    title: 'Google 搜尋',
-    level: 95,
-  },
-  {
-    icon: '💻',
-    title: '複製貼上',
-    level: 90,
-  },
-];
-
-const learning = [
-  {
-    icon: '🍝',
-    text: '如何不讓程式變成一團意大利麵'
-  },
-  {
-    icon: '🤔',
-    text: '如何在程式崩潰時優雅地求救'
-  },
-  {
-    icon: '😊',
-    text: '如何在 Debug 時保持微笑'
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "mainEntity": {
+    "@type": "Person",
+    "name": "楊凱捷",
+    "alternateName": ["KJyang", "imw1nt0r"],
+    "description": "鶯歌工商資訊科學生，全端開發者，AI 愛好者",
+    "affiliation": { "@type": "EducationalOrganization", "name": "新北市立鶯歌工商", "department": { "@type": "EducationalOrganization", "name": "資訊科" } }
   }
+};
+
+const timeline = [
+  {
+    period: "現在",
+    title: "鶯歌工商 · 資訊科",
+    note: "課內學硬體和基礎，課外自己鑽研 AI 跟 Web 開發。兩邊加起來學得比較完整。",
+  },
+  {
+    period: "一路以來",
+    title: "從 HTML 到 LLM",
+    note: "最早碰的是基本的 HTML CSS，然後學 JS，然後 React、Vue、Python，然後就掉進 AI 的坑了。學新技術對我來說不是負擔，比較像打電動解任務。",
+  },
+  {
+    period: "接下來",
+    title: "繼續挖更深",
+    note: "AI 這條路還很長，我想做的不只是「會用 ChatGPT」，而是真的理解底層、能整合進產品的那種。",
+  },
 ];
 ---
 
-<Layout title="關於我 | KJyang" description="了解關於我這個程式界的奇葩 - 高中生程式設計師">
-  <div class="about-container">
-    <header class="page-header">
-      <h1 class="page-title">關於我這個程式界的奇葩</h1>
-    </header>
+<Layout
+  title="關於我 — KJyang | 鶯歌工商資訊科全端開發者"
+  description="關於 KJyang — 鶯歌工商資訊科學生、全端開發者、AI 研究者。從 HTML 自學到 LLM 整合開發，也是 aespa 的忠實粉絲。"
+  jsonLd={jsonLd}
+>
 
-    <div class="about-content">
-      <section class="about-section">
-        <h2 class="section-title">Who am I?</h2>
-        <div class="text-content">
-          <p>一個來自鶯歌高職資訊科的高中生，</p>
-          <p>雖然常常把程式寫成一團亂麻，</p>
-          <p>但是我的座右銘是：</p>
-          <p class="quote">"不管程式多亂，至少我的心是清晰的" 😎</p>
-        </div>
-      </section>
-
-      <section class="about-section">
-        <h2 class="section-title">正在學習</h2>
-        <div class="learning-list">
-          {learning.map(item => (
-            <div class="learning-item">
-              <div class="item-icon">{item.icon}</div>
-              <div class="item-text">{item.text}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section class="about-section">
-        <h2 class="section-title">我的技能</h2>
-        <div class="skills-container">
-          {skills.map(skill => (
-            <div class="skill-card">
-              <div class="skill-icon">{skill.icon}</div>
-              <div class="skill-title">{skill.title}</div>
-              <div class="skill-level">
-                <div class="level-bar" style={`width: ${skill.level}%`}></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+  <section class="pt-32 pb-16">
+    <div class="section-container">
+      <h1 class="animate-on-scroll text-4xl sm:text-5xl font-black mb-6">
+        關於我
+      </h1>
+      <p class="animate-on-scroll delay-1 text-lg text-zinc-400 max-w-2xl leading-relaxed">
+        網路上叫 KJyang，IG 叫 <a href="https://www.instagram.com/imw1nt0r/" target="_blank" rel="noopener noreferrer" class="text-brand hover:text-brand-light">@imw1nt0r</a>。鶯歌工商資訊科。
+      </p>
     </div>
-  </div>
+  </section>
+
+  <!-- The Real Story -->
+  <section class="py-16" aria-label="我的故事">
+    <div class="section-container">
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-12">
+        <div class="lg:col-span-3">
+          <h2 class="animate-on-scroll text-2xl font-bold mb-6">我是誰</h2>
+          <div class="animate-on-scroll delay-1 space-y-4 text-zinc-300 leading-relaxed">
+            <p>
+              高中生，讀鶯歌工商資訊科。但老實說在學校學的跟我自己在外面學的差蠻多的 — 
+              學校教基礎，我自己研究比較前沿的東西。兩邊互補，我覺得這樣蠻好的。
+            </p>
+            <p>
+              我最強的地方大概是<strong class="text-zinc-100">學東西很快</strong>。
+              不是那種天才型的快，是我很會利用工具。LLM 出來之後我的學習效率直接翻倍 — 
+              遇到不懂的直接問，看文件看不懂就叫 AI 解釋，然後自己動手寫驗證。
+              這套方法讓我可以短時間上手一個全新的框架或語言。
+            </p>
+            <p>
+              技術面來說，我什麼都碰一點。前端 React、Vue 寫過，後端 Python FastAPI 也行，
+              AI 方面從 Prompt Engineering 到強化學習都有在玩。
+              最近比較專注在 <strong class="text-zinc-100">LLM 的實際應用</strong> — 
+              不是那種只會 call API 的，是真的有在想怎麼把 AI 整合進實際的產品流程裡面。
+            </p>
+            <p>
+              寫 code 之外，我追 aespa。
+              這個跟技術完全沒關係，但就是我的一部分啊。
+            </p>
+            <p>
+              我老婆 winter 的舞台表現力真的沒話說，
+              最愛的歌還是 Drama。我是 Dirty Work 時期入坑的，
+              應該也算是比較新的 MY 了。
+              有時候寫程式寫到累了，就去滑一下脆、看一下 aespa，整個心情又好了。
+            </p>
+          </div>
+        </div>
+
+        <aside class="lg:col-span-2">
+          <div class="animate-on-scroll delay-2 p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50">
+            <h3 class="text-lg font-semibold mb-6 text-zinc-200">基本資料</h3>
+            <dl class="space-y-4">
+              <div>
+                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider">暱稱</dt>
+                <dd class="mt-1 text-zinc-200">KJyang</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider">學校</dt>
+                <dd class="mt-1 text-zinc-200">鶯歌工商 · 資訊科</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider">擅長</dt>
+                <dd class="mt-1 text-zinc-200">AI / LLM 應用 · 全端開發</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider">主力語言</dt>
+                <dd class="mt-1 text-zinc-200">Python · TypeScript · Java</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider">追星</dt>
+                <dd class="mt-1 text-zinc-200">aespa 🖤</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-mono text-zinc-500 uppercase tracking-wider">地點</dt>
+                <dd class="mt-1 text-zinc-200">新北市</dd>
+              </div>
+            </dl>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section class="py-16" aria-label="學習歷程">
+    <div class="section-container">
+      <h2 class="animate-on-scroll text-2xl font-bold mb-10">到目前為止</h2>
+
+      <div class="relative">
+        <div class="absolute left-4 top-0 bottom-0 w-px bg-zinc-800" aria-hidden="true"></div>
+
+        <div class="space-y-10">
+          {timeline.map((item, i) => (
+            <div class={`animate-on-scroll delay-${i + 1} relative pl-12`}>
+              <div class="absolute left-2.5 top-1.5 w-3 h-3 rounded-full bg-brand border-2 border-zinc-950" aria-hidden="true"></div>
+              <span class="text-xs font-mono text-brand uppercase tracking-wider">{item.period}</span>
+              <h3 class="text-lg font-semibold text-zinc-100 mt-1 mb-2">{item.title}</h3>
+              <p class="text-zinc-400 text-sm leading-relaxed">{item.note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What I Believe -->
+  <section class="py-16" aria-label="我的想法">
+    <div class="section-container">
+      <h2 class="animate-on-scroll text-2xl font-bold mb-10">我怎麼看事情</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="animate-on-scroll delay-1 p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50">
+          <h3 class="text-lg font-semibold text-zinc-100 mb-2">工具用好就是實力</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            有人覺得用 AI 輔助寫 code 是作弊。我覺得不是 — 
+            知道怎麼問、怎麼驗證、怎麼整合，這本身就是一種能力。
+            重點是你能不能交出東西。
+          </p>
+        </div>
+
+        <div class="animate-on-scroll delay-2 p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50">
+          <h3 class="text-lg font-semibold text-zinc-100 mb-2">先做再說</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            想太多不如直接開幹。遇到問題再解決。
+            我大部分的專案都是「欸感覺可以做」然後就開始寫了，
+            寫到一半發現比想像中複雜，但也因為已經開始了所以會想辦法做完。
+          </p>
+        </div>
+
+        <div class="animate-on-scroll delay-3 p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50">
+          <h3 class="text-lg font-semibold text-zinc-100 mb-2">不設限</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            前端、後端、AI、遊戲開發、甚至 iOS — 什麼有趣就學什麼。
+            高中生的優勢就是時間還多，現在不多嘗試什麼時候試？
+          </p>
+        </div>
+
+        <div class="animate-on-scroll delay-4 p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/50">
+          <h3 class="text-lg font-semibold text-zinc-100 mb-2">開源是基本</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            我的東西全部放 GitHub。一方面是給自己記錄，一方面是希望別人也能從中學到什麼。
+            反正藏起來也不會比較值錢。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16">
+    <div class="section-container text-center">
+      <div class="animate-on-scroll p-10 rounded-3xl bg-zinc-900/30 border border-zinc-800/50">
+        <h2 class="text-2xl font-bold mb-4">想看實際成果？</h2>
+        <p class="text-zinc-400 mb-6">文字說再多不如直接看 code。</p>
+        <a href="/projects" class="inline-flex items-center gap-2 px-6 py-3 bg-brand hover:bg-brand-dark text-white font-semibold rounded-lg transition-all duration-200">
+          作品集
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
 </Layout>
-
-<style>
-  .about-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-  }
-
-  .page-header {
-    text-align: center;
-    margin-bottom: 4rem;
-  }
-
-  .page-title {
-    font-size: 3rem;
-    font-weight: 600;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 1rem;
-  }
-
-  .about-content {
-    display: grid;
-    gap: 4rem;
-  }
-
-  .about-section {
-    background: var(--card-background);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform var(--transition-normal);
-  }
-
-  .about-section:hover {
-    transform: translateY(-5px);
-  }
-
-  .section-title {
-    font-size: 2rem;
-    font-weight: 600;
-    margin-bottom: 2rem;
-    color: var(--text-color);
-  }
-
-  .text-content {
-    font-size: 1.2rem;
-    line-height: 1.8;
-    color: var(--text-muted);
-  }
-
-  .quote {
-    font-size: 1.4rem;
-    font-weight: 500;
-    color: var(--text-color);
-    margin: 2rem 0;
-    padding-left: 1rem;
-    border-left: 4px solid var(--accent-color);
-  }
-
-  .learning-list {
-    display: grid;
-    gap: 1.5rem;
-  }
-
-  .learning-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: var(--border-radius);
-    transition: all var(--transition-normal);
-  }
-
-  .learning-item:hover {
-    transform: translateX(10px);
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .item-icon {
-    font-size: 2rem;
-  }
-
-  .item-text {
-    font-size: 1.2rem;
-    color: var(--text-color);
-  }
-
-  .skills-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-  }
-
-  .skill-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: var(--border-radius);
-    padding: 1.5rem;
-    text-align: center;
-    transition: all var(--transition-normal);
-  }
-
-  .skill-card:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .skill-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-  }
-
-  .skill-title {
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: var(--text-color);
-    margin-bottom: 1rem;
-  }
-
-  .skill-level {
-    height: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .level-bar {
-    height: 100%;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    border-radius: 4px;
-    transition: width 1s ease;
-  }
-
-  @media (max-width: 768px) {
-    .about-container {
-      padding: 1rem;
-    }
-
-    .page-title {
-      font-size: 2rem;
-    }
-
-    .section-title {
-      font-size: 1.5rem;
-    }
-
-    .text-content {
-      font-size: 1rem;
-    }
-
-    .quote {
-      font-size: 1.2rem;
-    }
-
-    .item-icon {
-      font-size: 1.5rem;
-    }
-
-    .item-text {
-      font-size: 1rem;
-    }
-
-    .skill-icon {
-      font-size: 2rem;
-    }
-
-    .skill-title {
-      font-size: 1rem;
-    }
-    
-    .skills-container {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>

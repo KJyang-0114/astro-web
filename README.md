@@ -136,8 +136,8 @@ npm run astro check
 
 ## 🌐 線上訪問
 
-- **主網站**: [kjyang0114.site](https://kjyang0114.site)
-- **AI 探索**: [kjyang0114.site/ai](https://kjyang0114.site/ai)
+- **主網站**: [kjyang0114.dev](https://kjyang0114.dev)
+- **AI 探索**: [kjyang0114.dev/ai](https://kjyang0114.dev/ai)
 
 ## 📄 授權
 

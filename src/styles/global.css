@@ -1,510 +1,80 @@
-:root {
-  --background-color: #1a1a1a; /* 從#121212調亮為#1a1a1a */
-  --card-background: #252525; /* 從#1e1e1e調亮為#252525 */
-  --footer-background: #141414; /* 從#0f0f0f調亮為#141414 */
-  --text-color: #ffffff; /* 從#f5f5f5調亮為純白 */
-  --text-muted: #cccccc; /* 從#a0a0a0調亮為#cccccc */
-  --primary-color: #60a5fa; /* 從#3b82f6調亮為#60a5fa */
-  --secondary-color: #818cf8; /* 從#6366f1調亮為#818cf8 */
-  --accent-color: #34d399; /* 從#10b981調亮為#34d399 */
-  --border-radius: 0.5rem;
-  --transition-normal: 0.3s ease;
+@import "tailwindcss";
 
-  /* 優化色彩系統 - 讓漸層更明亮 */
-  --primary-gradient: linear-gradient(135deg, #7c9ce6 0%, #8b7cc8 100%); /* 調亮主漸層 */
-  --secondary-gradient: linear-gradient(135deg, #d4a5e6 0%, #e6a5c9 100%); /* 調亮副漸層 */
-  --accent-gradient: linear-gradient(135deg, #93e6fc 0%, #60d4fa 100%); /* 調亮強調漸層 */
-  --glass-bg: rgba(255, 255, 255, 0.08); /* 稍微增加玻璃背景透明度 */
-  --glass-border: rgba(255, 255, 255, 0.15); /* 增加邊框透明度 */
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); /* 減少陰影強度 */
-  --hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.25); /* 調整hover陰影 */
-  --glow-primary: 0 0 20px rgba(124, 156, 230, 0.25); /* 調亮發光效果 */
-  --glow-secondary: 0 0 20px rgba(212, 165, 230, 0.25); /* 調亮發光效果 */
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  max-width: 100%;
-}
-
-/* 修正頁面跳轉問題 */
-html {
-  font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  scroll-behavior: smooth;
-  overflow-y: scroll; /* 保持垂直滾動條始終顯示 */
-  overflow-x: hidden; /* 防止橫向滑動 */
-  height: 100%;
-  margin: 0;
-}
-
-body {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  line-height: 1.6;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  position: relative; /* 這對修復布局跳動很重要 */
-  visibility: visible !important;
-  opacity: 1 !important;
-  overflow-x: hidden; /* 防止橫向滑動 */
-  width: 100%; /* 確保寬度100% */
-}
-
-/* Lenis平滑滾動樣式 */
-html.lenis {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-scrolling iframe {
-  pointer-events: none;
-}
-
-/* 確保內容始終可見 */
-h1, h2, h3, h4, h5, h6, p, a, div, span, li, img, button, input, textarea, .hero-title, 
-.hero-subtitle, .hero-description, .section-title, .specialty, .profile-image, 
-.project-item, .section-line {
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: none !important;
-}
-
-/* 主容器樣式 */
-.site-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  width: 100%;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-main {
-  flex: 1;
-}
-
-a {
-  color: var(--primary-color);
-  text-decoration: none;
-  transition: all var(--transition-normal);
-  position: relative;
-}
-
-a::before {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--primary-gradient);
-  transition: width 0.3s ease;
-}
-
-a:hover {
-  color: var(--secondary-color);
-  transform: translateY(-1px);
-}
-
-a:hover::before {
-  width: 100%;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  margin-top: 0;
-  font-weight: 600;
-  line-height: 1.2;
-  font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-h1 {
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-h2 {
-  font-weight: 500;
-  letter-spacing: -0.01em;
-}
-
-p, span, div {
-  font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-img, video, canvas, svg {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* 按鈕樣式 */
-.primary-button, .secondary-button, .outline-button {
-  display: inline-block;
-  padding: 0.8rem 2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: var(--border-radius);
-  transition: all var(--transition-normal);
-  cursor: pointer;
-  text-decoration: none;
-  position: relative;
-  overflow: hidden;
-}
-
-.primary-button {
-  background: var(--primary-gradient);
-  color: white;
-  border: none;
-  box-shadow: var(--glow-primary);
-}
-
-.primary-button:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--hover-shadow), var(--glow-primary);
-  filter: brightness(1.1);
-}
-
-.primary-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.primary-button:hover::before {
-  left: 100%;
-}
-
-.secondary-button {
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  color: var(--text-color);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-}
-
-.secondary-button:hover {
-  background: rgba(255, 255, 255, 0.12);
-  transform: translateY(-3px);
-  box-shadow: var(--hover-shadow);
-}
-
-.outline-button {
-  background: transparent;
-  color: var(--primary-color);
-  border: 1px solid var(--primary-color);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  box-shadow: var(--glow-primary);
-}
-
-.outline-button:hover {
-  background: var(--primary-gradient);
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: var(--hover-shadow), var(--glow-primary);
-}
-
-/* 動畫效果 */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+@theme {
+  /* Color System */
+  --color-brand: #6366f1;
+  --color-brand-light: #818cf8;
+  --color-brand-dark: #4f46e5;
+  --color-accent: #06b6d4;
+  --color-accent-light: #22d3ee;
+  
+  /* Typography */
+  --font-sans: 'Noto Sans TC', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  
+  /* Animations */
+  --animate-fade-in: fade-in 0.6s ease-out both;
+  --animate-slide-up: slide-up 0.6s ease-out both;
+  
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 }
 
-.fade-in {
-  animation: fadeIn 0.5s ease forwards;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  
+  body {
+    @apply leading-relaxed;
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight text-zinc-50;
+  }
+  
+  ::selection {
+    background-color: rgba(99, 102, 241, 0.3);
+    color: #fff;
+  }
+  
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
 }
 
-/* GSAP 動畫相關樣式 */
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand to-accent;
+  }
+  
+  .section-container {
+    @apply max-w-6xl mx-auto px-6 sm:px-8 lg:px-12;
+  }
+}
+
+/* Scroll-triggered animations */
 .animate-on-scroll {
   opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
 }
-
-.gsap-marker-scroller-start,
-.gsap-marker-scroller-end,
-.gsap-marker-start,
-.gsap-marker-end {
-  display: none !important;
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
-
-/* 分割字符動畫樣式 */
-.split-char {
-  display: inline-block;
-  transform-origin: center bottom;
-}
-
-/* 滾動條樣式 */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--card-background);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--text-muted);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-color);
-}
-
-/* 表單元素通用樣式 */
-button, input, textarea, select {
-  font-family: inherit;
-  font-size: inherit;
-}
-
-/* 確保GSAP/Lenis動畫不會隱藏內容 */
-.no-animation * {
-  transition: none !important;
-  animation: none !important;
-  transform: none !important;
-}
-
-/* 響應式設計 */
-@media (max-width: 768px) {
-  :root {
-    --border-radius: 8px;
-  }
-
-  /* 手機端全局設置 */
-  * {
-    box-sizing: border-box;
-  }
-
-  body, html {
-    width: 100%;
-    max-width: 100vw;
-    overflow-x: hidden;
-    margin: 0;
-    padding: 0;
-  }
-
-  /* 手機端容器寬度限制 */
-  .container, .hero-content, .projects-section, .about-section {
-    width: 100%;
-    max-width: 100vw;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    margin-left: 0;
-    margin-right: 0;
-    box-sizing: border-box;
-  }
-
-  /* 手機端文字居中 */
-  .hero-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 3rem;
-    padding: 0 1rem;
-  }
-
-  .hero-text-container {
-    max-width: 100%;
-    width: 100%;
-  }
-
-  .hero-title {
-    font-size: 2.5rem;
-    text-align: center;
-    width: 100%;
-  }
-
-  .hero-subtitle {
-    font-size: 1.5rem;
-    text-align: center;
-    width: 100%;
-  }
-
-  .hero-description {
-    font-size: 1.1rem;
-    text-align: center;
-    width: 100%;
-  }
-
-  .hero-specialties {
-    text-align: center;
-    width: 100%;
-  }
-
-  .specialty {
-    text-align: center;
-    padding-left: 0;
-    width: 100%;
-  }
-
-  .specialty::before {
-    display: none; /* 在手機端隱藏裝飾符號 */
-  }
-
-  .hero-links {
-    justify-content: center;
-    flex-wrap: wrap;
-    width: 100%;
-  }
-
-  .hero-visual-container {
-    justify-content: center;
-    width: 100%;
-  }
-
-  .profile-image {
-    width: 200px;
-    height: 200px;
-    max-width: 90vw; /* 確保不會超出螢幕寬度 */
-  }
-
-  .profile-emoji {
-    font-size: 4rem;
-  }
-
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    width: 100%;
-    padding: 0;
-  }
-
-  .project-card {
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-  }
-
-  /* 手機端滾動提示 */
-  .scroll-hint {
-    bottom: 1rem;
-  }
-
-  /* 手機端項目區域 */
-  .projects-section {
-    padding: 3rem 1rem;
-    width: 100%;
-  }
-
-  .section-title {
-    font-size: 2rem;
-    width: 100%;
-  }
-
-  /* 手機端導航 */
-  .nav-links {
-    display: none;
-  }
-
-  .hamburger-menu {
-    display: block;
-  }
-
-  /* 手機端按鈕 */
-  .primary-button, .secondary-button, .outline-button {
-    width: 100%;
-    max-width: 300px;
-    margin: 0.5rem auto;
-    display: block;
-  }
-}
-
-/* 背景動態效果 - 移除複雜的動畫，改為簡單的靜態背景 */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(240, 147, 251, 0.05) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* 防止橫向滑動的全局樣式 */
-* {
-  box-sizing: border-box;
-  max-width: 100%;
-}
-
-img, video, canvas, svg {
-  max-width: 100%;
-  height: auto;
-}
-
-/* 確保所有容器不會超出螢幕寬度 */
-.container, .hero-section, .projects-section, .about-section, .contact-section {
-  width: 100%;
-  max-width: 100vw;
-  margin: 0 auto;
-  padding-left: min(2rem, 5vw);
-  padding-right: min(2rem, 5vw);
-  box-sizing: border-box;
-}
-
-/* 防止長文字造成橫向滑動 */
-p, h1, h2, h3, h4, h5, h6, span, div {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
-}
-
-/* 確保表格和列表不會超出寬度 */
-table {
-  width: 100%;
-  max-width: 100%;
-  table-layout: fixed;
-}
-
-ul, ol {
-  padding-left: 1.5rem;
-  width: 100%;
-  max-width: 100%;
-}
-
-/* 防止固定定位元素超出螢幕 */
-.fixed, .sticky {
-  max-width: 100vw;
-  left: 0;
-  right: 0;
-}
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
