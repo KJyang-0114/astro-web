@@ -1,0 +1,154 @@
+---
+import DemoNotice from "@components/DemoNotice.astro";
+import SiteShell from "@components/SiteShell.astro";
+import { studioContact } from "@data/studio";
+
+const treatments = [
+  ["01", "Preventive care", "Cleanings, exams, gum checks, and first-visit expectations."],
+  ["02", "Cosmetic consults", "Whitening, veneers, smile planning, and realistic treatment discussion."],
+  ["03", "Implant planning", "Consultation-first content for timing, budget, and trust."],
+  ["04", "Family visits", "Parent-friendly flow, comfort notes, and caregiver FAQ."]
+];
+
+const journey = [
+  ["Before visit", "Forms, insurance, parking, treatment concerns, and preferred time collected before arrival."],
+  ["In clinic", "Calm handoff from reception to exam, with visual explanation of X-rays and diagnosis."],
+  ["After plan", "Patient leaves with next step, estimate range, follow-up timing, and care notes."]
+];
+
+const faq = [
+  ["Is this a real dental clinic?", "No. This page is a website design sample for KJyang Studio."],
+  ["Can real doctor photos be added?", "Yes. This layout reserves space for real team photos, profile copy, hours, and location details."],
+  ["Can this connect to booking software?", "Yes. The appointment form can later connect to email, CRM, or booking tools after deployment."]
+];
+---
+
+<SiteShell title="Premium Dental Clinic Website Demo | KJyang Studio" description="English dental clinic demo with immersive clinic visuals, appointment UX, treatment clarity, patient journey, and FAQ." canonicalPath="/studio/en/demo/dental-clinic" lang="en" noindex>
+  <main class="en-dental-immersive">
+    <nav class="dental-side-nav" aria-label="Dental demo navigation">
+      <a class="dental-brand" href="/studio/en">Luma Dental Studio</a>
+      <div>
+        <a href="#journey">Journey</a>
+        <a href="#care">Care</a>
+        <a href="#appointment">Contact</a>
+      </div>
+    </nav>
+    <DemoNotice lang="en" />
+
+    <section class="dental-immersive-hero">
+      <img src="/demo-assets/dental-hero.png" alt="Bright dental clinic treatment room" />
+      <div class="dental-hero-copy">
+        <span>Private clinic website sample</span>
+        <h1>Patient trust, before appointment.</h1>
+        <p>Designed like a calm clinic intake experience: treatment clarity, first-visit reassurance, location confidence, and a booking path that does not feel aggressive.</p>
+        <div class="action-row">
+          <a class="btn dental-immersive-primary" href="#appointment">View appointment flow</a>
+          <a class="btn dental-immersive-secondary" href="#journey">See patient journey</a>
+        </div>
+      </div>
+      <aside class="appointment-sheet" aria-label="Appointment experience preview">
+        <span>NEW PATIENT FLOW</span>
+        <b>45 min consult</b>
+        <p>Symptoms, comfort notes, parking, first-visit timing, and follow-up expectations visible before contact.</p>
+        <div>
+          <small>Forms</small>
+          <small>Exam</small>
+          <small>Plan</small>
+        </div>
+      </aside>
+    </section>
+
+    <section class="dental-journey" id="journey">
+      <div class="wrap dental-journey-grid">
+        <div>
+          <span class="dental-kicker">Patient journey</span>
+          <h2>Not a service list. A calmer path from worry to booking.</h2>
+        </div>
+        <div class="journey-column">
+          {journey.map(([title, text]) => (
+            <article>
+              <b>{title}</b>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="dental-care-wall" id="care">
+      <div class="wrap dental-care-head">
+        <span class="dental-kicker">Care architecture</span>
+        <h2>Treatment pages built for clarity, not fear.</h2>
+      </div>
+      <div class="wrap dental-care-grid">
+        {treatments.map(([num, title, text]) => (
+          <article>
+            <span>{num}</span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="dental-proof-band">
+      <div class="wrap dental-proof-grid">
+        <article>
+          <span>Doctor profile</span>
+          <b>Space for real credentials, philosophy, and team photos.</b>
+        </article>
+        <article>
+          <span>Location confidence</span>
+          <b>Hours, parking, access, maps, and first-visit instructions.</b>
+        </article>
+        <article>
+          <span>No fake claims</span>
+          <b>Design supports proof. It does not invent certifications.</b>
+        </article>
+      </div>
+    </section>
+
+    <section class="dental-faq-block" id="faq">
+      <div class="wrap faq-grid">
+        <div>
+          <span class="dental-kicker">Patient questions</span>
+          <h2 class="section-title">Answer hesitation before booking.</h2>
+        </div>
+        <div class="faq-list">
+          {faq.map(([question, answer]) => (
+            <details>
+              <summary>{question}</summary>
+              <p>{answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section dental-immersive-contact" id="appointment">
+      <div class="wrap contact-grid">
+        <div>
+          <span class="dental-kicker">Sample form</span>
+          <h2 class="section-title">Ask for similar clinic website</h2>
+          <p class="section-copy">This sample does not book dental appointments. It collects website requirements and opens KJyang Studio LINE.</p>
+          <aside class="line-contact-card">
+            <div class="line-qr" aria-label="KJyang Studio LINE QR code">
+              <img src={studioContact.lineQr} alt="KJyang Studio LINE QR code" loading="lazy" />
+            </div>
+            <div>
+              <b>KJYANG STUDIO LINE</b>
+              <strong>{studioContact.lineId}</strong>
+              <p>Form text copies automatically. Paste it into LINE after clicking send.</p>
+            </div>
+          </aside>
+        </div>
+        <form class="contact-form">
+          <label class="field">Clinic or business name<input name="business" /></label>
+          <label class="field">Country / city<input name="location" /></label>
+          <label class="field">Website needs<textarea name="message" rows="5"></textarea></label>
+          <button class="btn dental-immersive-primary" type="button">Copy request and open LINE</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</SiteShell>

@@ -1,0 +1,49 @@
+---
+import StudioNav from "@components/StudioNav.astro";
+import SiteShell from "@components/SiteShell.astro";
+import { maintenancePlans, studioPlans } from "@data/studio";
+---
+
+<SiteShell title="價格方案 | KJyang Studio" description="KJyang Studio website build and maintenance price ranges for small businesses." canonicalPath="/studio/pricing">
+  <main class="studio-index">
+    <StudioNav />
+    <section class="studio-subpage-hero">
+      <div class="wrap">
+        <span>Pricing</span>
+        <h1>先給價格區間，避免彼此浪費時間</h1>
+        <p>實際報價會看頁面數、內容量、設計需求、部署方式和功能複雜度。網域費另計，客戶持有。</p>
+      </div>
+    </section>
+    <section class="studio-card-section">
+      <div class="wrap studio-pricing-grid">
+        {studioPlans.map((plan) => (
+          <article>
+            <h2>{plan.title}</h2>
+            <strong>{plan.price}</strong>
+            <p>{plan.text}</p>
+          </article>
+        ))}
+      </div>
+      <div class="wrap studio-maintenance-grid">
+        {maintenancePlans.map(([title, price, text]) => (
+          <article>
+            <b>{title}</b>
+            <strong>{price}</strong>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="studio-final-cta">
+      <div class="wrap">
+        <span>Budget fit</span>
+        <h2>價格先公開，細節再依內容和功能確認。</h2>
+        <p>想先知道你的需求大概落在哪個區間，可以傳目前網站或同行參考給我。</p>
+        <div class="action-row">
+          <a class="btn studio-index-primary" href="/studio/contact">預約諮詢報價</a>
+          <a class="btn studio-index-secondary" href="/studio/process">看合作流程</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteShell>

@@ -1,0 +1,32 @@
+---
+import StudioNav from "@components/StudioNav.astro";
+import DemoNotice from "@components/DemoNotice.astro";
+import SiteShell from "@components/SiteShell.astro";
+import { demos } from "@data/demos";
+---
+
+<SiteShell title="Demo Library | KJyang Studio" description="KJyang Studio demo library for small-business website design examples." canonicalPath="/studio/demo" noindex>
+  <main class="studio-index">
+    <StudioNav />
+    <DemoNotice />
+    <section class="studio-index-demos page-hero-offset">
+      <div class="wrap studio-showcase-head">
+        <span>DEMO LIBRARY</span>
+        <h1>不同產業，不同網站成交邏輯</h1>
+      </div>
+      <div class="wrap studio-showcase-grid">
+        {demos.map((demo, index) => (
+          <a class:list={["studio-showcase-card", `showcase-${demo.theme}`]} href={`/studio/demo/${demo.slug}`}>
+            <img src={demo.heroImage} alt={`${demo.businessName}${demo.industry}網站展示`} loading={index === 0 ? "eager" : "lazy"} />
+            <div>
+              <span>{demo.industry}</span>
+              <h3>{demo.businessName}</h3>
+              <p>{demo.headline}</p>
+              <b>看 Demo</b>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
+</SiteShell>

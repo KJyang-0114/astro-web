@@ -1,0 +1,67 @@
+# Web Highlighter Pro
+
+> Local-first Chrome research clipper for saving webpage quotes, collecting source-backed research notes, searching highlights by website, and exporting notes as TXT or Markdown.
+
+Website: https://kjyang0114.dev/web-highlighter-pro/
+Chrome Web Store: https://chromewebstore.google.com/detail/web-highlighter-pro/pkonbcipepfffbjcogkkepneeobogdjl
+Checkout: https://kjyang.lemonsqueezy.com/checkout/buy/2e3daee2-efb1-4c5e-b265-407b7bb25bb0
+Support: support@kjyang0114.dev
+
+## Summary
+
+Web Highlighter Pro helps students, researchers, writers, founders, and PKM users collect useful quotes while browsing. Users select text on a webpage, use the right-click context menu to save it, then review saved research highlights from the Chrome extension popup.
+
+Primary positioning:
+
+- Local-first research clipper for Chrome
+- Chrome extension for saving webpage quotes
+- Markdown web clipper for research notes
+- Web highlighter with source URLs and Markdown export
+- Local-first note capture tool for students, writers, researchers, and PKM users
+
+## Main Features
+
+- Highlight selected text on webpages
+- Save quote text, source URL, page title, and timestamp locally
+- Search saved research highlights
+- Filter notes by source website
+- Export source-backed notes as TXT or Markdown
+- Open original source pages from saved notes
+- Free trial with 5 highlights
+- Lifetime Pro unlock through Lemon Squeezy license key
+
+## Privacy
+
+Notes are stored locally in Chrome using chrome.storage.local. Web Highlighter Pro does not run its own backend notes database and does not require an account.
+
+## Pricing
+
+Lifetime license: US$19.99
+Early bird code: G1OTY4NW for 20% off
+
+## Best Fit Users
+
+- Students collecting study notes
+- Researchers saving source passages
+- Writers collecting references
+- Founders and operators reading product or market research
+- PKM users who want Markdown export
+
+## Use Cases
+
+- Export webpage highlights to Markdown
+- Save webpage quotes with source URLs
+- Collect research notes while browsing
+- Build a quote library for essays, articles, and market research
+- Move browser highlights into Obsidian, Notion, Logseq, Bear, Google Docs, or any Markdown workflow
+- Keep lightweight local notes without creating another account
+
+## Important Pages
+
+- Landing page: https://kjyang0114.dev/web-highlighter-pro/
+- Export web highlights to Markdown: https://kjyang0114.dev/web-highlighter-pro/export-web-highlights-to-markdown.html
+- Research clipper Chrome extension: https://kjyang0114.dev/web-highlighter-pro/research-clipper-chrome-extension.html
+- Local-first web highlighter: https://kjyang0114.dev/web-highlighter-pro/local-first-web-highlighter.html
+- Save webpage quotes with source URLs: https://kjyang0114.dev/web-highlighter-pro/save-webpage-quotes.html
+- Privacy policy: https://www.privacypolicies.com/live/b8c737cb-0092-4ea7-9118-9b8cab52d9e8
+- Terms: https://kjyang0114.dev/web-highlighter-pro/terms

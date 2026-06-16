@@ -1,0 +1,62 @@
+---
+import "@styles/studio-global.css";
+
+type Props = {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  schema?: unknown[];
+  noindex?: boolean;
+  lang?: string;
+  alternates?: Array<{
+    hrefLang: string;
+    href: string;
+  }>;
+};
+
+const {
+  title,
+  description,
+  canonicalPath = Astro.url.pathname,
+  schema = [],
+  noindex = false,
+  lang = "zh-Hant",
+  alternates = []
+} = Astro.props;
+const canonicalUrl = new URL(canonicalPath, "https://kjyang0114.dev").toString();
+const ogImageUrl = new URL("/brand/kjyang-cover.svg", "https://kjyang0114.dev").toString();
+const alternateUrls = alternates.map((alternate) => ({
+  hrefLang: alternate.hrefLang,
+  href: new URL(alternate.href, "https://kjyang0114.dev").toString()
+}));
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonicalUrl} />
+    {alternateUrls.map((alternate) => <link rel="alternate" hreflang={alternate.hrefLang} href={alternate.href} />)}
+    <meta property="og:site_name" content="KJyang Studio" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    {schema.map((entry) => <script type="application/ld+json" set:html={JSON.stringify(entry)} />)}
+  </head>
+  <body>
+    <slot />
+    <script>
+      import "../scripts/motion";
+    </script>
+  </body>
+</html>

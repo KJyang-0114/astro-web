@@ -1,0 +1,165 @@
+---
+import DemoNotice from "@components/DemoNotice.astro";
+import SiteShell from "@components/SiteShell.astro";
+import { studioContact } from "@data/studio";
+
+const lanes = [
+  ["01", "Emergency lane", "Leaks, no hot water, electrical issues, urgent access problems."],
+  ["02", "Estimate lane", "Installation, replacement, upgrade, and project photos before pricing."],
+  ["03", "Care lane", "Routine maintenance, seasonal inspection, rental and office service plans."]
+];
+
+const services = [
+  ["Leak response", "Damage control, photo triage, arrival window, repair approval."],
+  ["Water heater", "Brand, age, model, access, error code, replacement path."],
+  ["Fixture install", "Faucets, toilets, disposal units, shutoff valves, small upgrades."],
+  ["Property care", "Recurring inspection plans for homes, rentals, and small offices."]
+];
+
+const faq = [
+  ["Is this a real home-service company?", "No. This is a KJyang Studio website design sample."],
+  ["Why does the page show quote logic?", "Service customers need cost expectations before they trust a booking form."],
+  ["Can this work for plumbers, electricians, HVAC, or cleaning?", "Yes. The structure can be adapted for most service businesses with quote or booking intent."]
+];
+---
+
+<SiteShell title="Premium Home Service Website Demo | KJyang Studio" description="High-end English home service website demo with premium service positioning, quote journey, trust sections, and contact flow." canonicalPath="/studio/en/demo/home-service" lang="en" noindex>
+  <main class="en-home-signature">
+    <nav class="home-signature-nav" aria-label="Home service demo navigation">
+      <a href="/studio/en">Apex Home Response</a>
+      <div>
+        <a href="#lanes">Lanes</a>
+        <a href="#services">Services</a>
+        <a href="#quote">Quote</a>
+      </div>
+    </nav>
+    <DemoNotice lang="en" />
+
+    <section class="home-signature-hero">
+      <div class="home-hero-number" aria-hidden="true">24</div>
+      <div class="wrap home-signature-grid">
+        <div class="home-signature-copy">
+          <span>Premium service business website sample</span>
+          <h1>Make urgent home service feel organized, trusted, premium.</h1>
+          <p>A website direction for plumbers, electricians, HVAC, cleaning, and repair teams that need quote clarity, fast contact, proof, and a brand that does not feel cheap.</p>
+          <div class="action-row">
+            <a class="btn home-signature-primary" href="#quote">View quote flow</a>
+            <a class="btn home-signature-secondary" href="#lanes">Explore service lanes</a>
+          </div>
+        </div>
+
+        <div class="home-command-stack" aria-label="Premium service workflow preview">
+          <article class="home-status-card">
+            <span>LIVE RESPONSE</span>
+            <b>12 requests sorted today</b>
+            <p>Urgency, location, photos, and service type are routed before the customer waits.</p>
+          </article>
+          <article class="home-photo-card">
+            <img src="/demo-assets/ac-hero.png" alt="Technician inspecting home equipment" />
+            <div>
+              <b>Photo-first quote</b>
+              <span>Send issue · confirm scope · approve next step</span>
+            </div>
+          </article>
+          <article class="home-mini-ledger">
+            <span><b>03</b> open routes</span>
+            <span><b>45m</b> intake target</span>
+            <span><b>4.8</b> review module</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-lane-section" id="lanes">
+      <div class="wrap home-lane-grid">
+        <div>
+          <span class="home-kicker">Service lanes</span>
+          <h2>One homepage can route different customer intent.</h2>
+        </div>
+        {lanes.map(([num, title, text]) => (
+          <article>
+            <span>{num}</span>
+            <b>{title}</b>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="home-service-gallery" id="services">
+      <div class="wrap home-gallery-head">
+        <span class="home-kicker">High-value content blocks</span>
+        <h2>Service cards that explain scope, proof, and next action.</h2>
+      </div>
+      <div class="wrap home-gallery-grid">
+        {services.map(([title, text]) => (
+          <article>
+            <h3>{title}</h3>
+            <p>{text}</p>
+            <small>Photo guide / fee note / CTA</small>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="home-premium-proof">
+      <div class="wrap home-proof-grid">
+        <article>
+          <span>Trust architecture</span>
+          <b>Reviews, service area, inspection policy, warranty notes, and FAQ are visible before contact.</b>
+        </article>
+        <article>
+          <span>Brand lift</span>
+          <b>Premium layout helps local service businesses look more serious than generic directory listings.</b>
+        </article>
+        <article>
+          <span>Delivery ready</span>
+          <b>Built for real content, real forms, schema, mobile CTA, hosting, SSL, backups, and monitoring.</b>
+        </article>
+      </div>
+    </section>
+
+    <section class="home-faq-section">
+      <div class="wrap faq-grid">
+        <div>
+          <span class="home-kicker">Owner questions</span>
+          <h2 class="section-title">Answer doubt before the lead leaves.</h2>
+        </div>
+        <div class="faq-list">
+          {faq.map(([question, answer]) => (
+            <details>
+              <summary>{question}</summary>
+              <p>{answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section home-signature-contact" id="quote">
+      <div class="wrap contact-grid">
+        <div>
+          <span class="home-kicker">Sample form</span>
+          <h2 class="section-title">Ask for similar service website</h2>
+          <p class="section-copy">This sample does not book home repairs. It collects website requirements and opens KJyang Studio LINE.</p>
+          <aside class="line-contact-card">
+            <div class="line-qr" aria-label="KJyang Studio LINE QR code">
+              <img src={studioContact.lineQr} alt="KJyang Studio LINE QR code" loading="lazy" />
+            </div>
+            <div>
+              <b>KJYANG STUDIO LINE</b>
+              <strong>{studioContact.lineId}</strong>
+              <p>Form text copies automatically. Paste it into LINE after clicking send.</p>
+            </div>
+          </aside>
+        </div>
+        <form class="contact-form">
+          <label class="field">Business name<input name="business" /></label>
+          <label class="field">Service category<input name="category" /></label>
+          <label class="field">Website goal<textarea name="message" rows="5"></textarea></label>
+          <button class="btn home-signature-primary" type="button">Copy request and open LINE</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</SiteShell>

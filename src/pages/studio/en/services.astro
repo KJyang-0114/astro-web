@@ -1,0 +1,34 @@
+---
+import SiteShell from "@components/SiteShell.astro";
+---
+
+<SiteShell
+  title="Services | KJyang Studio"
+  description="KJyang Studio designs, codes, deploys, and maintains premium small-business websites."
+  canonicalPath="/studio/en/services"
+  lang="en"
+  alternates={[
+    { hrefLang: "zh-Hant", href: "/studio/services" },
+    { hrefLang: "en", href: "/studio/en/services" },
+    { hrefLang: "x-default", href: "/studio/en/services" }
+  ]}
+>
+  <main class="studio-en-v2 en-subpage">
+    <nav class="en-v2-nav">
+      <a class="en-v2-brand" href="/studio/en"><img src="/brand/kjyang-mark.svg" alt="" /><span>KJyang Studio</span></a>
+      <div class="en-v2-links"><a href="/studio/en/services">Services</a><a href="/studio/en/pricing">Pricing</a><a href="/studio/en/contact">Contact</a><a href="/studio">中文</a></div>
+    </nav>
+    <section class="en-v2-hero en-page-hero">
+      <div class="en-v2-wrap en-v2-hero-grid">
+        <div class="en-v2-copy">
+          <span class="en-v2-kicker">DESIGN / FRONTEND / DEPLOYMENT</span>
+          <h1>Premium websites built past the screenshot stage.</h1>
+          <p>For small businesses that need a polished website, clean frontend implementation, deployment setup, and care after launch.</p>
+        </div>
+        <div class="en-service-stack">
+          {["Website design", "Frontend implementation", "Deployment setup", "Hosting and care", "Basic SEO/GEO structure"].map((item) => <b>{item}</b>)}
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteShell>

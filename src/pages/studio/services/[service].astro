@@ -1,0 +1,71 @@
+---
+import StudioNav from "@components/StudioNav.astro";
+import SiteShell from "@components/SiteShell.astro";
+import { absoluteStudioUrl } from "@data/seo";
+import { getServicePage, servicePages } from "@data/trust";
+
+export function getStaticPaths() {
+  return servicePages.map((service) => ({
+    params: { service: service.slug }
+  }));
+}
+
+const service = getServicePage(Astro.params.service ?? "");
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.title,
+    description: service.description,
+    url: absoluteStudioUrl(`/studio/services/${service.slug}`),
+    provider: {
+      "@type": "Organization",
+      name: "KJyang Studio",
+      url: absoluteStudioUrl("/studio")
+    },
+    areaServed: ["Taiwan", "International"]
+  }
+];
+---
+
+<SiteShell title={`${service.title} | KJyang Studio`} description={service.description} canonicalPath={`/studio/services/${service.slug}`} schema={schema}>
+  <main class="studio-index">
+    <StudioNav />
+    <section class="studio-subpage-hero service-detail-hero">
+      <div class="wrap">
+        <span>Service</span>
+        <h1>{service.title}</h1>
+        <p>{service.description}</p>
+      </div>
+    </section>
+
+    <section class="service-detail-section">
+      <div class="wrap service-detail-grid">
+        <div>
+          <span>Outcome</span>
+          <h2>{service.promise}</h2>
+          <p>正式合作會先確認需求、頁數、內容、預算、部署方式和維護範圍，再進入設計與開發。</p>
+        </div>
+        <div class="service-includes">
+          {service.includes.map((item, index) => (
+            <article>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <b>{item}</b>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="studio-final-cta">
+      <div class="wrap">
+        <span>Next step</span>
+        <h2>先看作品案例，再判斷需求落在哪個方案。</h2>
+        <div class="action-row">
+          <a class="btn studio-index-primary" href="/studio/work">看作品案例</a>
+          <a class="btn studio-index-secondary" href="/studio/contact">聯絡諮詢</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteShell>

@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    container_name: astro-website
+    restart: always
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3000

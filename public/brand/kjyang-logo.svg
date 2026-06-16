@@ -1,0 +1,11 @@
+<svg width="1120" height="320" viewBox="0 0 1120 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1120" height="320" rx="36" fill="#0B0D10"/>
+  <rect x="42" y="42" width="236" height="236" rx="44" fill="#11151A" stroke="#F4E8D0" stroke-width="10"/>
+  <path d="M86 238V82H121V153L192 82H238L163 156L243 238H195L121 159V238H86Z" fill="#F4E8D0"/>
+  <path d="M204 42H278V116" stroke="#F0A94A" stroke-width="10"/>
+  <path d="M218 113L278 42" stroke="#F0A94A" stroke-width="10"/>
+  <path d="M340 96H1036" stroke="#2B3038" stroke-width="2"/>
+  <path d="M340 224H1036" stroke="#2B3038" stroke-width="2"/>
+  <text x="340" y="171" fill="#F4E8D0" font-family="Georgia, 'Times New Roman', serif" font-size="70" letter-spacing="1">KJyang Studio</text>
+  <text x="345" y="208" fill="#F0A94A" font-family="Arial, sans-serif" font-size="19" font-weight="700" letter-spacing="5">WEBSITES THAT TURN SEARCH INTO INQUIRIES</text>
+</svg>

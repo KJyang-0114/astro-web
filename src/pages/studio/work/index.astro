@@ -1,0 +1,81 @@
+---
+import StudioNav from "@components/StudioNav.astro";
+import SiteShell from "@components/SiteShell.astro";
+import { absoluteStudioUrl } from "@data/seo";
+import { workCases } from "@data/work";
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "KJyang Studio Works",
+    description: "KJyang Studio demo case studies for small business website design, CTA planning, mobile layout, and deployment-ready structure.",
+    url: absoluteStudioUrl("/studio/work"),
+    inLanguage: "zh-Hant",
+    mainEntity: workCases.map((work) => ({
+      "@type": "CreativeWork",
+      name: work.title,
+      url: absoluteStudioUrl(`/studio/work/${work.slug}`),
+      genre: work.industry
+    }))
+  }
+];
+---
+
+<SiteShell
+  title="作品案例 | KJyang Studio"
+  description="KJyang Studio 作品案例，用 case study 說明不同行業網站的設計策略、CTA、手機版、FAQ 與 SEO/GEO 基礎。"
+  canonicalPath="/studio/work"
+  schema={schema}
+>
+  <main class="studio-index">
+    <StudioNav />
+
+    <section class="studio-subpage-hero work-hero">
+      <div class="wrap work-hero-grid">
+        <div>
+          <span>Selected Work</span>
+          <h1>不是放幾張圖，是把網站怎麼成交講清楚</h1>
+          <p>
+            這裡整理四個 demo 的設計思考。每個 case 都會說明產業問題、第一屏、CTA、手機版、FAQ 和 SEO/GEO 基礎。
+          </p>
+        </div>
+        <div class="work-hero-panel">
+          <b>CASE STUDY SYSTEM</b>
+          <p>Demo 負責展示畫面，case study 負責展示判斷。客戶看到的不只是漂亮，而是知道每個區塊為什麼存在。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="work-index-section">
+      <div class="wrap work-case-grid">
+        {workCases.map((work, index) => (
+          <a class:list={["work-case-card", `work-case-${work.slug}`]} href={`/studio/work/${work.slug}`}>
+            <div>
+              <span>{String(index + 1).padStart(2, "0")} / {work.industry}</span>
+              <h2>{work.title}</h2>
+              <p>{work.description}</p>
+            </div>
+            <ul>
+              {work.stats.map(([num, label]) => (
+                <li><b>{num}</b><small>{label}</small></li>
+              ))}
+            </ul>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="studio-final-cta">
+      <div class="wrap">
+        <span>Demo to delivery</span>
+        <h2>看完 case，再回頭看 demo 會更清楚。</h2>
+        <p>正式網站會依真實商家資料重新規劃，不是直接把樣本套上店名。</p>
+        <div class="action-row">
+          <a class="btn studio-index-primary" href="/studio/demo">看 Demo</a>
+          <a class="btn studio-index-secondary" href="/studio/contact">討論需求</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteShell>

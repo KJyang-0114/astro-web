@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Highlighter Pro - Local-First Research Clipper for Markdown Notes</title>
+  <meta name="description" content="Web Highlighter Pro is a local-first Chrome extension for saving webpage quotes, collecting research notes, searching highlights by website, and exporting everything as TXT or Markdown.">
+  <meta name="keywords" content="research clipper, web clipper Chrome extension, webpage quotes, export highlights to Markdown, local-first notes, Chrome research notes, save webpage highlights, Markdown web clipper, PKM Chrome extension">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://kjyang0114.dev/web-highlighter-pro/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Web Highlighter Pro">
+  <meta property="og:description" content="Save webpage quotes locally, search research highlights, and export clean Markdown notes.">
+  <meta property="og:url" content="https://kjyang0114.dev/web-highlighter-pro/">
+  <meta property="og:image" content="https://kjyang0114.dev/web-highlighter-pro/assets/marquee.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Web Highlighter Pro">
+  <meta name="twitter:description" content="A local-first research clipper for webpage quotes and Markdown notes.">
+  <meta name="twitter:image" content="https://kjyang0114.dev/web-highlighter-pro/assets/marquee.png">
+  <link rel="icon" href="/web-highlighter-pro/assets/icon-128.png">
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --ink: #171923;
+      --muted: #626b7a;
+      --line: #dfe4ee;
+      --panel: #ffffff;
+      --accent: #7048e8;
+      --accent-dark: #5535b5;
+      --yellow: #ffec99;
+      --soft: #f0edff;
+      --shadow: 0 22px 70px rgba(26, 31, 44, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+      background: rgba(247, 248, 251, 0.82);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 13px 22px;
+      gap: 18px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 850;
+    }
+
+    .brand img {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: #303747;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-dark);
+    }
+
+    .nav-cta {
+      padding: 9px 14px;
+      color: #ffffff;
+      background: var(--accent);
+      border-radius: 999px;
+      box-shadow: 0 12px 28px rgba(112, 72, 232, 0.25);
+      white-space: nowrap;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 94dvh;
+      overflow: hidden;
+      isolation: isolate;
+      padding: 112px 22px 70px;
+      background:
+        linear-gradient(90deg, rgba(247, 248, 251, 0.98) 0%, rgba(247, 248, 251, 0.93) 42%, rgba(247, 248, 251, 0.55) 100%),
+        url("assets/screenshot-main.png") center right 36px / min(780px, 62vw) auto no-repeat,
+        #f7f8fb;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 160px;
+      background: linear-gradient(180deg, rgba(247, 248, 251, 0), var(--bg));
+      z-index: -1;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 7px 10px;
+      color: var(--accent-dark);
+      background: rgba(240, 237, 255, 0.86);
+      border: 1px solid #ddd5ff;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .hero h1 {
+      max-width: 580px;
+      margin: 0;
+      font-size: clamp(44px, 7vw, 74px);
+      line-height: 0.96;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .mobile-break {
+      display: none;
+    }
+
+    .hero-copy {
+      max-width: 620px;
+      margin: 24px 0 0;
+      color: #3f4655;
+      font-size: clamp(18px, 2vw, 23px);
+      line-height: 1.55;
+      font-weight: 520;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 13px 19px;
+      border-radius: 999px;
+      font-weight: 850;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button-primary {
+      color: #ffffff;
+      background: var(--accent);
+      box-shadow: 0 18px 38px rgba(112, 72, 232, 0.28);
+    }
+
+    .button-primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .button-secondary {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid var(--line);
+    }
+
+    .coupon {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .coupon strong {
+      color: var(--ink);
+      font-weight: 850;
+    }
+
+    .trust-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: 1180px;
+      margin: -38px auto 0;
+      padding: 0 22px;
+      gap: 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .trust-item {
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 12px 32px rgba(26, 31, 44, 0.08);
+    }
+
+    .trust-item strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 15px;
+    }
+
+    .trust-item span {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .section {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 92px 22px;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 34px;
+    }
+
+    .section-kicker {
+      margin: 0 0 12px;
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .section h2 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.02;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .section-lede {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 26px;
+      align-items: stretch;
+    }
+
+    .steps {
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      padding: 20px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+    .step-number {
+      display: inline-flex;
+      width: 30px;
+      height: 30px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      color: #ffffff;
+      background: var(--ink);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .step h3 {
+      margin: 0 0 8px;
+      font-size: 21px;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .visual-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #eef1f8;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .visual-panel img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .feature {
+      padding: 22px;
+      min-height: 210px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+    .feature mark {
+      display: inline;
+      padding: 0 4px;
+      color: var(--ink);
+      background: var(--yellow);
+      border-radius: 4px;
+      font-weight: 850;
+    }
+
+    .feature h3 {
+      margin: 18px 0 10px;
+      font-size: 21px;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .privacy {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .privacy-copy {
+      padding: 34px;
+      color: #ffffff;
+      background: #171923;
+      border-radius: 22px;
+    }
+
+    .privacy-copy h2 {
+      color: #ffffff;
+    }
+
+    .privacy-copy p {
+      color: #d5dae6;
+    }
+
+    .privacy-list {
+      display: grid;
+      gap: 10px;
+      margin: 26px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .privacy-list li {
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .pricing {
+      padding: 34px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 18px 60px rgba(26, 31, 44, 0.08);
+    }
+
+    .price {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      margin: 18px 0 8px;
+    }
+
+    .price strong {
+      font-size: 58px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .price span {
+      padding-bottom: 8px;
+      color: var(--muted);
+      font-weight: 750;
+    }
+
+    .price-note {
+      margin: 0 0 24px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .faq {
+      display: grid;
+      gap: 10px;
+    }
+
+    .resources {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .resource-link {
+      display: block;
+      min-height: 128px;
+      padding: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+    .resource-link strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .resource-link span {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    details {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 18px 20px;
+      font-weight: 850;
+    }
+
+    details p {
+      margin: 0;
+      padding: 0 20px 20px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .final-cta {
+      margin: 0 22px 22px;
+      padding: 76px 22px;
+      color: #ffffff;
+      background: #171923;
+      border-radius: 28px;
+      text-align: center;
+    }
+
+    .final-cta h2 {
+      max-width: 780px;
+      margin: 0 auto;
+      font-size: clamp(36px, 6vw, 68px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .final-cta p {
+      max-width: 660px;
+      margin: 20px auto 0;
+      color: #d5dae6;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .final-cta .hero-actions {
+      justify-content: center;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 22px 48px;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .footer a {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    @media (max-width: 900px) {
+      .nav-links a:not(.nav-cta) {
+        display: none;
+      }
+
+      .hero {
+        min-height: 88dvh;
+        background:
+          linear-gradient(180deg, rgba(247, 248, 251, 0.98) 0%, rgba(247, 248, 251, 0.92) 62%, rgba(247, 248, 251, 0.65) 100%),
+          url("assets/screenshot-main.png") bottom center / 720px auto no-repeat,
+          #f7f8fb;
+      }
+
+      .trust-row,
+      .workflow,
+      .feature-grid,
+      .privacy,
+      .resources {
+        grid-template-columns: 1fr;
+      }
+
+      .trust-row {
+        margin-top: 0;
+      }
+
+      .section {
+        padding: 70px 22px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .nav-inner {
+        padding: 12px 16px;
+      }
+
+      .brand span {
+        display: none;
+      }
+
+      .hero {
+        padding: 104px 18px 310px;
+      }
+
+      .hero h1 {
+        max-width: 100%;
+        font-size: 38px;
+        line-height: 1.04;
+      }
+
+      .mobile-break {
+        display: block;
+      }
+
+      .hero-copy {
+        font-size: 17px;
+      }
+
+      .nav-cta {
+        padding: 8px 11px;
+        font-size: 13px;
+      }
+
+      .hero-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .section,
+      .trust-row {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .privacy-copy,
+      .pricing {
+        padding: 24px;
+      }
+
+      .footer {
+        flex-direction: column;
+      }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Web Highlighter Pro",
+    "applicationCategory": "BrowserApplication",
+    "operatingSystem": "Chrome",
+    "alternateName": "Local-first research clipper for Chrome",
+    "description": "A local-first Chrome extension for saving webpage quotes, collecting research notes, searching highlights by website, and exporting notes as TXT or Markdown.",
+    "keywords": "research clipper, web clipper Chrome extension, webpage quotes, export highlights to Markdown, local-first notes, Chrome research notes, save webpage highlights, Markdown web clipper",
+    "featureList": [
+      "Save selected webpage text as local research notes",
+      "Search saved highlights by text, title, URL, and website",
+      "Filter notes by source website",
+      "Export saved notes as TXT or Markdown",
+      "Open original source pages from saved notes",
+      "Unlock lifetime Pro with a Lemon Squeezy license key"
+    ],
+    "url": "https://kjyang0114.dev/web-highlighter-pro/",
+    "image": "https://kjyang0114.dev/web-highlighter-pro/assets/marquee.png",
+    "offers": {
+      "@type": "Offer",
+      "price": "19.99",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "url": "https://kjyang.lemonsqueezy.com/checkout/buy/2e3daee2-efb1-4c5e-b265-407b7bb25bb0"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "KJ Yang",
+      "email": "support@kjyang0114.dev"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Where are my saved quotes stored?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Saved quotes and highlights are stored locally in Chrome using chrome.storage.local. Web Highlighter Pro does not maintain its own backend notes database."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I export research notes to Markdown?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. You can export saved or filtered highlights as TXT or Markdown from the popup, including source URLs and timestamps."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this a web highlighter or a research clipper?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Both. It highlights selected webpage text, but the main workflow is collecting source-backed quotes and exporting them into your own notes system."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use this with Obsidian, Notion, or PKM tools?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Export notes as Markdown or TXT, then import or paste them into Obsidian, Notion, Logseq, Bear, Apple Notes, Google Docs, or another knowledge workflow."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the lifetime license work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "After purchase, Lemon Squeezy sends a license key. Paste that key into the extension popup to unlock Lifetime Pro."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a class="brand" href="#top" aria-label="Web Highlighter Pro home">
+        <img src="assets/icon-128.png" alt="">
+        <span>Web Highlighter Pro</span>
+      </a>
+      <div class="nav-links">
+        <a href="#workflow">Workflow</a>
+        <a href="#features">Features</a>
+        <a href="#faq">FAQ</a>
+        <a class="nav-cta" href="https://chromewebstore.google.com/detail/web-highlighter-pro/pkonbcipepfffbjcogkkepneeobogdjl">Add to Chrome</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div class="eyebrow">Chrome research clipper · Local-first notes</div>
+        <h1 id="hero-title">Clip webpage <br class="mobile-break">quotes.<br>Export clean <br class="mobile-break">Markdown notes.</h1>
+        <p class="hero-copy">Web Highlighter Pro helps you collect useful quotes from webpages, keep source URLs attached, search research highlights by website, and export everything as TXT or Markdown.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://chromewebstore.google.com/detail/web-highlighter-pro/pkonbcipepfffbjcogkkepneeobogdjl">Add to Chrome</a>
+          <a class="button button-secondary" href="https://kjyang.lemonsqueezy.com/checkout/buy/2e3daee2-efb1-4c5e-b265-407b7bb25bb0">Buy Lifetime - $19.99</a>
+        </div>
+        <p class="coupon">Early bird: use code <strong>G1OTY4NW</strong> for 20% off. 5 free highlights included.</p>
+      </div>
+    </section>
+
+    <div class="trust-row" aria-label="Product highlights">
+      <div class="trust-item">
+        <strong>No account required</strong>
+        <span>Start collecting webpage quotes after installing the Chrome extension.</span>
+      </div>
+      <div class="trust-item">
+        <strong>Local-first research notes</strong>
+        <span>Saved quotes stay in Chrome local storage until you export them.</span>
+      </div>
+      <div class="trust-item">
+        <strong>Markdown export</strong>
+        <span>Move research snippets into Obsidian, Notion, docs, or any Markdown workflow.</span>
+      </div>
+    </div>
+
+    <section id="workflow" class="section">
+      <div class="section-head">
+        <p class="section-kicker">Workflow</p>
+        <h2>Capture source-backed research notes without opening a full note app.</h2>
+        <p class="section-lede">Built for students, researchers, writers, founders, and PKM users who collect quotes, references, and source material while browsing.</p>
+      </div>
+      <div class="workflow">
+        <div class="steps">
+          <article class="step">
+            <span class="step-number">1</span>
+            <h3>Select a webpage quote</h3>
+            <p>Capture useful passages from articles, documentation, emails, research pages, and competitor sites while staying in the browser.</p>
+          </article>
+          <article class="step">
+            <span class="step-number">2</span>
+            <h3>Save quote + source URL</h3>
+            <p>Use the context menu action to save selected text, page title, source URL, and timestamp in one step.</p>
+          </article>
+          <article class="step">
+            <span class="step-number">3</span>
+            <h3>Search, filter, export</h3>
+            <p>Find saved research highlights by text, title, URL, or source website. Export filtered notes when ready.</p>
+          </article>
+        </div>
+        <figure class="visual-panel">
+          <img src="assets/screenshot-workflow.png" alt="Web Highlighter Pro popup showing saved highlights and export workflow">
+        </figure>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <div class="section-head">
+        <p class="section-kicker">Features</p>
+        <h2>Small research clipper, focused job.</h2>
+        <p class="section-lede">Web Highlighter Pro does not try to become your whole knowledge base. It captures webpage quotes cleanly and gets out of the way.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature">
+          <mark>Highlight</mark>
+          <h3>Visual webpage quotes</h3>
+          <p>Selected text is wrapped in a clean yellow highlight style so saved passages remain easy to spot when you return.</p>
+        </article>
+        <article class="feature">
+          <mark>Search</mark>
+          <h3>Find research notes fast</h3>
+          <p>Search across saved quote text, page titles, URLs, and source website names from the extension popup.</p>
+        </article>
+        <article class="feature">
+          <mark>Filter</mark>
+          <h3>Group by source website</h3>
+          <p>Filter highlights by source domain when you need notes from one article, product doc, or research source.</p>
+        </article>
+        <article class="feature">
+          <mark>Export</mark>
+          <h3>Markdown and TXT</h3>
+          <p>Export saved research snippets into readable files with source URLs and timestamps preserved.</p>
+        </article>
+        <article class="feature">
+          <mark>Private</mark>
+          <h3>Local-first by design</h3>
+          <p>No custom backend database. Your research notes are stored in your Chrome profile unless you export them.</p>
+        </article>
+        <article class="feature">
+          <mark>Lifetime</mark>
+          <h3>Simple paid unlock</h3>
+          <p>Try 5 saved quotes for free, then unlock unlimited highlights with a Lemon Squeezy license key.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="privacy">
+        <div class="privacy-copy">
+          <p class="section-kicker">Privacy</p>
+          <h2>Your research notes stay local.</h2>
+          <p class="section-lede">Web Highlighter Pro stores saved quotes in Chrome local storage. It does not require an account, and it does not run its own notes database.</p>
+          <ul class="privacy-list">
+            <li>No required account</li>
+            <li>No custom backend database</li>
+            <li>No selling user data</li>
+            <li>Export whenever you want</li>
+          </ul>
+        </div>
+        <div class="pricing">
+          <p class="section-kicker">Lifetime deal</p>
+          <h2>One-time purchase.</h2>
+          <div class="price">
+            <strong>$19.99</strong>
+            <span>USD</span>
+          </div>
+          <p class="price-note">Use early bird code <strong>G1OTY4NW</strong> for 20% off. Includes unlimited saved quotes and Markdown export.</p>
+          <a class="button button-primary" href="https://kjyang.lemonsqueezy.com/checkout/buy/2e3daee2-efb1-4c5e-b265-407b7bb25bb0">Buy Lifetime License</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section">
+      <div class="section-head">
+        <p class="section-kicker">FAQ</p>
+        <h2>Quick answers before installing.</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Where are my saved quotes stored?</summary>
+          <p>Saved quotes and highlights are stored locally in Chrome using chrome.storage.local. Web Highlighter Pro does not maintain its own backend notes database.</p>
+        </details>
+        <details>
+          <summary>Does it work on every website?</summary>
+          <p>It works on normal webpages where Chrome extensions can run. Browser system pages, Chrome Web Store pages, and some protected pages may block extension scripting.</p>
+        </details>
+        <details>
+          <summary>Why does the extension request access to websites?</summary>
+          <p>Users can choose text on any webpage, so the extension needs permission to apply highlights and restore saved highlights on pages they visit.</p>
+        </details>
+        <details>
+          <summary>Can I export research notes to Markdown?</summary>
+          <p>Yes. You can export saved or filtered highlights as TXT or Markdown from the popup, including source URLs and timestamps.</p>
+        </details>
+        <details>
+          <summary>Is this a web highlighter or a research clipper?</summary>
+          <p>Both. It highlights selected webpage text, but the main workflow is collecting source-backed quotes and exporting them into your own notes system.</p>
+        </details>
+        <details>
+          <summary>Can I use this with Obsidian, Notion, or PKM tools?</summary>
+          <p>Yes. Export notes as Markdown or TXT, then import or paste them into Obsidian, Notion, Logseq, Bear, Apple Notes, Google Docs, or another knowledge workflow.</p>
+        </details>
+        <details>
+          <summary>How does the lifetime license work?</summary>
+          <p>After purchase, Lemon Squeezy sends a license key. Paste that key into the extension popup to unlock Lifetime Pro.</p>
+        </details>
+        <details>
+          <summary>What if highlights do not appear after navigating back?</summary>
+          <p>Dynamic pages can render content late. Refreshing the page usually restores saved highlights once the page content is stable.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="resources-title">
+      <div class="section-head">
+        <p class="section-kicker">Guides</p>
+        <h2 id="resources-title">Research workflows this extension supports.</h2>
+        <p class="section-lede">Short guides for people searching for Markdown export, local-first highlighting, and webpage quote capture.</p>
+      </div>
+      <div class="resources">
+        <a class="resource-link" href="/web-highlighter-pro/export-web-highlights-to-markdown.html">
+          <strong>Export web highlights to Markdown</strong>
+          <span>Save highlights and move them into your Markdown workflow.</span>
+        </a>
+        <a class="resource-link" href="/web-highlighter-pro/research-clipper-chrome-extension.html">
+          <strong>Research clipper for Chrome</strong>
+          <span>Collect source-backed notes without another account.</span>
+        </a>
+        <a class="resource-link" href="/web-highlighter-pro/local-first-web-highlighter.html">
+          <strong>Local-first web highlighter</strong>
+          <span>Keep saved quotes in Chrome until you export them.</span>
+        </a>
+        <a class="resource-link" href="/web-highlighter-pro/save-webpage-quotes.html">
+          <strong>Save webpage quotes with source URLs</strong>
+          <span>Capture quote text, page title, URL, and timestamp.</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <h2>Turn browsing into source-backed Markdown notes.</h2>
+      <p>Install Web Highlighter Pro, save your first 5 webpage quotes for free, and export your research when ready.</p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="https://chromewebstore.google.com/detail/web-highlighter-pro/pkonbcipepfffbjcogkkepneeobogdjl">Add to Chrome</a>
+        <a class="button button-secondary" href="https://kjyang.lemonsqueezy.com/checkout/buy/2e3daee2-efb1-4c5e-b265-407b7bb25bb0">Buy Lifetime</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© 2026 Web Highlighter Pro. Built by KJ Yang.</span>
+    <div class="footer-links">
+      <a href="https://www.privacypolicies.com/live/b8c737cb-0092-4ea7-9118-9b8cab52d9e8">Privacy Policy</a>
+      <a href="/web-highlighter-pro/terms">Terms</a>
+      <a href="mailto:support@kjyang0114.dev">Support</a>
+    </div>
+  </footer>
+</body>
+</html>
