@@ -403,6 +403,92 @@
   color: #11100d;
 }
 
+.studio-compare-section {
+  padding: 118px 0;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(240, 169, 74, 0.16), transparent 28%),
+    linear-gradient(180deg, #11100d 0%, #171511 100%);
+  color: #f7f2e8;
+}
+
+.studio-compare-head {
+  display: grid;
+  grid-template-columns: 0.8fr 1.05fr;
+  gap: 48px;
+  align-items: end;
+  margin-bottom: 36px;
+}
+
+.studio-compare-head span {
+  color: #f0a94a;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.24em;
+}
+
+.studio-compare-head h2 {
+  max-width: 11ch;
+  margin: 12px 0 0;
+  font-family: "Cinzel", "Noto Serif TC", serif;
+  font-size: clamp(3rem, 5vw, 5.2rem);
+  line-height: 0.98;
+}
+
+.studio-compare-head p {
+  max-width: 58ch;
+  margin: 0;
+  color: #cfc7ba;
+  font-size: 1.12rem;
+  line-height: 1.8;
+}
+
+.studio-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: rgba(247, 242, 232, 0.18);
+  border: 1px solid rgba(247, 242, 232, 0.18);
+}
+
+.studio-compare-grid article {
+  min-height: 320px;
+  display: grid;
+  align-content: space-between;
+  gap: 28px;
+  padding: 32px;
+  background:
+    linear-gradient(135deg, rgba(247, 242, 232, 0.08), rgba(247, 242, 232, 0.025)),
+    #11100d;
+}
+
+.studio-compare-grid article.is-featured {
+  background:
+    radial-gradient(circle at 88% 12%, rgba(240, 169, 74, 0.25), transparent 28%),
+    linear-gradient(135deg, rgba(240, 169, 74, 0.16), rgba(247, 242, 232, 0.05)),
+    #17120b;
+}
+
+.studio-compare-grid span {
+  color: #f0a94a;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+}
+
+.studio-compare-grid h3 {
+  max-width: 8ch;
+  margin: 0;
+  font-family: "Cinzel", "Noto Serif TC", serif;
+  font-size: clamp(2.1rem, 3vw, 3.15rem);
+  line-height: 0.98;
+}
+
+.studio-compare-grid p {
+  margin: 0;
+  color: #cfc7ba;
+  line-height: 1.8;
+}
+
 .studio-service-grid,
 .studio-pricing-grid,
 .studio-maintenance-grid,
@@ -3424,6 +3510,7 @@
 @media (max-width: 1080px) {
   .studio-index-grid,
   .studio-brandkit-grid,
+  .studio-compare-head,
   .studio-delivery-grid,
   .studio-lite-grid,
   .studio-final-grid,
@@ -3454,6 +3541,7 @@
 
   .studio-showcase-grid,
   .studio-service-grid,
+  .studio-compare-grid,
   .studio-pricing-grid,
   .studio-maintenance-grid,
   .en-demo-cards,
@@ -3500,6 +3588,7 @@
 
   .studio-index-grid,
   .studio-brandkit-grid,
+  .studio-compare-head,
   .studio-lite-grid,
   .studio-final-grid,
   .en-demo-grid,
@@ -3526,6 +3615,7 @@
   .studio-subpage-hero h1,
   .studio-contact-page h1,
   .studio-lite-grid h2,
+  .studio-compare-head h2,
   .studio-final-grid h2,
   .en-demo-grid h1,
   .en-demo-split h2,
@@ -3562,6 +3652,7 @@
   }
 
   .studio-showcase-head,
+  .studio-compare-grid,
   .brandkit-copy article,
   .studio-delivery-grid,
   .studio-delivery-grid article,
@@ -3588,6 +3679,7 @@
   .studio-orbit,
   .studio-showcase-grid,
   .studio-service-grid,
+  .studio-compare-grid,
   .studio-pricing-grid,
   .studio-maintenance-grid,
   .en-demo-cards,
@@ -3623,6 +3715,7 @@
   .studio-showcase-card,
   .studio-showcase-grid,
   .studio-service-grid article,
+  .studio-compare-grid article,
   .studio-pricing-grid article,
   .studio-maintenance-grid article,
   .studio-link-card,
