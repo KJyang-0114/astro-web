@@ -1,0 +1,189 @@
+---
+import SiteShell from "@components/SiteShell.astro";
+import DemoNotice from "@components/DemoNotice.astro";
+import { buildSchemas, getDemo } from "@data/demos";
+import { studioContact } from "@data/studio";
+
+const demo = getDemo("tutoring-center");
+const lineUrl = studioContact.lineUrl;
+
+const scoreCards = [
+  ["段考前", "題型弱點散落，家長只看到分數。"],
+  ["試聽後", "老師標記科目卡點，安排班型和頻率。"],
+  ["追蹤中", "出席、作業、測驗回報，家長看得見進度。"]
+];
+
+const studioWins = [
+  ["試聽入口固定", "首頁、課程、FAQ、手機底部都能預約。"],
+  ["課程分層清楚", "年級、科目、衝刺、一對一補強分開呈現。"],
+  ["在地招生更好找", "SEO title、服務區域、FAQ 與課程資訊完整整理。"],
+  ["招生季可更新", "活動、課表、老師介紹、小改版可持續維護。"]
+];
+---
+
+<SiteShell title={demo.seoTitle} description={demo.metaDescription} canonicalPath={`/studio/demo/${demo.slug}`} schema={buildSchemas(demo)} noindex>
+  <main class="academy-page">
+    <nav class="site-nav academy-nav">
+      <a class="brand" href="/studio/demo">啟衡文理補習班</a>
+      <div class="nav-links">
+        <a href="#courses">課程</a>
+        <a href="#results">追蹤</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">試聽</a>
+      </div>
+    </nav>
+    <DemoNotice />
+
+    <section class="academy-hero">
+      <div class="wrap academy-hero-grid">
+        <div class="academy-copy">
+          <span class="academy-kicker">{demo.serviceArea}</span>
+          <h1>不是喊升學保證，是把孩子卡住的地方找出來</h1>
+          <p>{demo.subhead}</p>
+          <div class="action-row">
+            <a class="btn academy-primary" href="#contact">{demo.primaryCta}</a>
+            <a class="btn academy-secondary" href="#courses">{demo.secondaryCta}</a>
+          </div>
+        </div>
+        <div class="academy-board">
+          <img src={demo.heroImage} alt="補習班老師與學生討論課程" />
+          <div class="academy-score">
+            <span>TRIAL CLASS</span>
+            <b>免費試聽</b>
+            <p>年級、科目、近期成績先整理，試聽後給課程建議。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="academy-transform" id="results">
+      <div class="wrap academy-transform-grid">
+        {scoreCards.map(([title, text]) => (
+          <article>
+            <b>{title}</b>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="academy-courses" id="courses">
+      <div class="wrap academy-section-head">
+        <span>COURSE MAP</span>
+        <h2>家長要先找到年級、科目、程度，不是先看口號</h2>
+      </div>
+      <div class="wrap academy-course-grid">
+        {demo.services.map((service) => (
+          <article>
+            <h3>{service.title}</h3>
+            <p>{service.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="academy-proof">
+      <div class="wrap academy-proof-grid">
+        <div>
+          <span>VISIBLE PROGRESS</span>
+          <h2>{demo.proofTitle}</h2>
+          <p>對家長來說，報名後要看見孩子怎麼被追蹤。網站把回報方式先說清楚，信任才會建立。</p>
+        </div>
+        <div>
+          {demo.proof.map((item) => (
+            <article>
+              <b>{item.title}</b>
+              <p>{item.text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="academy-process">
+      <div class="wrap academy-process-grid">
+        {demo.process.map((step, index) => (
+          <article>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="academy-studio">
+      <div class="wrap academy-studio-grid">
+        <h2>這頁讓補習班看起來有系統，不是只有老師介紹</h2>
+        <div>
+          {studioWins.map(([title, text]) => (
+            <article>
+              <b>{title}</b>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section academy-faq" id="faq">
+      <div class="wrap faq-grid">
+        <div>
+          <h2 class="section-title">家長預約前會問</h2>
+          <p class="section-copy">FAQ 把試聽費用、班級人數、單科報名和家長回報先說清楚。</p>
+        </div>
+        <div class="faq-list">
+          {demo.faq.map((item) => (
+            <details>
+              <summary>{item.title}</summary>
+              <p>{item.text}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section academy-contact" id="contact">
+      <div class="wrap contact-grid">
+        <div>
+          <h2 class="section-title">留下年級與科目，安排免費試聽</h2>
+          <p class="section-copy">此區為範例聯絡設計。想做類似網站請聯絡 KJyang Studio：{studioContact.phone} · LINE {studioContact.lineId}</p>
+          <div class="action-row">
+            <button class="btn academy-secondary fake-phone" type="button">電話按鈕示意</button>
+            <a class="btn academy-primary" href={lineUrl}>LINE 詢問網站</a>
+          </div>
+          <aside class="line-contact-card">
+            <div class="line-qr" aria-label="KJyang Studio LINE QR code">
+              <img src={studioContact.lineQr} alt="KJyang Studio LINE QR code" loading="lazy" />
+            </div>
+            <div>
+              <b>KJYANG STUDIO LINE</b>
+              <strong>{studioContact.lineId}</strong>
+              <p>此 demo 不接受補習試聽。想做類似網站，可傳目前網站或參考風格。</p>
+            </div>
+          </aside>
+        </div>
+        <form class="contact-form">
+          <label class="field">
+            家長姓名
+            <input name="parent" autocomplete="name" />
+          </label>
+          <label class="field">
+            年級與科目
+            <input name="course" />
+          </label>
+          <label class="field">
+            目前想改善的狀況
+            <textarea name="message" rows="4"></textarea>
+          </label>
+          <button class="btn academy-primary" type="button">複製需求並開 LINE</button>
+        </form>
+      </div>
+    </section>
+
+    <div class="mobile-cta" aria-label="手機快速試聽">
+      <a href="#contact">電話</a>
+      <a href={lineUrl}>LINE 諮詢</a>
+    </div>
+  </main>
+</SiteShell>

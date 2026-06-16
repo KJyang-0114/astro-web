@@ -1,0 +1,87 @@
+---
+import StudioNav from "@components/StudioNav.astro";
+import SiteShell from "@components/SiteShell.astro";
+import { absoluteStudioUrl } from "@data/seo";
+import { fitChecks, studioBeliefs } from "@data/trust";
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "About KJyang Studio",
+    url: absoluteStudioUrl("/studio/about"),
+    inLanguage: "zh-Hant",
+    about: {
+      "@type": "Organization",
+      name: "KJyang Studio",
+      url: absoluteStudioUrl("/studio")
+    }
+  }
+];
+---
+
+<SiteShell
+  title="關於 KJyang Studio | 網站設計、代碼與部署"
+  description="KJyang Studio 是小型網站工作室，主打網站設計、前端代碼編寫、部署上線、主機設定與後續維護。"
+  canonicalPath="/studio/about"
+  schema={schema}
+>
+  <main class="studio-index">
+    <StudioNav />
+
+    <section class="about-hero">
+      <div class="wrap about-hero-grid">
+        <div>
+          <span>About KJyang Studio</span>
+          <h1>小型工作室，但網站要做得像能長期使用的資產</h1>
+        </div>
+        <p>
+          我主要做網站設計、前端代碼編寫、部署上線與後續維護。SEO/GEO 會做基礎結構，但不保證排名或 AI 引用。
+          比起把自己包裝成大型 agency，我更希望把能做什麼、不能保證什麼、合作怎麼進行先說清楚。
+        </p>
+      </div>
+    </section>
+
+    <section class="belief-section">
+      <div class="wrap belief-grid">
+        {studioBeliefs.map((item, index) => (
+          <article>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h2>{item.title}</h2>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="fit-section">
+      <div class="wrap fit-grid">
+        <div>
+          <span>Fit check</span>
+          <h2>適合才合作，不適合就不要硬做</h2>
+          <p>網站製作不是所有客戶都適合同一套流程。先篩選期待，後面比較少消耗。</p>
+        </div>
+        <div>
+          {fitChecks.map(([title, text]) => (
+            <article>
+              <b>{title}</b>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="studio-final-cta">
+      <div class="wrap">
+        <span>Start with context</span>
+        <h2>先傳目前狀況，不用一開始就講很完整。</h2>
+        <p>可以先傳行業、目前網站、參考風格、預算範圍和想做的頁面。我會先判斷適合哪種方案。</p>
+        <div class="action-row">
+          <a class="btn studio-index-primary" href="/studio/contact">聯絡 KJyang Studio</a>
+          <a class="btn studio-index-secondary" href="/studio/work">看作品案例</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteShell>

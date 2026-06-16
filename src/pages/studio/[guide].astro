@@ -1,0 +1,73 @@
+---
+import StudioNav from "@components/StudioNav.astro";
+import SiteShell from "@components/SiteShell.astro";
+import { buildGuideSchemas, getStudioGuide, studioGuides } from "@data/guides";
+import { studioContact } from "@data/studio";
+
+export function getStaticPaths() {
+  return studioGuides.map((guide) => ({
+    params: { guide: guide.slug }
+  }));
+}
+
+const guide = getStudioGuide(Astro.params.guide ?? "");
+---
+
+<SiteShell
+  title={`${guide.title} | KJyang Studio`}
+  description={guide.description}
+  canonicalPath={`/studio/${guide.slug}`}
+  schema={buildGuideSchemas(guide)}
+>
+  <main class="studio-index">
+    <StudioNav />
+    <section class="studio-subpage-hero guide-hero">
+      <div class="wrap">
+        <span>{guide.kicker}</span>
+        <h1>{guide.title}</h1>
+        <p>{guide.summary}</p>
+      </div>
+    </section>
+
+    <section class="studio-card-section guide-section">
+      <div class="wrap studio-service-grid">
+        {guide.sections.map((section, index) => (
+          <article>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h2>{section.title}</h2>
+            <p>{section.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="faq-section guide-faq">
+      <div class="wrap faq-grid">
+        <div>
+          <h2 class="section-title">常見問題</h2>
+          <p class="section-copy">這些內容讓搜尋引擎、AI 和客戶都能更快理解服務邊界。</p>
+        </div>
+        <div class="faq-list">
+          {guide.faq.map((item) => (
+            <details>
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="studio-final-cta">
+      <div class="wrap">
+        <span>KJyang Studio</span>
+        <h2>想做類似網站，直接用 LINE 傳需求。</h2>
+        <p>傳行業、目前網站、預算範圍和想參考的 demo，我會先判斷適合一頁式、多頁式或客製功能。</p>
+        <div class="action-row">
+          <a class="btn studio-index-primary" href={studioContact.lineUrl}>LINE 聯絡</a>
+          <a class="btn studio-index-secondary" href="/studio/pricing">看價格區間</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteShell>

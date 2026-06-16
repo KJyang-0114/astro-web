@@ -6,6 +6,7 @@ const navItems = [
   { label: '關於我', href: '/about' },
   { label: '作品集', href: '/projects' },
   { label: 'AI 探索', href: '/ai' },
+  { label: '網站服務', href: '/studio', featured: true },
   { label: '聯絡我', href: '/contact' },
 ];
 
@@ -15,12 +16,12 @@ function isActive(href: string) {
 }
 ---
 
-<header class="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
-  <nav class="glass rounded-2xl flex items-center justify-between h-14 w-full max-w-5xl px-4 sm:px-6 transition-all duration-300 shadow-lg shadow-black/20" aria-label="主導航">
+<header class="fixed top-4 left-0 right-0 z-50 flex justify-center px-3 sm:px-4">
+  <nav class="glass rounded-2xl flex items-center justify-between h-14 w-full max-w-6xl px-3 sm:px-5 transition-all duration-300 shadow-lg shadow-black/20" aria-label="主導航">
     <!-- Logo -->
-    <a href="/" class="text-lg font-bold tracking-tight hover:opacity-80 transition-opacity flex items-center gap-2" aria-label="KJyang 首頁">
-      <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand to-accent flex items-center justify-center text-white text-xs">KJ</div>
-      <span class="text-zinc-100">KJyang</span>
+    <a href="/" class="text-lg font-bold tracking-tight hover:opacity-80 transition-opacity flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-brand rounded-full" aria-label="KJyang 首頁">
+      <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand to-accent flex items-center justify-center text-white text-xs font-bold shadow-lg shadow-brand/20">KJ</div>
+      <span class="text-zinc-100 hidden sm:inline">KJyang</span>
     </a>
 
     <!-- Desktop Nav -->
@@ -30,10 +31,12 @@ function isActive(href: string) {
           <a
             href={item.href}
             class:list={[
-              "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 relative group",
+              "px-3 lg:px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 relative group cursor-pointer focus-visible:ring-2 focus-visible:ring-brand",
               isActive(item.href)
                 ? "text-white"
-                : "text-zinc-400 hover:text-zinc-100"
+                : item.featured
+                  ? "text-zinc-100 bg-white/[0.08] border border-white/10 hover:border-brand/50"
+                  : "text-zinc-400 hover:text-zinc-100"
             ]}
             aria-current={isActive(item.href) ? "page" : undefined}
           >
@@ -52,7 +55,7 @@ function isActive(href: string) {
     <!-- Mobile Menu Button -->
     <button
       id="mobile-menu-btn"
-      class="md:hidden p-2 text-zinc-400 hover:text-zinc-100 transition-colors rounded-full hover:bg-white/5"
+      class="md:hidden p-2 text-zinc-400 hover:text-zinc-100 transition-colors rounded-full hover:bg-white/5 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand"
       aria-label="開啟選單"
       aria-expanded="false"
     >
@@ -69,7 +72,7 @@ function isActive(href: string) {
         <a
           href={item.href}
           class:list={[
-            "text-2xl font-bold transition-all duration-300 transform translate-y-4 opacity-0",
+            "text-2xl font-bold transition-all duration-300 transform translate-y-4 opacity-0 focus-visible:ring-2 focus-visible:ring-brand rounded-xl px-4 py-2",
             isActive(item.href) ? "text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-accent-light" : "text-zinc-400 hover:text-zinc-100"
           ]}
           style={`transition-delay: ${index * 50}ms`}
@@ -77,7 +80,7 @@ function isActive(href: string) {
           {item.label}
         </a>
       ))}
-      <button id="close-menu-btn" class="mt-12 p-4 text-zinc-500 hover:text-zinc-100 rounded-full border border-zinc-800 hover:border-zinc-600 transition-all">
+      <button id="close-menu-btn" class="mt-12 p-4 text-zinc-500 hover:text-zinc-100 rounded-full border border-zinc-800 hover:border-zinc-600 transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-brand" aria-label="關閉選單">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>

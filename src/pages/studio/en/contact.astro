@@ -1,0 +1,30 @@
+---
+import SiteShell from "@components/SiteShell.astro";
+import { studioContact } from "@data/studio";
+---
+
+<SiteShell title="Contact | KJyang Studio" description="Contact KJyang Studio for website design, frontend implementation, deployment, and maintenance." canonicalPath="/studio/en/contact" lang="en">
+  <main class="studio-en-v2 en-subpage">
+    <nav class="en-v2-nav">
+      <a class="en-v2-brand" href="/studio/en"><img src="/brand/kjyang-mark.svg" alt="" /><span>KJyang Studio</span></a>
+      <div class="en-v2-links"><a href="/studio/en/services">Services</a><a href="/studio/en/pricing">Pricing</a><a href="/studio/en/contact">Contact</a><a href="/studio">中文</a></div>
+    </nav>
+    <section class="en-v2-hero en-page-hero">
+      <div class="en-v2-wrap en-v2-hero-grid">
+        <div class="en-v2-copy">
+          <span class="en-v2-kicker">PROJECT INQUIRY</span>
+          <h1>Send context first. Then scope properly.</h1>
+          <p>Share your business type, current website, reference sites, budget range, and whether you need deployment or ongoing care.</p>
+          <div class="en-v2-actions">
+            <a class="en-v2-btn en-v2-btn-primary" href={studioContact.lineUrl}>LINE contact</a>
+            <a class="en-v2-btn en-v2-btn-secondary" href="/studio/en/demo">View demos</a>
+          </div>
+        </div>
+        <div class="line-contact-card studio-real-contact">
+          <div class="line-qr"><img src={studioContact.lineQr} alt="KJyang Studio LINE QR code" /></div>
+          <div><b>LINE / PHONE LABEL</b><strong>{studioContact.lineId}</strong><p>LINE works best for first contact. Send links, screenshots, and project context.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteShell>

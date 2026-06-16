@@ -1,0 +1,25 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#0B0D10"/>
+  <g opacity="0.28">
+    <path d="M120 0V900M280 0V900M440 0V900M600 0V900M760 0V900M920 0V900M1080 0V900M1240 0V900M1400 0V900" stroke="#F4E8D0"/>
+    <path d="M0 180H1600M0 360H1600M0 540H1600M0 720H1600" stroke="#F4E8D0"/>
+  </g>
+  <circle cx="1272" cy="164" r="260" fill="#F0A94A" opacity="0.11"/>
+  <circle cx="240" cy="770" r="300" fill="#F4E8D0" opacity="0.06"/>
+  <rect x="122" y="122" width="210" height="210" rx="34" fill="#11151A" stroke="#F4E8D0" stroke-width="9"/>
+  <path d="M162 280V174H187V222L236 174H270L218 224L275 280H239L187 227V280H162Z" fill="#F4E8D0"/>
+  <path d="M268 122H332V186" stroke="#F0A94A" stroke-width="9"/>
+  <path d="M282 183L332 122" stroke="#F0A94A" stroke-width="9"/>
+  <text x="122" y="452" fill="#F4E8D0" font-family="Georgia, 'Times New Roman', serif" font-size="108" letter-spacing="0">KJyang Studio</text>
+  <text x="128" y="516" fill="#F0A94A" font-family="Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="6">WEBSITES THAT TURN SEARCH INTO INQUIRIES</text>
+  <text x="124" y="628" fill="#D7CBB7" font-family="Arial, 'Noto Sans TC', sans-serif" font-size="34">幫小商家把 Google 搜尋與手機訪客</text>
+  <text x="124" y="678" fill="#D7CBB7" font-family="Arial, 'Noto Sans TC', sans-serif" font-size="34">變成 LINE、電話、表單詢問。</text>
+  <g transform="translate(1076 482)">
+    <rect width="330" height="202" rx="22" fill="#F4E8D0"/>
+    <rect x="24" y="28" width="282" height="23" rx="12" fill="#0B0D10"/>
+    <rect x="24" y="70" width="184" height="15" rx="8" fill="#0B0D10" opacity="0.48"/>
+    <rect x="24" y="106" width="122" height="42" rx="21" fill="#F0A94A"/>
+    <rect x="162" y="106" width="110" height="42" rx="21" fill="#0B0D10"/>
+  </g>
+  <text x="122" y="812" fill="#81796B" font-family="Arial, sans-serif" font-size="17" font-weight="700" letter-spacing="3.4">CLIENT OWNS DOMAIN · VPS · SSL · BACKUPS · MONITORING</text>
+</svg>

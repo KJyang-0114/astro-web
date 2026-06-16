@@ -5,18 +5,27 @@
 !/.gitignore
 !/.gitattributes
 
-# --- Whitelist website files (allow these into git) ---
+# --- Whitelist project files (allow these into git) ---
 !/src/
 !/public/
+!/.github/
+!/.dockerignore
+!/Dockerfile
+!/docker-compose.yml
 !/astro.config.mjs
 !/package.json
 !/package-lock.json
 !/pnpm-lock.yaml
 !/yarn.lock
+!/tsconfig.json
 !/vite.config.js
 !/README.md
+!/rebuild-docker.sh
 
-# If you add other config files you need, whitelist them here
+# --- Ignore generated/editor files inside whitelisted trees ---
+**/.DS_Store
+/public/_assets/
+/src/styles/*.bad.*
 
 # Notes:
 # - Everything else in the repo root is ignored unless explicitly whitelisted above.

@@ -1,0 +1,63 @@
+---
+import StudioNav from "@components/StudioNav.astro";
+import SiteShell from "@components/SiteShell.astro";
+import { absoluteStudioUrl } from "@data/seo";
+import { whyUsBlocks } from "@data/trust";
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Why KJyang Studio",
+    url: absoluteStudioUrl("/studio/why-us"),
+    description: "Why small businesses choose KJyang Studio for website design, frontend implementation, deployment, and maintenance."
+  }
+];
+---
+
+<SiteShell
+  title="為什麼選 KJyang Studio | 網站設計不是只套模板"
+  description="說明 KJyang Studio 和便宜模板、AI 生成頁、只做首頁的差別，包含設計、代碼、部署、維護與基礎 SEO/GEO。"
+  canonicalPath="/studio/why-us"
+  schema={schema}
+>
+  <main class="studio-index">
+    <StudioNav />
+
+    <section class="why-hero">
+      <div class="wrap why-hero-grid">
+        <div>
+          <span>Why us</span>
+          <h1>客戶不是只買頁面，是買判斷、設計和交付能力</h1>
+          <p>AI 可以生成文字和畫面，但正式商家網站還要能被客戶看懂、能聯絡、能部署、能維護。</p>
+        </div>
+        <div class="why-proof-card">
+          <b>不是魔法，也不保證排名。</b>
+          <p>真正能控制的是資訊架構、設計質感、前端實作、部署品質和後續維護規則。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="why-blocks-section">
+      <div class="wrap why-blocks">
+        {whyUsBlocks.map((item, index) => (
+          <article>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h2>{item.title}</h2>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="why-comparison">
+      <div class="wrap why-comparison-grid">
+        <h2>自己用 AI 做，可以。問題是後面誰負責？</h2>
+        <div>
+          <p>正式網站要考慮手機文字是否擠、CTA 是否在正確位置、表單是否真的能用、schema 是否合理、sitemap 是否更新、Docker 是否能重建、Cloudflare 與 SSL 是否正常。</p>
+          <p>這些不是單張漂亮截圖能解決的事。KJyang Studio 的價值在於把設計、代碼與上線流程接起來。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteShell>

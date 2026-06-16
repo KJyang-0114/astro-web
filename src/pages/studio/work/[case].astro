@@ -1,0 +1,153 @@
+---
+import StudioNav from "@components/StudioNav.astro";
+import SiteShell from "@components/SiteShell.astro";
+import { absoluteStudioUrl } from "@data/seo";
+import { getWorkCase, workCases } from "@data/work";
+
+export function getStaticPaths() {
+  return workCases.map((item) => ({
+    params: { case: item.slug }
+  }));
+}
+
+const work = getWorkCase(Astro.params.case ?? "");
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: work.title,
+    description: work.description,
+    url: absoluteStudioUrl(`/studio/work/${work.slug}`),
+    inLanguage: "zh-Hant",
+    creator: {
+      "@type": "Organization",
+      name: "KJyang Studio",
+      url: absoluteStudioUrl("/studio")
+    },
+    about: work.industry,
+    workExample: absoluteStudioUrl(work.demoUrl)
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: work.faq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer
+      }
+    }))
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "KJyang Studio",
+        item: absoluteStudioUrl("/studio")
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "作品案例",
+        item: absoluteStudioUrl("/studio/work")
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: work.title,
+        item: absoluteStudioUrl(`/studio/work/${work.slug}`)
+      }
+    ]
+  }
+];
+---
+
+<SiteShell title={`${work.title} | KJyang Studio`} description={work.description} canonicalPath={`/studio/work/${work.slug}`} schema={schema}>
+  <main class="studio-index">
+    <StudioNav />
+
+    <article class="work-detail">
+      <header class="work-detail-hero">
+        <div class="wrap work-detail-grid">
+          <div>
+            <a class="insight-back" href="/studio/work">← 回作品案例</a>
+            <span>{work.eyebrow}</span>
+            <h1>{work.title}</h1>
+            <p>{work.description}</p>
+          </div>
+          <aside class="work-detail-panel">
+            <b>{work.industry}</b>
+            <dl>
+              <div><dt>Problem</dt><dd>{work.problem}</dd></div>
+              <div><dt>Strategy</dt><dd>{work.strategy}</dd></div>
+            </dl>
+          </aside>
+        </div>
+      </header>
+
+      <section class="work-strategy-section">
+        <div class="wrap work-strategy-grid">
+          <article>
+            <span>VISUAL</span>
+            <h2>{work.visualTone}</h2>
+          </article>
+          <article>
+            <span>CTA</span>
+            <h2>{work.ctaPlan}</h2>
+          </article>
+          <article>
+            <span>MOBILE</span>
+            <h2>{work.mobilePlan}</h2>
+          </article>
+          <article>
+            <span>SEO / GEO</span>
+            <h2>{work.seoPlan}</h2>
+          </article>
+        </div>
+      </section>
+
+      <section class="work-story-section">
+        <div class="wrap work-story-grid">
+          <div class="work-story-list">
+            {work.sections.map((section, index) => (
+              <section>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <h2>{section.title}</h2>
+                <p>{section.body}</p>
+              </section>
+            ))}
+          </div>
+          <aside class="work-decision-board">
+            <span>Design decisions</span>
+            <h2>這個 demo 的關鍵判斷</h2>
+            <ul>
+              {work.decisions.map((decision) => <li>{decision}</li>)}
+            </ul>
+            <a class="btn studio-index-primary" href={work.demoUrl}>看實際 Demo</a>
+          </aside>
+        </div>
+      </section>
+    </article>
+
+    <section class="faq-section guide-faq">
+      <div class="wrap faq-grid">
+        <div>
+          <h2 class="section-title">常見問題</h2>
+          <p class="section-copy">case study 是展示設計判斷，不代表真實營業店家。</p>
+        </div>
+        <div class="faq-list">
+          {work.faq.map((item) => (
+            <details>
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteShell>

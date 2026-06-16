@@ -1,0 +1,87 @@
+---
+import StudioNav from "@components/StudioNav.astro";
+import SiteShell from "@components/SiteShell.astro";
+import { insightPosts } from "@data/insights";
+import { absoluteStudioUrl } from "@data/seo";
+
+const latestPost = insightPosts[0];
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "KJyang Studio Insights",
+    description: "小商家網站設計、LINE 詢問、部署維護、SEO/GEO 基礎與網站規劃文章。",
+    url: absoluteStudioUrl("/studio/insights"),
+    inLanguage: "zh-Hant",
+    mainEntity: insightPosts.map((post) => ({
+      "@type": "Article",
+      headline: post.title,
+      url: absoluteStudioUrl(`/studio/insights/${post.slug}`),
+      datePublished: post.date
+    }))
+  }
+];
+---
+
+<SiteShell
+  title="網站設計知識庫 | KJyang Studio"
+  description="KJyang Studio 定期整理小商家網站設計、LINE CTA、部署維護、價格規劃和 SEO/GEO 基礎文章。"
+  canonicalPath="/studio/insights"
+  schema={schema}
+>
+  <main class="studio-index">
+    <StudioNav />
+
+    <section class="studio-subpage-hero insights-hero">
+      <div class="wrap insights-hero-grid">
+        <div>
+          <span>KJyang Studio Insights</span>
+          <h1>小商家網站設計知識庫</h1>
+          <p>
+            固定整理網站設計、手機版體驗、LINE 詢問、部署維護、價格規劃和 SEO/GEO 基礎。
+            目標不是寫空泛行銷文，而是把店家真的會遇到的網站問題講清楚。
+          </p>
+        </div>
+        <a class="insights-featured" href={`/studio/insights/${latestPost.slug}`}>
+          <span>Latest / {latestPost.date}</span>
+          <h2>{latestPost.title}</h2>
+          <p>{latestPost.summary}</p>
+          <b>閱讀最新文章</b>
+        </a>
+      </div>
+    </section>
+
+    <section class="insights-list-section">
+      <div class="wrap insights-list-head">
+        <span>Daily publishing base</span>
+        <h2>先建立可信任的長期內容，而不是只放一頁等運氣</h2>
+        <p>每天新增一篇可以從這裡累積。文章會進 sitemap、llms.txt 和結構化資料，讓搜尋和 AI 比較容易理解 KJyang Studio 的服務主題。</p>
+      </div>
+      <div class="wrap insights-list">
+        {insightPosts.map((post, index) => (
+          <a class="insight-card" href={`/studio/insights/${post.slug}`}>
+            <div>
+              <span>{post.category}</span>
+              <time datetime={post.date}>{post.date}</time>
+            </div>
+            <h2>{post.title}</h2>
+            <p>{post.summary}</p>
+            <b>{String(index + 1).padStart(2, "0")}</b>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="studio-final-cta">
+      <div class="wrap">
+        <span>KJyang Studio</span>
+        <h2>想看實際網站設計，可以直接看 demo。</h2>
+        <p>文章負責說明觀念，demo 負責展示設計、資訊架構和詢問流程。</p>
+        <div class="action-row">
+          <a class="btn studio-index-primary" href="/studio/demo">看網站 Demo</a>
+          <a class="btn studio-index-secondary" href="/studio/contact">聯絡 KJyang Studio</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteShell>

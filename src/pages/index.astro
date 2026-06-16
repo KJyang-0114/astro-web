@@ -28,10 +28,16 @@ const jsonLd = {
 };
 
 const techStack = [
-  { name: "AI / LLM", items: ["Prompt Engineering", "Grok API", "LLM 整合應用", "強化學習", "AI Agent"], icon: "🧠" },
-  { name: "前端", items: ["React", "Vue", "Astro", "TypeScript", "Tailwind CSS"], icon: "🖥️" },
-  { name: "後端 & 工具", items: ["Python", "FastAPI", "Node.js", "Docker", "Git"], icon: "⚙️" },
-  { name: "其他", items: ["Java", "Minecraft Forge", "Swift", "Linux"], icon: "🎮" },
+  { name: "AI / LLM", items: ["Prompt Engineering", "LLM 整合應用", "AI Agent", "強化學習"], mark: "AI", tone: "from-violet-400 to-blue-400" },
+  { name: "前端", items: ["React", "Vue", "Astro", "TypeScript", "Tailwind CSS"], mark: "FE", tone: "from-cyan-300 to-blue-400" },
+  { name: "後端 & 部署", items: ["Python", "FastAPI", "Node.js", "Docker", "Linux"], mark: "OPS", tone: "from-emerald-300 to-cyan-400" },
+  { name: "實驗專案", items: ["Java", "Minecraft Forge", "Swift", "Vision", "Automation"], mark: "LAB", tone: "from-amber-300 to-orange-400" },
+];
+
+const studioHighlights = [
+  { label: "網站製作", value: "Design + Code" },
+  { label: "部署交付", value: "VPS / SSL / Docker" },
+  { label: "商家轉換", value: "LINE / Phone / Form" },
 ];
 ---
 
@@ -42,44 +48,69 @@ const techStack = [
 >
 
   <!-- Hero -->
-  <section class="relative min-h-screen flex items-center pt-20 overflow-hidden" aria-label="KJyang 首頁">
+  <section class="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden" aria-label="KJyang 首頁">
     <!-- Background Elements -->
     <div class="absolute inset-0 bg-grid z-0 pointer-events-none"></div>
     <div class="absolute top-0 right-0 w-3/4 h-3/4 bg-gradient-to-b from-brand/20 to-transparent blur-[120px] rounded-full pointer-events-none translate-x-1/4 -translate-y-1/4"></div>
     <div class="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-t from-accent/10 to-transparent blur-[100px] rounded-full pointer-events-none -translate-x-1/4 translate-y-1/4"></div>
 
     <div class="section-container w-full relative z-10">
+      <div class="grid lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.75fr)] gap-12 lg:gap-16 items-center">
       <div class="max-w-4xl">
         <div class="animate-on-scroll inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-xs font-medium mb-8 backdrop-blur-sm">
           <span class="w-1.5 h-1.5 rounded-full bg-brand-light animate-pulse"></span>
-          鶯歌工商 · 資訊科
+          鶯歌工商 · 資訊科 · Web / AI / Studio
         </div>
 
-        <h1 class="animate-on-scroll delay-1 text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-8">
+        <h1 class="animate-on-scroll delay-1 text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[1.05] mb-8">
           Builds with <br />
           <span class="text-gradient">Logic & Magic.</span>
         </h1>
 
-        <p class="animate-on-scroll delay-2 text-xl sm:text-2xl text-zinc-400 mb-6 font-medium max-w-2xl leading-relaxed">
-          我是 KJyang。寫全端、玩 AI、做有趣的東西。
+        <p class="animate-on-scroll delay-2 text-xl sm:text-2xl text-zinc-300 mb-6 font-medium max-w-2xl leading-relaxed">
+          我是 KJyang。寫全端、玩 AI，也用 KJyang Studio 幫商家做能上線、能詢問、能維護的網站。
         </p>
 
         <p class="animate-on-scroll delay-2 text-base text-zinc-500 max-w-2xl mb-10 leading-relaxed">
-          平常在研究怎麼用 LLM 和各種新技術搞事情，
-          偶爾寫寫全端，偶爾改改 Minecraft mod。
-          GitHub 上有 13+ 個開源專案，歡迎逛逛。
+          這裡是我的個人入口：技術作品、AI 實驗、開發紀錄。需要商業網站製作、部署、SSL、主機維護，可以直接看 Studio 服務頁。
         </p>
 
         <div class="animate-on-scroll delay-3 flex flex-wrap gap-4">
-          <a href="/projects" class="group relative inline-flex items-center gap-2 px-8 py-4 bg-zinc-100 text-zinc-950 font-semibold rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95">
-             <span class="relative z-10">看我做了什麼</span>
+          <a href="/studio" class="group relative inline-flex items-center gap-2 px-8 py-4 bg-zinc-100 text-zinc-950 font-semibold rounded-full overflow-hidden transition-all hover:bg-white hover:shadow-2xl hover:shadow-brand/20 active:translate-y-px focus-visible:ring-2 focus-visible:ring-brand">
+             <span class="relative z-10">網站服務 / KJyang Studio</span>
              <div class="absolute inset-0 bg-gradient-to-r from-brand-light to-accent-light opacity-0 group-hover:opacity-20 transition-opacity"></div>
-             <svg class="w-4 h-4 relative z-10 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+             <svg class="w-4 h-4 relative z-10 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
           </a>
-          <a href="/about" class="inline-flex items-center gap-2 px-8 py-4 bg-white/5 hover:bg-white/10 text-zinc-300 font-semibold rounded-full border border-white/10 transition-all hover:scale-105 active:scale-95 backdrop-blur-sm">
-            更了解我
+          <a href="/projects" class="group relative inline-flex items-center gap-2 px-8 py-4 bg-white/5 hover:bg-white/10 text-zinc-200 font-semibold rounded-full border border-white/10 transition-all hover:border-white/20 active:translate-y-px backdrop-blur-sm focus-visible:ring-2 focus-visible:ring-brand">
+             <span class="relative z-10">看我做了什麼</span>
+             <svg class="w-4 h-4 relative z-10 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
           </a>
         </div>
+      </div>
+
+      <aside class="animate-on-scroll delay-3 hero-console relative rounded-[2rem] border border-white/10 bg-zinc-950/75 p-4 sm:p-5 shadow-2xl shadow-black/40 backdrop-blur-xl">
+        <div class="rounded-[1.5rem] border border-white/10 bg-zinc-900/70 overflow-hidden">
+          <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
+            <div>
+              <p class="text-xs uppercase tracking-[0.28em] text-brand-light font-mono">Studio Route</p>
+              <h2 class="mt-1 text-xl font-bold text-zinc-50">KJyang Studio</h2>
+            </div>
+            <span class="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-200">Online</span>
+          </div>
+          <div class="p-5 space-y-4">
+            {studioHighlights.map((item) => (
+              <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                <p class="text-xs text-zinc-500">{item.label}</p>
+                <p class="mt-1 font-mono text-sm text-zinc-100">{item.value}</p>
+              </div>
+            ))}
+            <a href="/studio" class="group flex items-center justify-between rounded-2xl bg-gradient-to-r from-brand to-accent px-5 py-4 font-bold text-white transition-colors hover:from-brand-light hover:to-accent-light focus-visible:ring-2 focus-visible:ring-white">
+              <span>查看網站服務</span>
+              <svg class="w-5 h-5 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+            </a>
+          </div>
+        </div>
+      </aside>
       </div>
     </div>
     
@@ -113,7 +144,7 @@ const techStack = [
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {techStack.map((group, i) => (
           <div class={`animate-on-scroll delay-${i + 1} glass-card p-8 rounded-3xl flex flex-col h-full group`}>
-            <span class="text-4xl mb-6 block transform group-hover:scale-110 transition-transform duration-300 origin-left" aria-hidden="true">{group.icon}</span>
+            <span class={`mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${group.tone} text-sm font-black text-zinc-950 shadow-lg shadow-black/20`} aria-hidden="true">{group.mark}</span>
             <h3 class="text-xl font-bold text-zinc-100 mb-4">{group.name}</h3>
             <div class="flex flex-wrap gap-2 mt-auto">
               {group.items.map(skill => (

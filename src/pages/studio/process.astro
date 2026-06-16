@@ -1,0 +1,40 @@
+---
+import StudioNav from "@components/StudioNav.astro";
+import SiteShell from "@components/SiteShell.astro";
+import { studioProcess } from "@data/studio";
+---
+
+<SiteShell title="合作流程 | KJyang Studio" description="KJyang Studio website design and deployment process from requirement discussion to maintenance." canonicalPath="/studio/process">
+  <main class="studio-index">
+    <StudioNav />
+    <section class="studio-subpage-hero">
+      <div class="wrap">
+        <span>Process</span>
+        <h1>先講清楚，再開始做</h1>
+        <p>網站不是只交一個畫面。從需求、內容、設計、前端、部署到維護，每一步都要能落地。</p>
+      </div>
+    </section>
+    <section class="studio-card-section">
+      <div class="wrap studio-process-list">
+        {studioProcess.map(([num, title, text]) => (
+          <article>
+            <span>{num}</span>
+            <h2>{title}</h2>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="studio-final-cta">
+      <div class="wrap">
+        <span>Start clean</span>
+        <h2>流程越清楚，交付後越少來回修改。</h2>
+        <p>先把目標、內容、預算和上線方式整理好，再進入設計與開發。</p>
+        <div class="action-row">
+          <a class="btn studio-index-primary" href="/studio/contact">開始網站諮詢</a>
+          <a class="btn studio-index-secondary" href="/studio/demo">先看 Demo</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteShell>

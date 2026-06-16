@@ -1,0 +1,178 @@
+---
+import SiteShell from "@components/SiteShell.astro";
+
+const systems = [
+  ["01", "Brand-grade direction", "A visual system with clear hierarchy, restrained motion, responsive layouts, and industry-aware content structure."],
+  ["02", "Frontend implementation", "Pages coded for real delivery: semantic structure, clean CSS, mobile stability, metadata, schema, and launch checks."],
+  ["03", "Deployment and care", "VPS, Docker, DNS, SSL, backups, monitoring, and maintenance can be handled without turning the client into a technical operator."]
+];
+
+const demos = [
+  ["Home Service Dispatch", "Urgent repair website direction with quote flow, service zones, pricing logic, proof, and mobile-first conversion.", "/studio/en/demo/home-service"],
+  ["Dental Clinic Appointment", "Premium healthcare direction with calm appointment flow, treatment clarity, location trust, and first-visit guidance.", "/studio/en/demo/dental-clinic"]
+];
+
+const proof = [
+  ["Not a template swap", "Each industry needs a different first screen, CTA path, FAQ strategy, and trust sequence."],
+  ["Not just an AI mockup", "The site must survive mobile, content changes, deployment, metadata, and post-launch maintenance."],
+  ["No ranking promises", "Basic SEO/GEO structure can be included, but search rankings and AI citations are never guaranteed."]
+];
+
+const launchChecks = ["Mobile layout", "CTA path", "SEO metadata", "FAQ schema", "Sitemap", "Deployment", "SSL", "Care plan"];
+---
+
+<SiteShell
+  title="KJyang Studio | Premium Website Design, Code, and Launch"
+  description="KJyang Studio designs, codes, deploys, and maintains premium websites for small businesses and service professionals."
+  canonicalPath="/studio/en"
+  lang="en"
+  alternates={[
+    { hrefLang: "zh-Hant", href: "/studio" },
+    { hrefLang: "en", href: "/studio/en" },
+    { hrefLang: "x-default", href: "/studio/en" }
+  ]}
+>
+  <main class="en-premium">
+    <nav class="en-premium-nav" aria-label="English studio navigation">
+      <a class="en-premium-brand" href="/studio/en" aria-label="KJyang Studio English home">
+        <img src="/brand/kjyang-mark.svg" alt="" />
+        <span>KJyang Studio</span>
+      </a>
+      <div class="en-premium-links">
+        <a href="/studio/en/services">Services</a>
+        <a href="/studio/en/pricing">Pricing</a>
+        <a href="/studio/en/demo">Demos</a>
+        <a href="/studio/en/contact">Contact</a>
+        <a href="/studio">中文</a>
+      </div>
+    </nav>
+
+    <section class="en-premium-hero">
+      <div class="en-premium-wrap en-premium-hero-grid">
+        <div class="en-premium-copy">
+          <span>Premium websites / coded properly / launched cleanly</span>
+          <h1>Websites that feel designed before they feel generated.</h1>
+          <p>
+            KJyang Studio creates polished websites for small businesses, clinics, service teams, studios, and independent professionals that need more than a quick AI-looking page.
+          </p>
+          <div class="en-premium-actions">
+            <a class="en-premium-btn primary" href="/studio/en/contact">Start a project</a>
+            <a class="en-premium-btn secondary" href="/studio/en/services">View services</a>
+          </div>
+        </div>
+
+        <aside class="en-premium-board" aria-label="Project system preview">
+          <div class="en-premium-board-top">
+            <span>Project board</span>
+            <b>Client-ready system</b>
+          </div>
+          <div class="en-premium-window">
+            <div class="en-premium-window-title">
+              <span></span><span></span><span></span>
+              <small>studio / build / launch</small>
+            </div>
+            <div class="en-premium-window-body">
+              <article>
+                <small>Positioning</small>
+                <b>Clear offer in first viewport</b>
+              </article>
+              <article>
+                <small>Conversion</small>
+                <b>Contact path, proof, FAQ, pricing logic</b>
+              </article>
+              <article>
+                <small>Delivery</small>
+                <b>Frontend, schema, deploy, maintenance</b>
+              </article>
+            </div>
+          </div>
+          <div class="en-premium-mini">
+            <span>Design</span>
+            <span>Code</span>
+            <span>Deploy</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="en-premium-system">
+      <div class="en-premium-wrap en-premium-section-head">
+        <span>Operating system</span>
+        <h2>A website studio workflow, not a screenshot factory.</h2>
+      </div>
+      <div class="en-premium-wrap en-premium-system-grid">
+        {systems.map(([num, title, text]) => (
+          <article>
+            <span>{num}</span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="en-premium-demos">
+      <div class="en-premium-wrap en-premium-section-head light">
+        <span>Demo directions</span>
+        <h2>Two sample websites built to show decision quality.</h2>
+        <p>These are sample websites only. They demonstrate layout, copy structure, CTA planning, and industry-specific UX.</p>
+      </div>
+      <div class="en-premium-wrap en-premium-demo-grid">
+        {demos.map(([title, text, href]) => (
+          <a class="en-premium-demo" href={href}>
+            <div>
+              <span>Sample website</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </div>
+            <b>Open demo</b>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="en-premium-proof">
+      <div class="en-premium-wrap en-premium-proof-grid">
+        <div>
+          <span>Why it looks different</span>
+          <h2>Premium is mostly restraint, structure, and follow-through.</h2>
+          <p>Cheap website work usually stops at a visual draft. Real business websites need content strategy, stable UI, routing, contact behavior, and launch ownership.</p>
+        </div>
+        <div class="en-premium-proof-list">
+          {proof.map(([title, text]) => (
+            <article>
+              <b>{title}</b>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="en-premium-launch">
+      <div class="en-premium-wrap en-premium-launch-panel">
+        <div>
+          <span>Launch checklist</span>
+          <h2>Designed to go live, not just look good in preview.</h2>
+        </div>
+        <ul>
+          {launchChecks.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="en-premium-final">
+      <div class="en-premium-wrap en-premium-final-grid">
+        <div>
+          <span>Next step</span>
+          <h2>Send business context. Get a practical scope recommendation.</h2>
+          <p>Share business type, current website, reference sites, budget range, and whether deployment or ongoing care is needed.</p>
+        </div>
+        <div class="en-premium-actions">
+          <a class="en-premium-btn primary" href="/studio/en/contact">Contact KJyang Studio</a>
+          <a class="en-premium-btn secondary dark" href="/studio/en/pricing">View pricing</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteShell>

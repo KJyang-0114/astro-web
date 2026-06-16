@@ -1,0 +1,21 @@
+---
+type Props = {
+  lang?: "zh" | "en";
+};
+
+const { lang = "zh" } = Astro.props;
+const copy = lang === "en"
+  ? {
+      label: "Sample website",
+      text: "Demo content only. This is not a real business website."
+    }
+  : {
+      label: "範例樣本",
+      text: "此頁為 KJyang Studio 網站設計展示，不是真實店家。請勿依此頁預約冷氣、牙醫、補習或室內設計服務。"
+    };
+---
+
+<aside class="demo-notice" aria-label={copy.label}>
+  <b>{copy.label}</b>
+  <span>{copy.text}</span>
+</aside>

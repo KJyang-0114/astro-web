@@ -1,0 +1,49 @@
+---
+import StudioNav from "@components/StudioNav.astro";
+import SiteShell from "@components/SiteShell.astro";
+import { studioServices } from "@data/studio";
+import { servicePages } from "@data/trust";
+---
+
+<SiteShell title="服務內容 | KJyang Studio" description="KJyang Studio website design, frontend coding, deployment, hosting setup, maintenance, and basic SEO setup." canonicalPath="/studio/services">
+  <main class="studio-index">
+    <StudioNav />
+    <section class="studio-subpage-hero">
+      <div class="wrap">
+        <span>Services</span>
+        <h1>我們主打網站設計、代碼編寫、部署上線</h1>
+        <p>SEO/GEO 可做基礎設定，但不保證排名。核心交付是把網站真正設計好、寫出來、放上線。</p>
+      </div>
+    </section>
+    <section class="studio-card-section">
+      <div class="wrap studio-service-grid">
+        {studioServices.map((item, index) => (
+          <article>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h2>{item.title}</h2>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+      <div class="wrap service-page-links">
+        {servicePages.map((service) => (
+          <a href={`/studio/services/${service.slug}`}>
+            <span>{service.title}</span>
+            <p>{service.description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+    <section class="studio-final-cta">
+      <div class="wrap">
+        <span>Next step</span>
+        <h2>先看 Demo，再決定適合一頁式或多頁網站。</h2>
+        <p>如果你已經有店名、服務項目和大概預算，可以直接用 LINE 或表單開始諮詢。</p>
+        <div class="action-row">
+          <a class="btn studio-index-primary" href="/studio/demo">看設計 Demo</a>
+          <a class="btn studio-index-secondary" href="/studio/contact">LINE 諮詢</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteShell>

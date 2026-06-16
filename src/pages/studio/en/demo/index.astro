@@ -1,0 +1,46 @@
+---
+import DemoNotice from "@components/DemoNotice.astro";
+import SiteShell from "@components/SiteShell.astro";
+
+const demos = [
+  ["Home Service", "Fast quote, service area, pricing guide, proof, and quote form.", "/studio/en/demo/home-service"],
+  ["Dental Clinic", "Appointment flow, treatment clarity, trust content, and location info.", "/studio/en/demo/dental-clinic"]
+];
+---
+
+<SiteShell title="English Demo Library | KJyang Studio" description="English website demo library for service business websites." canonicalPath="/studio/en/demo" lang="en" noindex>
+  <main class="studio-index en-site">
+    <nav class="site-nav studio-index-nav">
+      <a class="brand studio-brand" href="/studio/en">
+        <img src="/brand/kjyang-mark.svg" alt="" />
+        <span>KJyang Studio</span>
+      </a>
+      <div class="nav-links">
+        <a href="/studio/en">Home</a>
+        <a href="/studio/en/services">Services</a>
+        <a href="/studio/en/pricing">Pricing</a>
+        <a href="/studio/en/contact">Contact</a>
+        <a href="/studio">中文</a>
+      </div>
+    </nav>
+    <DemoNotice lang="en" />
+    <section class="studio-subpage-hero">
+      <div class="wrap">
+        <span>English demos</span>
+        <h1>Two demo directions for international clients</h1>
+        <p>English pages use quote and appointment flows, then route inquiries to KJyang Studio contact.</p>
+      </div>
+    </section>
+    <section class="studio-card-section">
+      <div class="wrap studio-service-grid">
+        {demos.map(([title, text, href], index) => (
+          <a class="studio-link-card" href={href}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h2>{title}</h2>
+            <p>{text}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
+</SiteShell>

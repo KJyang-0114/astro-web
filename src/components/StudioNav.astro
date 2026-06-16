@@ -1,0 +1,22 @@
+---
+const links = [
+  ["服務", "/studio/services"],
+  ["作品", "/studio/work"],
+  ["價格", "/studio/pricing"],
+  ["流程", "/studio/process"],
+  ["知識庫", "/studio/insights"],
+  ["關於", "/studio/about"],
+  ["聯絡", "/studio/contact"]
+];
+---
+
+<nav class="site-nav studio-index-nav">
+  <a class="brand studio-brand" href="/studio">
+    <img src="/brand/kjyang-mark.svg" alt="" />
+    <span>KJyang Studio</span>
+  </a>
+  <div class="nav-links">
+    {links.map(([label, href]) => <a href={href}>{label}</a>)}
+    <a href="/studio/en">EN</a>
+  </div>
+</nav>

@@ -87,6 +87,12 @@
   .glass-card {
     @apply bg-zinc-900/40 backdrop-blur-sm border border-zinc-800/60 hover:bg-zinc-900/60 hover:border-zinc-700/60 transition-all duration-300;
   }
+
+  .hero-console {
+    background-image:
+      linear-gradient(135deg, rgba(99, 102, 241, 0.16), transparent 34%),
+      linear-gradient(315deg, rgba(6, 182, 212, 0.14), transparent 36%);
+  }
   
   /* Grid Background Pattern */
   .bg-grid {
@@ -113,3 +119,20 @@
 .delay-3 { transition-delay: 0.3s; }
 .delay-4 { transition-delay: 0.4s; }
 .delay-5 { transition-delay: 0.5s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .animate-on-scroll {
+    opacity: 1;
+    transform: none;
+  }
+}

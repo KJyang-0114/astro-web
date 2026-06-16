@@ -1,0 +1,93 @@
+---
+import StudioNav from "@components/StudioNav.astro";
+import SiteShell from "@components/SiteShell.astro";
+import { buildInsightSchemas, getInsightPost, insightPosts } from "@data/insights";
+import { studioContact } from "@data/studio";
+
+export function getStaticPaths() {
+  return insightPosts.map((post) => ({
+    params: { post: post.slug }
+  }));
+}
+
+const post = getInsightPost(Astro.params.post ?? "");
+---
+
+<SiteShell
+  title={`${post.title} | KJyang Studio`}
+  description={post.description}
+  canonicalPath={`/studio/insights/${post.slug}`}
+  schema={buildInsightSchemas(post)}
+>
+  <main class="studio-index">
+    <StudioNav />
+
+    <article class="insight-article">
+      <header class="insight-article-hero">
+        <div class="wrap insight-article-grid">
+          <div>
+            <a class="insight-back" href="/studio/insights">← 回知識庫</a>
+            <span>{post.category} / <time datetime={post.date}>{post.date}</time></span>
+            <h1>{post.title}</h1>
+            <p>{post.summary}</p>
+          </div>
+          <aside class="insight-takeaways" aria-label="文章重點">
+            <b>重點整理</b>
+            <ul>
+              {post.takeaways.map((item) => <li>{item}</li>)}
+            </ul>
+          </aside>
+        </div>
+      </header>
+
+      <section class="insight-body-section">
+        <div class="wrap insight-body-grid">
+          <div class="insight-body">
+            {post.sections.map((section, index) => (
+              <section>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <h2>{section.title}</h2>
+                <p>{section.body}</p>
+              </section>
+            ))}
+          </div>
+          <aside class="insight-side-note">
+            <span>KJyang Studio</span>
+            <h2>這類內容會持續更新</h2>
+            <p>我會把常見網站問題整理成文章，讓客戶能先理解設計、前端、部署和維護的差別。</p>
+            <a class="btn studio-index-primary" href="/studio/contact">討論網站需求</a>
+          </aside>
+        </div>
+      </section>
+    </article>
+
+    <section class="faq-section guide-faq">
+      <div class="wrap faq-grid">
+        <div>
+          <h2 class="section-title">常見問題</h2>
+          <p class="section-copy">這些問題會一起放進結構化資料，讓搜尋和 AI 更容易理解文章內容。</p>
+        </div>
+        <div class="faq-list">
+          {post.faq.map((item) => (
+            <details>
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="studio-final-cta">
+      <div class="wrap">
+        <span>KJyang Studio</span>
+        <h2>如果你也想整理自己的網站，可以先用 LINE 傳需求。</h2>
+        <p>傳行業、目前網站、預算範圍和想參考的 demo，我會先判斷適合一頁式、多頁式或客製功能。</p>
+        <div class="action-row">
+          <a class="btn studio-index-primary" href={studioContact.lineUrl}>LINE 聯絡</a>
+          <a class="btn studio-index-secondary" href="/studio/insights">看更多文章</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</SiteShell>
