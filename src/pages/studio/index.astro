@@ -12,6 +12,12 @@ const proof = [
   ["代碼", "使用現代前端架構製作快速、安全、穩定、可部署的網站。"],
   ["部署", "協助主機、DNS、SSL、備份和監控，網站不是丟檔案就結束。"]
 ];
+
+const comparison = [
+  ["AI 初稿", "適合快速發想畫面和文案方向，但常缺少真實內容整理、手機 CTA、部署和維護責任。"],
+  ["模板網站", "適合預算很低或臨時頁面，但多數行業資訊架構會長得太像，難呈現服務差異。"],
+  ["KJyang Studio", "依行業重新安排首屏、服務、流程、FAQ、LINE 入口、前端代碼和部署上線。"]
+];
 ---
 
 <SiteShell
@@ -77,6 +83,25 @@ const proof = [
             ))}
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="studio-compare-section" aria-label="AI、模板與 KJyang Studio 交付差異">
+      <div class="wrap studio-compare-head">
+        <span>NOT TEMPLATE WORK</span>
+        <h2>AI 可以做初稿，但正式網站要能被客戶使用</h2>
+        <p>
+          客戶不只是在買一張好看的首頁截圖，而是在買一個能被搜尋、能被理解、能聯絡、能上線和能維護的網站。
+        </p>
+      </div>
+      <div class="wrap studio-compare-grid">
+        {comparison.map(([title, text], index) => (
+          <article class={index === 2 ? "is-featured" : ""}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
       </div>
     </section>
 
