@@ -11,36 +11,20 @@ const projects = [
     github: "https://github.com/KJyang-0114/Simple-2048-RL",
   },
   {
-    title: "Vox-Summary-Tool",
-    description: "網頁語音摘要工具。直接在瀏覽器錄音或上傳音檔，用 OpenAI Whisper 轉文字，再用 GPT 自動整理成重點摘要。",
-    tags: ["Flask", "OpenAI Whisper", "GPT", "Docker"],
-    category: "AI",
+    title: "Sift",
+    description: "Go 寫的 AI code scanner。以 Semgrep rules、package verification、選擇性 LLM 分析與 SARIF 把錯誤變成可重跑檢查。",
+    tags: ["Go", "Semgrep", "SARIF", "SQLite"],
+    category: "驗證",
     color: "cyan",
-    github: "https://github.com/KJyang-0114/Vox-Summary-Tool",
+    github: "https://github.com/KJyang-0114/sift",
   },
   {
     title: "Nyx-Core",
-    description: "AI Vision Engine — 基於 YOLO 的物件偵測框架，支援 TensorRT 加速、CustomTkinter GUI 操作介面、滑鼠控制驅動。5 位貢獻者共同開發。",
+    description: "保留上游 commit history 的 YOLO 即時視覺衍生研究。README 明確列出 Passer1072/RookieAI_yolov8 來源與本人有限 diff。",
     tags: ["Python", "YOLO", "TensorRT", "AI"],
     category: "AI",
     color: "green",
     github: "https://github.com/KJyang-0114/Nyx-Core",
-  },
-  {
-    title: "OmniRestore",
-    description: "亂碼修復工具（Mojibake Fixer）。自動偵測文字編碼並轉換成正確的 UTF-8，解決各種編碼錯誤造成的亂碼問題。",
-    tags: ["Flask", "chardet", "Python", "編碼處理"],
-    category: "工具",
-    color: "cyan",
-    github: "https://github.com/KJyang-0114/OmniRestore",
-  },
-  {
-    title: "BridgeMaster",
-    description: "Minecraft 1.8.9 Forge mod。自動蓋橋，內建邊緣偵測、動態 CPS（7-12 正常 / 11-16 跳躍）、平滑旋轉，支援多種方塊類型。",
-    tags: ["Java", "Forge", "Minecraft", "遊戲開發"],
-    category: "遊戲",
-    color: "yellow",
-    github: "https://github.com/KJyang-0114/BridgeMaster",
   },
   {
     title: "Online Clipboard",
@@ -61,19 +45,19 @@ const projects = [
   },
   {
     title: "Character Studio",
-    description: "角色克隆工作室 — 上傳聊天紀錄（LINE/Discord/JSON），自動分析語言風格與性格特徵，生成角色扮演 bot 的提示詞。支援 Gemini/OpenAI/Claude。",
-    tags: ["FastAPI", "React", "LLM", "Prompt Engineering"],
+    description: "FastAPI 後端原型：偵測 LINE、Discord、JSON 與純文字對話，拆出 sender、role、timestamp 與統計。",
+    tags: ["FastAPI", "Pydantic", "Parser", "Structured Data"],
     category: "AI",
     color: "purple",
     github: "https://github.com/KJyang-0114/character-studio",
   },
   {
     title: "Discord 解題機器人",
-    description: "高一時自己做的 Discord 機器人，同學上傳數學或英文考卷圖片，LLM 自動解題並回覆。解決了自己和同學備考需要即時解題的問題。",
+    description: "同學上傳老師題目圖片；Mathpix OCR 後交給 LLM 生成步驟，切分長回覆，並以 SQLite 保存追問上下文。數十名同學、約運行一年；不宣稱未量測答對率。",
     tags: ["Python", "discord.py", "LLM API", "圖片 OCR"],
     category: "工具",
     color: "cyan",
-    github: "https://github.com/KJyang-0114",
+    github: "https://github.com/KJyang-0114/discord-problem-solving-bot",
   },
 ];
 
@@ -89,15 +73,15 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "name": "KJyang 的作品集",
-  "description": "KJyang 的開源專案集合 — AI 應用、全端開發、遊戲模組、實用工具。",
+  "description": "KJyang 的精選專案：真實使用、AI 驗證、資料處理與產品原型。",
   "url": "https://kjyang0114.dev/projects",
   "author": { "@type": "Person", "name": "楊凱捷", "alternateName": "KJyang" }
 };
 ---
 
 <Layout
-  title="作品集 — KJyang | AI 應用 · 全端開發 · 開源專案"
-  description="KJyang 的作品集：強化學習 AI、語音摘要工具、Minecraft Mod、跨裝置剪貼簿等 13+ 個 GitHub 開源專案。鶯歌工商資訊科出品。"
+  title="作品集 — KJyang | Build · Verify · Deliver"
+  description="KJyang 的精選作品：Discord 解題 Bot、Sift、2048 RL、Character Studio 與 local-first 工具。"
   jsonLd={jsonLd}
 >
 
