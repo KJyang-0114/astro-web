@@ -31,7 +31,7 @@ const techStack = [
   { name: "AI / LLM", items: ["Prompt Engineering", "LLM 整合應用", "AI Agent", "強化學習"], mark: "AI", tone: "from-violet-400 to-blue-400" },
   { name: "前端", items: ["React", "Vue", "Astro", "TypeScript", "Tailwind CSS"], mark: "FE", tone: "from-cyan-300 to-blue-400" },
   { name: "後端 & 部署", items: ["Python", "FastAPI", "Node.js", "Docker", "Linux"], mark: "OPS", tone: "from-emerald-300 to-cyan-400" },
-  { name: "實驗專案", items: ["Java", "Minecraft Forge", "Swift", "Vision", "Automation"], mark: "LAB", tone: "from-amber-300 to-orange-400" },
+  { name: "驗證與實驗", items: ["Go", "PyTorch", "OCR", "SQLite", "Testing"], mark: "LAB", tone: "from-amber-300 to-orange-400" },
 ];
 
 const studioHighlights = [
@@ -43,7 +43,7 @@ const studioHighlights = [
 
 <Layout
   title="KJyang — 鶯歌工商資訊科 | 全端開發 · AI 應用"
-  description="KJyang，鶯歌工商資訊科。專注 AI / LLM 應用開發、全端 Web 架構。GitHub 13+ 開源專案。"
+  description="KJyang，鶯歌工商資訊科高三。把 AI 放進真實使用、錯誤驗證與商業交付。"
   jsonLd={jsonLd}
 >
 
@@ -68,7 +68,7 @@ const studioHighlights = [
         </h1>
 
         <p class="animate-on-scroll delay-2 text-xl sm:text-2xl text-zinc-300 mb-6 font-medium max-w-2xl leading-relaxed">
-          我是 KJyang。寫全端、玩 AI，也用 KJyang Studio 幫商家做能上線、能詢問、能維護的網站。
+          我是 KJyang，鶯歌工商資訊科高三。AI 讓我開始做；錯誤讓我學會驗證；真實交付讓我理解資訊管理。
         </p>
 
         <p class="animate-on-scroll delay-2 text-base text-zinc-500 max-w-2xl mb-10 leading-relaxed">
@@ -181,7 +181,7 @@ const studioHighlights = [
               </div>
               <h3 class="text-2xl font-bold text-zinc-100 mb-3 group-hover:text-purple-300 transition-colors">Simple-2048-RL</h3>
               <p class="text-zinc-400 leading-relaxed">
-                用 DQN 訓練 AI 玩 2048。從環境建置到訓練 pipeline 全部自己刻，想試試看強化學習到底能不能打出高分。
+                 手寫 DQN、experience replay 與 epsilon-greedy，用 2048 研究「程式能跑」與「學習真的可驗證」之間的差距。
               </p>
            </div>
         </article>
@@ -191,13 +191,13 @@ const studioHighlights = [
            <div class="p-8 relative z-10">
               <div class="flex justify-between items-start mb-6">
                 <span class="px-3 py-1 text-xs font-mono font-bold tracking-wider uppercase rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Tools</span>
-                <a href="https://github.com/KJyang-0114/Vox-Summary-Tool" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors">
+                 <a href="https://github.com/KJyang-0114/sift" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                 </a>
               </div>
-              <h3 class="text-2xl font-bold text-zinc-100 mb-3 group-hover:text-cyan-300 transition-colors">Vox-Summary-Tool</h3>
+               <h3 class="text-2xl font-bold text-zinc-100 mb-3 group-hover:text-cyan-300 transition-colors">Sift</h3>
               <p class="text-zinc-400 leading-relaxed">
-                錄音或丟音檔進去，Whisper 轉文字再用 GPT 整理成重點摘要。Flask + Docker 部署。
+                 Go 寫的 AI code scanner；用靜態規則、套件驗證、diff mode 與 SARIF 把「懷疑有錯」變成可重跑的檢查。
               </p>
            </div>
         </article>
@@ -206,14 +206,14 @@ const studioHighlights = [
            <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
            <div class="p-8 relative z-10">
               <div class="flex justify-between items-start mb-6">
-                <span class="px-3 py-1 text-xs font-mono font-bold tracking-wider uppercase rounded-full bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">Game</span>
-                <a href="https://github.com/KJyang-0114/BridgeMaster" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors">
+                 <span class="px-3 py-1 text-xs font-mono font-bold tracking-wider uppercase rounded-full bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">Real use</span>
+                 <a href="https://github.com/KJyang-0114/discord-problem-solving-bot" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                 </a>
               </div>
-              <h3 class="text-2xl font-bold text-zinc-100 mb-3 group-hover:text-yellow-300 transition-colors">BridgeMaster</h3>
+               <h3 class="text-2xl font-bold text-zinc-100 mb-3 group-hover:text-yellow-300 transition-colors">Discord 解題 Bot</h3>
               <p class="text-zinc-400 leading-relaxed">
-                Minecraft Forge mod，自動幫你蓋橋。路徑演算法 + 遊戲開發的混血產物。
+                 數十名同學、約一年真實運行。Mathpix OCR、LLM 解題、長訊息切分與 SQLite 追問。
               </p>
            </div>
         </article>
@@ -229,7 +229,7 @@ const studioHighlights = [
               </div>
               <h3 class="text-2xl font-bold text-zinc-100 mb-3 group-hover:text-green-300 transition-colors">Nyx-Core</h3>
               <p class="text-zinc-400 leading-relaxed">
-                AI Vision Engine — 基於 YOLO 的物件偵測框架，支援 TensorRT 加速與 GUI 操作介面。5 人共同開發。
+                 保留 provenance 的 YOLO 即時視覺衍生研究。README 已明確區分上游作者與本人有限改動。
               </p>
            </div>
         </article>

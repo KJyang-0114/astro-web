@@ -8,6 +8,7 @@
 # --- Whitelist project files (allow these into git) ---
 !/src/
 !/public/
+!/assets/
 !/.github/
 !/.dockerignore
 !/Dockerfile
