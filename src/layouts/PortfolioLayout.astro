@@ -1,0 +1,59 @@
+---
+import "../styles/design-system.css";
+import "../styles/portfolio.css";
+import Navigation from "../components/portfolio/Navigation.astro";
+import Footer from "../components/portfolio/Footer.astro";
+interface Props {
+  title: string;
+  description: string;
+  jsonLd?: object;
+  noindex?: boolean;
+}
+const { title, description, jsonLd, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, "https://kjyang0114.dev").href;
+---
+
+<!doctype html>
+<html lang="zh-Hant">
+  <head
+    ><meta charset="utf-8" /><meta
+      name="viewport"
+      content="width=device-width,initial-scale=1"
+    /><meta name="color-scheme" content="light dark" /><title>
+      {title}
+    </title><meta name="description" content={description} /><link
+      rel="canonical"
+      href={canonical}
+    /><link rel="icon" href="/favicon.svg" type="image/svg+xml" /><meta
+      property="og:type"
+      content="website"
+    /><meta property="og:locale" content="zh_TW" /><meta
+      property="og:site_name"
+      content="KJyang"
+    /><meta property="og:title" content={title} /><meta
+      property="og:description"
+      content={description}
+    /><meta property="og:url" content={canonical} /><meta
+      property="og:image"
+      content="https://kjyang0114.dev/og-portfolio.png"
+    />{noindex && <meta name="robots" content="noindex,follow" />}<meta
+      property="og:image:width"
+      content="1200"
+    /><meta property="og:image:height" content="630" /><meta
+      property="og:image:alt"
+      content="KJyang — Human, then Code. AI, Web, Automation."
+    /><meta name="twitter:card" content="summary_large_image" />{
+      jsonLd && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(jsonLd).replace(/</g, "\\u003c")}
+        />
+      )
+    }</head
+  ><body class="portfolio" id="top"
+    ><a class="skip-link" href="#main">跳到內容</a><Navigation /><main
+      id="main"
+    >
+      <slot />
+    </main><Footer /></body>
+</html>

@@ -1,0 +1,107 @@
+---
+const { studio = false, english = false } = Astro.props;
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+const items = studio
+  ? english
+    ? [
+        ["Services", "/studio/en/services"],
+        ["Pricing", "/studio/en/pricing"],
+        ["Demos", "/studio/en/demo"],
+        ["Contact", "/studio/en/contact"],
+        ["中文", "/studio"],
+      ]
+    : [
+        ["服務", "/studio/services"],
+        ["設計案例", "/studio/work"],
+        ["價格", "/studio/pricing"],
+        ["流程", "/studio/process"],
+        ["知識庫", "/studio/insights"],
+        ["聯絡", "/studio/contact"],
+        ["EN", "/studio/en"],
+      ]
+  : [
+      ["首頁", "/"],
+      ["作品", "/projects"],
+      ["關於", "/about"],
+      ["履歷", "/resume"],
+      ["AI 筆記", "/ai"],
+      ["Studio ↗", "/studio"],
+      ["聯絡", "/contact"],
+    ];
+const active = (href: string) =>
+  href === "/"
+    ? pathname === "/"
+    : href === "/studio"
+      ? pathname === "/studio"
+      : pathname === href || pathname.startsWith(href + "/");
+---
+
+<header class="site-header">
+  <a
+    class="site-brand"
+    href={studio ? (english ? "/studio/en" : "/studio") : "/"}
+    aria-label={studio ? "KJyang Studio" : "KJyang 首頁"}
+    >KJyang<i>.</i>{studio && <small>STUDIO</small>}</a
+  >
+  <nav
+    id="site-menu"
+    class="site-menu"
+    aria-label={english ? "Main navigation" : "主導覽"}
+  >
+    {
+      items.map(([name, href], i) => (
+        <a
+          href={href}
+          aria-current={active(href) ? "page" : undefined}
+          class:list={[{ "nav-cta": href === "/studio" }]}
+        >
+          <small aria-hidden="true">[{String(i + 1).padStart(2, "0")}]</small>
+          {name}
+        </a>
+      ))
+    }
+  </nav>
+  <span
+    class="appearance-note"
+    title={english ? "Appearance follows your system" : "外觀跟隨系統設定"}
+    aria-label={english ? "System appearance" : "外觀跟隨系統設定"}>◐</span
+  >
+  <button
+    class="site-menu-toggle"
+    aria-controls="site-menu"
+    aria-expanded="false"
+    aria-label={english ? "Open menu" : "開啟導覽"}
+    data-open-label={english ? "Open menu" : "開啟導覽"}
+    data-close-label={english ? "Close menu" : "關閉導覽"}>＋</button
+  >
+</header>
+<script>
+  const header = document.querySelector(".site-header");
+  const button = header?.querySelector<HTMLButtonElement>(".site-menu-toggle");
+  function setMenu(open: boolean) {
+    header?.classList.toggle("open", open);
+    button?.setAttribute("aria-expanded", String(open));
+    if (button) {
+      button.textContent = open ? "−" : "＋";
+      button.setAttribute(
+        "aria-label",
+        (open ? button.dataset.closeLabel : button.dataset.openLabel) || "Menu",
+      );
+    }
+  }
+  button?.addEventListener("click", () =>
+    setMenu(button.getAttribute("aria-expanded") !== "true"),
+  );
+  document.addEventListener("keydown", (e) => {
+    if (
+      e.key === "Escape" &&
+      button?.getAttribute("aria-expanded") === "true"
+    ) {
+      setMenu(false);
+      button.focus();
+    }
+  });
+  header
+    ?.querySelectorAll("nav a")
+    .forEach((a) => a.addEventListener("click", () => setMenu(false)));
+</script>
