@@ -41,7 +41,7 @@ else
     log "容器未運行或已停止"
 fi
 
-if docker rm kjyang-wbs-astro-container >/dev/null 2>&1; then
+if docker rm -f kjyang-wbs-astro-container >/dev/null 2>&1; then
     log "成功移除容器"
 else
     log "容器不存在或已移除"
@@ -73,10 +73,14 @@ fi
 
 # 運行新容器
 log "啟動新容器..."
-if docker run -d -p 3000:3000 --name kjyang-wbs-astro-container kjyang-wbs-astro >> "$LOG_FILE" 2>> "$ERROR_LOG"; then
+RUN_OUTPUT=$(docker run -d -p 3000:3000 --name kjyang-wbs-astro-container kjyang-wbs-astro 2>&1)
+RUN_STATUS=$?
+printf '%s\n' "$RUN_OUTPUT" >> "$LOG_FILE"
+if [ "$RUN_STATUS" -eq 0 ]; then
     log "新容器啟動成功"
 else
-    log_error "新容器啟動失敗"
+    printf '%s\n' "$RUN_OUTPUT" >> "$ERROR_LOG"
+    log_error "新容器啟動失敗: $RUN_OUTPUT"
     exit 1
 fi
 
