@@ -71,6 +71,33 @@ if [ -n "$PORT_CONTAINERS" ]; then
     done
 fi
 
+# 清理舊版以 Node/Astro 直接啟動的網站程序，讓 Docker 接管專案固定的 3000 埠
+if command -v lsof >/dev/null 2>&1; then
+    PORT_PIDS=$(lsof -tiTCP:3000 -sTCP:LISTEN 2>/dev/null || true)
+    for port_pid in $PORT_PIDS; do
+        process_command=$(ps -p "$port_pid" -o command= 2>/dev/null || true)
+        log "3000 埠監聽程序 PID $port_pid: $process_command"
+        case "$process_command" in
+            *node*|*npm*|*astro*)
+                log "停止舊版 Node/Astro 網站程序 PID $port_pid"
+                kill "$port_pid"
+                ;;
+            *)
+                log_error "3000 埠由非網站程序占用，拒絕自動停止: $process_command"
+                exit 1
+                ;;
+        esac
+    done
+
+    # 等待 macOS 釋放 listener，最長 10 秒
+    for _ in {1..10}; do
+        if ! lsof -tiTCP:3000 -sTCP:LISTEN >/dev/null 2>&1; then
+            break
+        fi
+        sleep 1
+    done
+fi
+
 # 運行新容器
 log "啟動新容器..."
 RUN_STATUS=1
