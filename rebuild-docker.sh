@@ -72,6 +72,20 @@ if [ -n "$PORT_CONTAINERS" ]; then
 fi
 
 # 清理舊版以 Node/Astro 直接啟動的網站程序，讓 Docker 接管專案固定的 3000 埠
+stop_legacy_preview() {
+    if ! command -v pgrep >/dev/null 2>&1; then
+        return
+    fi
+    preview_pids=$(pgrep -f 'astro preview.*--port 3000' 2>/dev/null || true)
+    for preview_pid in $preview_pids; do
+        preview_command=$(ps -p "$preview_pid" -o command= 2>/dev/null || true)
+        log "停止舊版 Astro preview PID $preview_pid: $preview_command"
+        kill "$preview_pid" 2>/dev/null || true
+    done
+}
+
+stop_legacy_preview
+
 if command -v lsof >/dev/null 2>&1; then
     PORT_PIDS=$(lsof -tiTCP:3000 -sTCP:LISTEN 2>/dev/null || true)
     for port_pid in $PORT_PIDS; do
@@ -102,6 +116,7 @@ fi
 log "啟動新容器..."
 RUN_STATUS=1
 for attempt in 1 2 3; do
+    stop_legacy_preview
     docker rm -f kjyang-wbs-astro-container >/dev/null 2>&1 || true
     RUN_OUTPUT=$(docker run -d -p 3000:3000 --name kjyang-wbs-astro-container kjyang-wbs-astro 2>&1)
     RUN_STATUS=$?
