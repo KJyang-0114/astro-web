@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>KJyang</title>
+  <style>
+    .paper { fill: #f5f1ec; }
+    .letter { fill: #82485d; }
+    @media (prefers-color-scheme: dark) {
+      .paper { fill: #28242b; }
+      .letter { fill: #d897ab; }
+    }
+  </style>
+  <rect class="paper" width="64" height="64" rx="14" />
+  <path class="letter" d="M10 16h7v13l12-13h9L24 32l14 16h-9L17 35v13h-7z" />
+  <path class="letter" d="M39 16h15v21c0 8-4 12-12 12h-4v-7h4c4 0 5-2 5-5V23h-8z" />
+</svg>

@@ -51,6 +51,7 @@ for (const route of routes) {
     `${route}: description`,
   );
   assert.match(html, /rel="canonical"/, `${route}: canonical`);
+  assert.ok(html.includes('/favicon-portfolio.svg'), `${route}: portfolio favicon`);
   assert.doesNotMatch(
     html,
     /design-review|localhost|127\.0\.0\.1|比較提案|返回設計|先篩掉/,
@@ -73,6 +74,7 @@ for (const route of routes) {
 }
 const home = readFileSync(fileFor("/"), "utf8");
 assert.ok(home.includes("AI 讓我開始做；錯誤讓我學會驗證；"));
+assert.match(home, /class="hero-role">Software Engineer<\/p>/);
 assert.ok(
   home.includes("Builds with Logic &amp; Magic.") ||
     home.includes("Builds with Logic & Magic."),
@@ -115,7 +117,12 @@ console.log(
 const resume = readFileSync(fileFor("/resume"), "utf8");
 for (const text of [
   "雲書苑教育科技有限公司",
-  "2025.09 / 2025.10",
+  "2025/9",
+  "正式任職",
+  "Fully Remote",
+  "Open to Remote / Contract / Part-time",
+  "Primary",
+  "Experience With",
   "2026 年初",
   "NDA",
   "Sift",
@@ -144,6 +151,7 @@ for (const section of [
 ])
   assert.ok(resume.includes(`id="${section}"`), `resume section ${section}`);
 assert.ok(sitemap.includes("/resume"));
+assert.doesNotMatch(resume, /2025\.09 \/ 2025\.10/);
 console.log(
   "PASS: resume sections, supplied experience dates, contact details, and sitemap.",
 );

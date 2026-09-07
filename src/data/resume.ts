@@ -130,6 +130,27 @@ export const skills = [
     ],
   },
 ];
+// Primary reflects recurring work; specialist tools remain Experience With.
+// Keep the full original inventory and do not imply proficiency percentages.
+const primarySkills = new Set([
+  "JavaScript", "TypeScript", "HTML", "CSS", "Astro",
+  "Responsive Web Design", "Component-based UI development", "API Integration",
+  "Python", "FastAPI", "REST API", "SQLite", "Data validation", "Backend integration",
+  "Git", "GitHub", "Codebase refactoring", "Debugging", "Repository analysis",
+  "LLM API integration", "AI-assisted development", "OCR pipelines",
+]);
+export const skillLevels = [
+  { name: "Primary", description: "目前主要投入、反覆用於專案開發與整合的技術。", primary: true },
+  { name: "Experience With", description: "曾於特定專案、工具整合或研究中使用與接觸的技術。", primary: false },
+].map(level => ({
+  name: level.name,
+  description: level.description,
+  groups: skills.map(group => ({
+    name: group.name,
+    items: group.items.filter(item => primarySkills.has(item) === level.primary),
+  })).filter(group => group.items.length > 0),
+}));
+
 export const experience = [
   "參與實際商業產品／專案開發，而非單純個人練習專案",
   "在完全遠端環境下進行軟體開發與協作",
