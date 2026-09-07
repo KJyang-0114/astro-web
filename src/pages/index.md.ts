@@ -10,6 +10,15 @@ title: kjyang0114.dev
 
 KJyang personal site, Web Highlighter Pro product pages, and KJyang Studio website services.
 
+## Personal site
+
+- [Resume](https://kjyang0114.dev/resume): Software engineering experience, skills, availability, and contact details.
+
+- [About KJyang](https://kjyang0114.dev/about): Learning, development approach, and personal background.
+- [Projects](https://kjyang0114.dev/projects): Eight projects with scope, implementation notes, and source code.
+- [AI notes](https://kjyang0114.dev/ai): Introductory concepts, capabilities, limitations, and responsible use.
+- [Contact](https://kjyang0114.dev/contact): GitHub, Discord, and Instagram.
+
 ## Main Sections
 
 - [KJyang Studio](${absoluteStudioUrl("/studio")}): Website design, frontend coding, deployment, hosting setup, maintenance, and basic SEO/GEO foundations.
@@ -26,8 +35,8 @@ KJyang personal site, Web Highlighter Pro product pages, and KJyang Studio websi
     {
       headers: {
         "Content-Type": "text/markdown; charset=utf-8",
-        "Cache-Control": "public, max-age=3600"
-      }
-    }
+        "Cache-Control": "public, max-age=3600",
+      },
+    },
   );
 }

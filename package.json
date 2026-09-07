@@ -7,7 +7,9 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview --host 0.0.0.0 --port 3000",
-    "astro": "astro"
+    "astro": "astro",
+    "verify:site": "npm run build && node scripts/verify-site.mjs",
+    "verify:motion": "node scripts/verify-wire-art.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",
@@ -20,6 +22,10 @@
     "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.4.1",
     "gsap": "^3.15.0",
-    "tailwindcss": "^4.1.17"
+    "tailwindcss": "^4.1.17",
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.180.0"
   }
 }

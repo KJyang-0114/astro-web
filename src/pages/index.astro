@@ -1,264 +1,77 @@
 ---
-import Layout from '../layouts/Layout.astro';
-
+import PortfolioLayout from "../layouts/PortfolioLayout.astro";
+import WireArt from "../components/portfolio/WireArt.astro";
+import ExhibitScenes from "../components/portfolio/ExhibitScenes.astro";
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "ProfilePage",
-  "dateModified": "2026-02-18",
-  "mainEntity": {
-    "@type": "Person",
-    "name": "楊凱捷",
-    "alternateName": ["KJyang", "kjyang", "imw1nt0r"],
-    "url": "https://kjyang0114.dev",
-    "jobTitle": "全端開發者",
-    "description": "鶯歌工商資訊科，擅長用 AI 和新技術做有趣的東西",
-    "knowsAbout": ["LLM", "AI", "Web Development", "Python", "React", "TypeScript", "Java", "強化學習"],
-    "sameAs": [
-      "https://github.com/KJyang-0114",
-      "https://www.instagram.com/imw1nt0r/",
-      "https://discord.gg/sZbn6Dw3Bx"
-    ],
-    "affiliation": {
-      "@type": "EducationalOrganization",
-      "name": "新北市立鶯歌工商",
-      "alternateName": ["鶯歌工商", "YKVS"],
-      "department": { "@type": "EducationalOrganization", "name": "資訊科" }
-    }
-  }
+  "@type": "Person",
+  name: "楊凱捷",
+  alternateName: "KJyang",
+  url: "https://kjyang0114.dev",
+  sameAs: [
+    "https://github.com/KJyang-0114",
+    "https://www.instagram.com/imw1nt0r/",
+  ],
 };
-
-const techStack = [
-  { name: "AI / LLM", items: ["Prompt Engineering", "LLM 整合應用", "AI Agent", "強化學習"], mark: "AI", tone: "from-violet-400 to-blue-400" },
-  { name: "前端", items: ["React", "Vue", "Astro", "TypeScript", "Tailwind CSS"], mark: "FE", tone: "from-cyan-300 to-blue-400" },
-  { name: "後端 & 部署", items: ["Python", "FastAPI", "Node.js", "Docker", "Linux"], mark: "OPS", tone: "from-emerald-300 to-cyan-400" },
-  { name: "驗證與實驗", items: ["Go", "PyTorch", "OCR", "SQLite", "Testing"], mark: "LAB", tone: "from-amber-300 to-orange-400" },
-];
-
-const studioHighlights = [
-  { label: "網站製作", value: "Design + Code" },
-  { label: "部署交付", value: "VPS / SSL / Docker" },
-  { label: "商家轉換", value: "LINE / Phone / Form" },
-];
 ---
 
-<Layout
-  title="KJyang — 鶯歌工商資訊科 | 全端開發 · AI 應用"
-  description="KJyang，鶯歌工商資訊科高三。把 AI 放進真實使用、錯誤驗證與商業交付。"
+<PortfolioLayout
+  title="KJyang — Builds with Logic & Magic."
+  description="我是 KJyang，鶯歌工商資訊科高三。用 AI、Web 與自動化做出能實際使用的系統；分享作品、驗證過程與網站設計服務。"
   jsonLd={jsonLd}
 >
-
-  <!-- Hero -->
-  <section class="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden" aria-label="KJyang 首頁">
-    <!-- Background Elements -->
-    <div class="absolute inset-0 bg-grid z-0 pointer-events-none"></div>
-    <div class="absolute top-0 right-0 w-3/4 h-3/4 bg-gradient-to-b from-brand/20 to-transparent blur-[120px] rounded-full pointer-events-none translate-x-1/4 -translate-y-1/4"></div>
-    <div class="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-t from-accent/10 to-transparent blur-[100px] rounded-full pointer-events-none -translate-x-1/4 translate-y-1/4"></div>
-
-    <div class="section-container w-full relative z-10">
-      <div class="grid lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.75fr)] gap-12 lg:gap-16 items-center">
-      <div class="max-w-4xl">
-        <div class="animate-on-scroll inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-xs font-medium mb-8 backdrop-blur-sm">
-          <span class="w-1.5 h-1.5 rounded-full bg-brand-light animate-pulse"></span>
-          鶯歌工商 · 資訊科 · Web / AI / Studio
-        </div>
-
-        <h1 class="animate-on-scroll delay-1 text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[1.05] mb-8">
-          Builds with <br />
-          <span class="text-gradient">Logic & Magic.</span>
-        </h1>
-
-        <p class="animate-on-scroll delay-2 text-xl sm:text-2xl text-zinc-300 mb-6 font-medium max-w-2xl leading-relaxed">
-          我是 KJyang，鶯歌工商資訊科高三。AI 讓我開始做；錯誤讓我學會驗證；真實交付讓我理解資訊管理。
-        </p>
-
-        <p class="animate-on-scroll delay-2 text-base text-zinc-500 max-w-2xl mb-10 leading-relaxed">
-          這裡是我的個人入口：技術作品、AI 實驗、開發紀錄。需要商業網站製作、部署、SSL、主機維護，可以直接看 Studio 服務頁。
-        </p>
-
-        <div class="animate-on-scroll delay-3 flex flex-wrap gap-4">
-          <a href="/studio" class="group relative inline-flex items-center gap-2 px-8 py-4 bg-zinc-100 text-zinc-950 font-semibold rounded-full overflow-hidden transition-all hover:bg-white hover:shadow-2xl hover:shadow-brand/20 active:translate-y-px focus-visible:ring-2 focus-visible:ring-brand">
-             <span class="relative z-10">網站服務 / KJyang Studio</span>
-             <div class="absolute inset-0 bg-gradient-to-r from-brand-light to-accent-light opacity-0 group-hover:opacity-20 transition-opacity"></div>
-             <svg class="w-4 h-4 relative z-10 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-          </a>
-          <a href="/projects" class="group relative inline-flex items-center gap-2 px-8 py-4 bg-white/5 hover:bg-white/10 text-zinc-200 font-semibold rounded-full border border-white/10 transition-all hover:border-white/20 active:translate-y-px backdrop-blur-sm focus-visible:ring-2 focus-visible:ring-brand">
-             <span class="relative z-10">看我做了什麼</span>
-             <svg class="w-4 h-4 relative z-10 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-          </a>
-        </div>
-      </div>
-
-      <aside class="animate-on-scroll delay-3 hero-console relative rounded-[2rem] border border-white/10 bg-zinc-950/75 p-4 sm:p-5 shadow-2xl shadow-black/40 backdrop-blur-xl">
-        <div class="rounded-[1.5rem] border border-white/10 bg-zinc-900/70 overflow-hidden">
-          <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
-            <div>
-              <p class="text-xs uppercase tracking-[0.28em] text-brand-light font-mono">Studio Route</p>
-              <h2 class="mt-1 text-xl font-bold text-zinc-50">KJyang Studio</h2>
-            </div>
-            <span class="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-200">Online</span>
-          </div>
-          <div class="p-5 space-y-4">
-            {studioHighlights.map((item) => (
-              <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                <p class="text-xs text-zinc-500">{item.label}</p>
-                <p class="mt-1 font-mono text-sm text-zinc-100">{item.value}</p>
-              </div>
-            ))}
-            <a href="/studio" class="group flex items-center justify-between rounded-2xl bg-gradient-to-r from-brand to-accent px-5 py-4 font-bold text-white transition-colors hover:from-brand-light hover:to-accent-light focus-visible:ring-2 focus-visible:ring-white">
-              <span>查看網站服務</span>
-              <svg class="w-5 h-5 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-            </a>
-          </div>
-        </div>
-      </aside>
-      </div>
-    </div>
-    
-    <!-- Floating Abstract 3D-ish Elements (CSS only) -->
-    <div class="absolute right-10 top-1/3 w-24 h-24 rounded-2xl bg-gradient-to-br from-brand to-brand-dark opacity-20 blur-xl animate-[float_8s_ease-in-out_infinite] delay-1000 hidden lg:block"></div>
-    <div class="absolute right-40 bottom-1/4 w-32 h-32 rounded-full bg-gradient-to-tr from-accent to-accent-light opacity-20 blur-xl animate-[float_12s_ease-in-out_infinite] hidden lg:block"></div>
-  </section>
-
-  <!-- What I Do (Bento Grid Style) -->
-  <section class="py-32 relative" aria-label="技術能力">
-    <div class="section-container">
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-        <div>
-          <h2 class="animate-on-scroll text-3xl sm:text-4xl font-bold mb-4">
-            我在搞什麼
-          </h2>
-          <p class="animate-on-scroll delay-1 text-zinc-400 max-w-xl">
-            主力是 <strong class="text-zinc-200">AI / LLM 應用</strong> — 我很會利用 AI 工具來加速學習和開發。
-            不只是會用，是真的有在研究怎麼整合進產品裡面。
-          </p>
-        </div>
-        <div class="animate-on-scroll delay-2 hidden md:block">
-           <svg class="w-24 h-6 text-zinc-800" viewBox="0 0 100 24" fill="currentColor">
-             <circle cx="12" cy="12" r="2" />
-             <circle cx="36" cy="12" r="2" />
-             <circle cx="60" cy="12" r="2" />
-           </svg>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        {techStack.map((group, i) => (
-          <div class={`animate-on-scroll delay-${i + 1} glass-card p-8 rounded-3xl flex flex-col h-full group`}>
-            <span class={`mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${group.tone} text-sm font-black text-zinc-950 shadow-lg shadow-black/20`} aria-hidden="true">{group.mark}</span>
-            <h3 class="text-xl font-bold text-zinc-100 mb-4">{group.name}</h3>
-            <div class="flex flex-wrap gap-2 mt-auto">
-              {group.items.map(skill => (
-                <span class="px-2.5 py-1 text-xs font-medium rounded-md bg-white/5 text-zinc-400 border border-white/5 group-hover:border-white/10 group-hover:text-zinc-300 transition-colors">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Recent Stuff -->
-  <section class="py-32 bg-zinc-900/20" aria-label="最近在做的事">
-    <div class="section-container">
-      <h2 class="animate-on-scroll text-3xl sm:text-4xl font-bold mb-4">
-        最近在忙的
-      </h2>
-      <p class="animate-on-scroll delay-1 text-zinc-400 mb-12 max-w-2xl">
-        隨便挑幾個有在動的東西。完整的去 <a href="/projects" class="text-brand-light hover:text-brand transition-colors underline underline-offset-4 decoration-zinc-700 hover:decoration-brand">作品集</a> 看。
+  <section class="hero">
+    <div class="hero-title">
+      <span class="micro">AI × WEB × AUTOMATION / TAIWAN</span><h1>
+        Human,<br />then <span>Code.</span>
+      </h1><p class="identity">楊凱捷 <i>/</i> KJyang</p><p class="hero-school">
+        鶯歌工商資訊科高三 · 新北市
       </p>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <article class="animate-on-scroll delay-1 group relative rounded-3xl bg-zinc-900 border border-zinc-800 overflow-hidden hover:border-zinc-700 transition-all duration-500">
-           <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-           <div class="p-8 relative z-10">
-              <div class="flex justify-between items-start mb-6">
-                <span class="px-3 py-1 text-xs font-mono font-bold tracking-wider uppercase rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20">AI</span>
-                <a href="https://github.com/KJyang-0114/Simple-2048-RL" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                </a>
-              </div>
-              <h3 class="text-2xl font-bold text-zinc-100 mb-3 group-hover:text-purple-300 transition-colors">Simple-2048-RL</h3>
-              <p class="text-zinc-400 leading-relaxed">
-                 手寫 DQN、experience replay 與 epsilon-greedy，用 2048 研究「程式能跑」與「學習真的可驗證」之間的差距。
-              </p>
-           </div>
-        </article>
-
-        <article class="animate-on-scroll delay-2 group relative rounded-3xl bg-zinc-900 border border-zinc-800 overflow-hidden hover:border-zinc-700 transition-all duration-500">
-           <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-           <div class="p-8 relative z-10">
-              <div class="flex justify-between items-start mb-6">
-                <span class="px-3 py-1 text-xs font-mono font-bold tracking-wider uppercase rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Tools</span>
-                 <a href="https://github.com/KJyang-0114/sift" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                </a>
-              </div>
-               <h3 class="text-2xl font-bold text-zinc-100 mb-3 group-hover:text-cyan-300 transition-colors">Sift</h3>
-              <p class="text-zinc-400 leading-relaxed">
-                 Go 寫的 AI code scanner；用靜態規則、套件驗證、diff mode 與 SARIF 把「懷疑有錯」變成可重跑的檢查。
-              </p>
-           </div>
-        </article>
-
-        <article class="animate-on-scroll delay-3 group relative rounded-3xl bg-zinc-900 border border-zinc-800 overflow-hidden hover:border-zinc-700 transition-all duration-500">
-           <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-           <div class="p-8 relative z-10">
-              <div class="flex justify-between items-start mb-6">
-                 <span class="px-3 py-1 text-xs font-mono font-bold tracking-wider uppercase rounded-full bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">Real use</span>
-                 <a href="https://github.com/KJyang-0114/discord-problem-solving-bot" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                </a>
-              </div>
-               <h3 class="text-2xl font-bold text-zinc-100 mb-3 group-hover:text-yellow-300 transition-colors">Discord 解題 Bot</h3>
-              <p class="text-zinc-400 leading-relaxed">
-                 數十名同學、約一年真實運行。Mathpix OCR、LLM 解題、長訊息切分與 SQLite 追問。
-              </p>
-           </div>
-        </article>
-
-        <article class="animate-on-scroll delay-4 group relative rounded-3xl bg-zinc-900 border border-zinc-800 overflow-hidden hover:border-zinc-700 transition-all duration-500">
-           <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-           <div class="p-8 relative z-10">
-              <div class="flex justify-between items-start mb-6">
-                <span class="px-3 py-1 text-xs font-mono font-bold tracking-wider uppercase rounded-full bg-green-500/10 text-green-400 border border-green-500/20">Vision</span>
-                <a href="https://github.com/KJyang-0114/Nyx-Core" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors">
-                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                </a>
-              </div>
-              <h3 class="text-2xl font-bold text-zinc-100 mb-3 group-hover:text-green-300 transition-colors">Nyx-Core</h3>
-              <p class="text-zinc-400 leading-relaxed">
-                 保留 provenance 的 YOLO 即時視覺衍生研究。README 已明確區分上游作者與本人有限改動。
-              </p>
-           </div>
-        </article>
+    </div><div class="hero-note">
+      <span class="micro">AI · WEB · AUTOMATION</span><h2>
+        讓想法，<br />有真實的去處。
+      </h2><p>
+        AI 讓我開始做；錯誤讓我學會驗證；<br />真實交付讓我理解資訊管理。
+      </p><div class="hero-actions">
+        <a class="button-primary" href="/studio">網站服務 / Studio ↗</a><a
+          class="text-link"
+          href="/projects">看我做了什麼 ↗</a>
       </div>
+    </div><div class="hero-art"><WireArt /></div><div class="hero-bottom">
+      <span>把 AI、Web 與自動化，做成能實際操作的系統。</span><a href="/studio"
+        >網站設計與開發 / Studio ↗</a
+      ><span>01 — INTRODUCTION</span>
     </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="py-32 relative overflow-hidden" aria-label="聯絡方式">
-    <div class="absolute inset-0 bg-brand-dark/5"></div>
-    <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brand/50 to-transparent"></div>
-    
-    <div class="section-container relative z-10 text-center">
-        <h2 class="text-4xl sm:text-5xl font-bold mb-8 tracking-tight">
-          Ready to <span class="text-gradient">Collaborate?</span>
-        </h2>
-        <p class="text-zinc-400 mb-10 max-w-lg mx-auto text-lg">
-          想合作專案、聊技術、或有什麼有趣的想法，都歡迎找我。
-        </p>
-        <div class="flex flex-wrap justify-center gap-4">
-          <a href="/contact" class="inline-flex items-center gap-2 px-8 py-4 bg-white text-black hover:bg-zinc-200 font-bold rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-white/10">
-            聯絡我
-          </a>
-          <a href="https://github.com/KJyang-0114" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-8 py-4 bg-black/50 text-white hover:bg-black/70 border border-zinc-700 hover:border-zinc-500 font-semibold rounded-full transition-all hover:scale-105 active:scale-95 backdrop-blur-md">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
-            GitHub
-          </a>
-        </div>
+  </section><section class="exhibit">
+    <div class="exhibit-intro">
+      <span class="micro">SELECTED SYSTEMS</span><h2>
+        小系統。<br />真實的使用。
+      </h2><p>
+        從同學的一張題目圖片開始，<br />做出能解題、也能接續追問的工具。
+      </p><a href="/projects#discord" class="text-link"
+        >Discord 解題 Bot <span>↗</span></a>
+    </div><div class="specimen"><ExhibitScenes /></div><div
+      class="exhibit-select"
+    >
+      <span class="micro">SELECT A SYSTEM</span><button
+        data-scene="bot"
+        aria-pressed="true">01 <b>Discord Bot</b> ↗</button
+      ><button data-scene="sift" aria-pressed="false">02 <b>Sift</b> ↗</button
+      ><button data-scene="rl" aria-pressed="false">03 <b>2048 RL</b> ↗</button
+      ><p class="proof-title" aria-live="polite">
+        題目圖片 → 可追問的解答
+      </p><small>互動示意 · 專案細節與原始碼見作品頁</small>
     </div>
-  </section>
-
-</Layout>
+  </section><a class="next-page" href="/projects"
+    ><span>探索所有作品 <small>08 / SELECTED WORK</small></span><b>↗</b></a
+  ><section class="home-method">
+    <span class="micro">BUILD · VERIFY · DELIVER</span><h2>
+      讓工具加速。<br />讓驗證把關。
+    </h2><p>
+      AI /
+      LLM、前端、後端與部署，是我把想法做出來的工具。讀錯誤、核對資料、修改重測，才讓作品更接近真實需求。
+    </p><a class="text-link" href="/about">我的開發方式 ↗</a><a
+      class="text-link"
+      href="/ai">AI 入門筆記 ↗</a>
+  </section></PortfolioLayout
+>

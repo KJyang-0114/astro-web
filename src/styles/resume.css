@@ -1,0 +1,384 @@
+.resume {
+  max-width: 1320px;
+  margin: auto;
+  padding: 0 clamp(24px, 5vw, 80px) 100px;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+.resume-hero {
+  padding: 88px 0 64px;
+  border-bottom: 1px solid var(--line);
+}
+.resume-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin: 0 0 20px;
+}
+.resume h1 {
+  font-size: clamp(44px, 6.2vw, 84px);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 1.07;
+  margin: 24px 0;
+}
+.resume h1 span {
+  display: block;
+  color: var(--accent);
+}
+.resume-disciplines {
+  font-size: clamp(14px, 1.6vw, 19px);
+  margin: 28px 0;
+}
+.resume-intro {
+  max-width: 760px;
+  font-size: 17px;
+  line-height: 2;
+}
+.resume-status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  font-size: 13px;
+  margin-top: 30px;
+}
+.resume-status > span:last-child {
+  color: var(--muted);
+}
+.resume-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+.resume-open {
+  max-width: 740px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.resume-actions {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  align-items: center;
+  font-size: 14px;
+}
+.resume-actions a,
+.resume-actions button {
+  border-bottom: 1px solid var(--line);
+  padding: 9px 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.resume a:hover,
+.resume button:hover {
+  color: var(--accent);
+}
+.resume-layout {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 70px;
+  align-items: start;
+}
+.resume-index {
+  position: sticky;
+  top: 30px;
+  display: grid;
+  gap: 12px;
+  padding-top: 56px;
+  font-size: 13px;
+}
+.resume-index > span {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  margin-bottom: 10px;
+}
+.resume-index small {
+  color: var(--muted);
+  font-size: 10px;
+  margin-right: 18px;
+}
+.resume-content section {
+  padding: 56px 0;
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 30px;
+}
+.resume h2 {
+  font-size: clamp(25px, 3vw, 36px);
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  margin: 0 0 32px;
+}
+.resume h3 {
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 500;
+  margin: 20px 0 10px;
+}
+.resume h4 {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 24px 0 12px;
+}
+.resume p {
+  margin-bottom: 16px;
+}
+.resume-content {
+  font-size: 15px;
+}
+.resume-entry + .resume-entry {
+  margin-top: 34px;
+  padding-top: 25px;
+  border-top: 1px solid var(--line);
+}
+.resume-company {
+  font-size: 17px;
+}
+.resume-meta {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.015em;
+}
+.resume ul {
+  padding-left: 19px;
+  margin: 16px 0 24px;
+  list-style: disc;
+}
+.resume li {
+  margin: 5px 0;
+  padding-left: 3px;
+  break-inside: avoid;
+}
+.resume li::marker {
+  color: var(--accent);
+}
+.resume blockquote {
+  margin: 24px 0 0;
+  padding: 12px 20px;
+  border-left: 2px solid var(--accent);
+  font-size: 13px;
+  color: var(--muted);
+}
+.resume-tech {
+  font-size: 13px;
+  color: var(--muted);
+}
+.resume-tech strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+.resume-pair,
+.resume-skills {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 40px;
+}
+.resume-skills h3 {
+  font-size: 17px;
+}
+.resume-columns {
+  columns: 2;
+  column-gap: 35px;
+}
+.resume-workflow {
+  list-style: decimal;
+  padding-left: 24px;
+  margin: 20px 0 32px;
+  columns: 2;
+  column-gap: 40px;
+}
+.resume-links > div {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  gap: 20px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+.resume-links dt {
+  color: var(--muted);
+  font-size: 12px;
+}
+.resume-links dd {
+  margin: 0;
+}
+@media (max-width: 1000px) {
+  .resume-layout {
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 30px;
+  }
+  .resume-pair {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+@media (max-width: 760px) {
+  .resume-hero {
+    padding-top: 45px;
+  }
+  .resume-layout {
+    display: block;
+  }
+  .resume-index {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 20px;
+    padding: 25px 0;
+  }
+  .resume-index > span {
+    width: 100%;
+    margin: 0;
+  }
+  .resume-index small {
+    margin-right: 6px;
+  }
+  .resume-skills {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+  .resume-workflow,
+  .resume-columns {
+    columns: 1;
+  }
+  .resume-content section {
+    padding: 36px 0;
+  }
+  .resume-links > div {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+@media print {
+  @page {
+    size: A4;
+    margin: 16mm;
+  }
+  html,
+  body.portfolio {
+    background: #fff !important;
+    color: #111 !important;
+    font-size: 10pt;
+    --ink: #111;
+    --muted: #444;
+    --accent: #333;
+    --line: #ccc;
+  }
+  body.portfolio > .site-header,
+  body.portfolio > .site-footer,
+  .skip-link,
+  .resume-index,
+  .resume-actions,
+  #print-resume {
+    display: none !important;
+  }
+  .resume {
+    max-width: none;
+    padding: 0;
+    line-height: 1.5;
+    font-size: 10pt;
+  }
+  .resume-hero {
+    padding: 0 0 16pt;
+  }
+  .resume h1 {
+    font-size: 30pt;
+    line-height: 1.1;
+    margin: 10pt 0;
+  }
+  .resume h1 span {
+    color: #111;
+  }
+  .resume-disciplines {
+    font-size: 12pt;
+    margin: 12pt 0;
+  }
+  .resume-intro {
+    font-size: 10pt;
+    line-height: 1.7;
+    max-width: none;
+  }
+  .resume-status {
+    margin-top: 12pt;
+  }
+  .resume-open {
+    max-width: none;
+  }
+  .resume-layout {
+    display: block;
+  }
+  .resume-content {
+    font-size: 10pt;
+  }
+  .resume-content section {
+    padding: 18pt 0;
+  }
+  .resume h2 {
+    font-size: 18pt;
+    margin-bottom: 14pt;
+  }
+  .resume h3 {
+    font-size: 12pt;
+    margin: 10pt 0 6pt;
+  }
+  .resume-eyebrow {
+    font-size: 8pt;
+    margin-bottom: 8pt;
+  }
+  .resume-meta,
+  .resume-tech,
+  .resume-links dt {
+    font-size: 9pt;
+  }
+  .resume-company {
+    font-size: 11pt;
+  }
+  .resume p {
+    margin-bottom: 8pt;
+  }
+  .resume ul {
+    margin: 8pt 0 12pt;
+  }
+  .resume li {
+    margin: 3pt 0;
+  }
+  .resume-entry + .resume-entry {
+    margin-top: 14pt;
+    padding-top: 10pt;
+  }
+  .resume-pair,
+  .resume-skills {
+    display: block;
+  }
+  .resume-workflow {
+    columns: 1;
+  }
+  .resume a {
+    color: #111;
+    text-decoration: none;
+  }
+  .resume h2,
+  .resume h3,
+  .resume h4,
+  .resume-eyebrow,
+  .resume-meta {
+    break-after: avoid;
+  }
+  .resume p {
+    orphans: 3;
+    widows: 3;
+  }
+  .resume-links > div {
+    grid-template-columns: 70pt 1fr;
+    gap: 10pt;
+    break-inside: avoid;
+  }
+  .resume blockquote {
+    font-size: 9pt;
+  }
+}

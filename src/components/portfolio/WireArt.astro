@@ -1,0 +1,18 @@
+---
+const { label = "FORM FOLLOWS LOGIC" } = Astro.props;
+---
+
+<div class="art" data-wire-art>
+  <div class="art-label">
+    <span>{label}</span><button
+      class="motion-toggle"
+      type="button"
+      aria-pressed="false">暫停動效 Ⅱ</button>
+  </div><canvas class="wire-art" aria-label="緩慢旋轉的幾何線稿" role="img"
+  ></canvas><div class="art-label">
+    <span>[ FIG. 01 ]</span><span>LOGIC ↔ MAGIC</span>
+  </div><noscript><p>Logic &amp; Magic / 幾何線稿</p></noscript>
+</div>
+<script>
+  import "../../scripts/wire-art";
+</script>

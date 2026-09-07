@@ -1,0 +1,61 @@
+---
+const { studio = false, english = false } = Astro.props;
+const links = studio
+  ? english
+    ? [
+        ["Services", "/studio/en/services"],
+        ["Pricing", "/studio/en/pricing"],
+        ["Contact", "/studio/en/contact"],
+        ["中文", "/studio"],
+        ["About KJyang", "/about"],
+      ]
+    : [
+        ["服務", "/studio/services"],
+        ["設計案例", "/studio/work"],
+        ["Demo", "/studio/demo"],
+        ["價格", "/studio/pricing"],
+        ["合作流程", "/studio/process"],
+        ["知識庫", "/studio/insights"],
+        ["關於工作室", "/studio/about"],
+        ["合作方式", "/studio/why-us"],
+        ["聯絡", "/studio/contact"],
+        ["EN", "/studio/en"],
+        ["KJyang 個人網站", "/"],
+      ]
+  : [
+      ["作品", "/projects"],
+      ["關於", "/about"],
+      ["履歷", "/resume"],
+      ["AI 筆記", "/ai"],
+      ["網站服務", "/studio"],
+      ["聯絡", "/contact"],
+      ["GitHub", "https://github.com/KJyang-0114"],
+      ["Instagram", "https://www.instagram.com/imw1nt0r/"],
+      ["Discord", "https://discord.gg/sZbn6Dw3Bx"],
+    ];
+---
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div>
+      <strong>{studio ? "KJyang Studio" : "KJyang / 楊凱捷"}</strong><p>
+        {
+          studio
+            ? english
+              ? "Design, code, launch, and care."
+              : "網站設計、前端開發、部署與維護。"
+            : "Builds with Logic & Magic."
+        }
+      </p>
+    </div><nav
+      class="footer-links"
+      aria-label={english ? "Footer navigation" : "頁尾導覽"}
+    >
+      {links.map(([label, href]) => <a href={href}>{label}</a>)}
+    </nav>
+  </div><div class="footer-base">
+    <span>© {new Date().getFullYear()} KJyang</span><span
+      >{studio ? "DESIGN / CODE / DEPLOY" : "NEW TAIPEI, TAIWAN"}</span
+    ><a href="#top">{english ? "Back to top ↑" : "回到頂端 ↑"}</a>
+  </div>
+</footer>

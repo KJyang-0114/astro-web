@@ -1,0 +1,73 @@
+---
+import "../../styles/exhibits.css";
+---
+
+<div class="scene is-active" data-panel="bot">
+  <div class="chat-ui">
+    <div class="windowbar">
+      <span># study-room</span><span>Discord 解題 Bot</span>
+    </div><div class="chat-message">
+      <span class="avatar student">K</span><div>
+        <b>同學 <small>題目圖片</small></b><div class="math-paper">
+          ∫ 2x dx = ? <span>題目.png</span>
+        </div>
+      </div>
+    </div><div class="chat-message">
+      <span class="avatar bot">↳</span><div>
+        <b>解題 Bot <small>APP</small></b><p>
+          先看冪次積分公式，<br />再代入這一題。
+        </p><div class="math-answer">x² + C <span>✓</span></div>
+      </div>
+    </div><div class="chat-follow">所以 C 是什麼？ <span>↑</span></div><span
+      class="chat-caption">Mathpix OCR → LLM → SQLite · 對話示意</span>
+  </div>
+</div><div class="scene" data-panel="sift" hidden>
+  <div class="terminal-ui">
+    <div class="windowbar">
+      <span>● ● ●</span><span>sift / inspection</span><span>⌘</span>
+    </div><div class="terminal-code">
+      <p><i>❯</i> sift scan . --format sarif</p><p class="dim">
+        deterministic first. semantic second.
+      </p><div class="terminal-stage">
+        <span class="terminal-check">✓</span><span>Semgrep rules</span><small
+          >STATIC</small>
+      </div><div class="terminal-stage">
+        <span class="terminal-check">✓</span><span>Package verifier</span><small
+          >VERIFY</small>
+      </div><div class="terminal-stage">
+        <span class="terminal-check">◇</span><span>Semantic analyzer</span
+        ><small>OPTIONAL</small>
+      </div><div class="terminal-output">
+        <span>→ report.sarif</span><span>→ SQLite history</span>
+      </div>
+    </div><div class="terminal-status">
+      <span>GO / SEMGREP / SARIF</span><span>流程示意</span>
+    </div>
+  </div>
+</div><div class="scene" data-panel="rl" hidden>
+  <div class="board-ui">
+    <div class="board-heading">
+      <strong>2048<span> / RL</span></strong><span class="sample-chip"
+        >介面示意</span>
+    </div><div class="board-grid" aria-label="2048 示意棋盤">
+      <span data-value="2">2</span><span data-value="0"></span><span
+        data-value="2">2</span
+      ><span data-value="4">4</span><span data-value="4">4</span><span
+        data-value="4">4</span
+      ><span data-value="8">8</span><span data-value="0"></span><span
+        data-value="2">2</span
+      ><span data-value="8">8</span><span data-value="8">8</span><span
+        data-value="16">16</span
+      ><span data-value="0"></span><span data-value="2">2</span><span
+        data-value="4">4</span
+      ><span data-value="4">4</span>
+    </div><div class="board-meta">
+      <span>STATE → ACTION → REWARD</span><button
+        class="board-step"
+        type="button">走一步 ←</button>
+    </div><p class="board-help">合併規則示意，不執行訓練模型。</p>
+  </div>
+</div>
+<script>
+  import "../../scripts/exhibits";
+</script>
