@@ -73,14 +73,27 @@ fi
 
 # 運行新容器
 log "啟動新容器..."
-RUN_OUTPUT=$(docker run -d -p 3000:3000 --name kjyang-wbs-astro-container kjyang-wbs-astro 2>&1)
-RUN_STATUS=$?
-printf '%s\n' "$RUN_OUTPUT" >> "$LOG_FILE"
-if [ "$RUN_STATUS" -eq 0 ]; then
-    log "新容器啟動成功"
-else
+RUN_STATUS=1
+for attempt in 1 2 3; do
+    docker rm -f kjyang-wbs-astro-container >/dev/null 2>&1 || true
+    RUN_OUTPUT=$(docker run -d -p 3000:3000 --name kjyang-wbs-astro-container kjyang-wbs-astro 2>&1)
+    RUN_STATUS=$?
+    printf '%s\n' "$RUN_OUTPUT" >> "$LOG_FILE"
+    if [ "$RUN_STATUS" -eq 0 ]; then
+        log "新容器啟動成功"
+        break
+    fi
     printf '%s\n' "$RUN_OUTPUT" >> "$ERROR_LOG"
-    log_error "新容器啟動失敗: $RUN_OUTPUT"
+    log_error "第 $attempt 次啟動失敗: $RUN_OUTPUT"
+    if command -v lsof >/dev/null 2>&1; then
+        log "3000 埠目前的監聽程序:"
+        lsof -nP -iTCP:3000 -sTCP:LISTEN 2>&1 | tee -a "$LOG_FILE" || true
+    fi
+    sleep 5
+done
+
+if [ "$RUN_STATUS" -ne 0 ]; then
+    log_error "重試三次後仍無法啟動新容器"
     exit 1
 fi
 
