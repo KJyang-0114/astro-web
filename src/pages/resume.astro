@@ -2,7 +2,7 @@
 import PortfolioLayout from "../layouts/PortfolioLayout.astro";
 import {
   resumeProjects,
-  skills,
+  skillLevels,
   experience,
   workflow,
   aiUses,
@@ -33,12 +33,13 @@ const sections = [
   <article class="resume">
     <header class="resume-hero">
       <p class="resume-eyebrow">KJYANG / CURRICULUM VITAE</p>
+      <p class="resume-availability">Open to Remote / Contract / Part-time</p>
       <h1>KJyang <span>Software Engineer.</span></h1>
       <p class="resume-disciplines">
         Web · Backend · Developer Tools · AI Systems
       </p>
       <p class="resume-intro">
-        專注於實際交付、系統整合與工程驗證的軟體開發者。具備正式遠端工作經驗，曾參與教育科技產品開發，並持續投入
+        專注於實際交付、系統整合與工程驗證的軟體開發者。曾正式任職於雲書苑教育科技有限公司，以完全遠端形式參與教育科技產品開發，並持續投入
         Web、Backend、Developer Tooling、AI-assisted Systems 與 Security
         相關專案。
       </p>
@@ -77,9 +78,9 @@ const sections = [
             <h3>Software Developer</h3><p class="resume-company">
               雲書苑教育科技有限公司
             </p><p class="resume-meta">
-              Remote · 2025.09 / 2025.10 — 2026 年初
+              正式任職 · Fully Remote · <time datetime="2025-09">2025/9</time> — 2026 年初
             </p>
-            <p>曾以完全遠端形式參與教育科技相關軟體開發工作。</p>
+            <p>自 2025 年 9 月起正式任職於雲書苑教育科技有限公司，擔任 Software Developer；任職期間採完全遠端工作模式，參與商業產品開發、需求實作、除錯、測試與交付。</p>
             <p>
               由於受到 NDA
               約束，無法公開產品細節、內部架構、客戶資訊與部分技術實作內容。
@@ -150,18 +151,20 @@ const sections = [
         <section id="skills">
           <p class="resume-eyebrow">04 / TECHNICAL SKILLS</p><h2>
             技術能力
-          </h2><div class="resume-skills">
+          </h2><div>
             {
-              skills.map((group) => (
-                <div>
-                  <>
-                    <h3>{group.name}</h3>
-                    <ul>
-                      {group.items.map((item) => (
-                        <li>{item}</li>
-                      ))}
-                    </ul>
-                  </>
+              skillLevels.map((level) => (
+                <div class="resume-skill-level">
+                  <h3>{level.name}</h3>
+                  <p class="resume-meta">{level.description}</p>
+                  <div class="resume-skills">
+                    {level.groups.map((group) => (
+                      <div>
+                        <h4>{group.name}</h4>
+                        <ul>{group.items.map(item => <li>{item}</li>)}</ul>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ))
             }
@@ -188,7 +191,7 @@ const sections = [
         </section>
         <section id="remote">
           <p class="resume-eyebrow">06 / REMOTE WORK</p><h2>遠端協作</h2><p>
-            具備正式完全遠端工作經驗。
+            曾正式任職於雲書苑教育科技有限公司，任職期間以完全遠端形式進行開發與協作，具備實際商業專案的遠端交付經驗。
           </p><div class="resume-pair">
             <div>
               <h3>熟悉的工作方式</h3><ul>
