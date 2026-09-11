@@ -1,0 +1,41 @@
+---
+import type { FlowNode } from "../../data/project-flows";
+interface Props { nodes: FlowNode[]; slug: string }
+const { nodes, slug } = Astro.props;
+---
+<div class="project-flow" data-project-flow>
+  <p class="flow-hint">點開一站，看它做什麼，以及需要注意的地方。</p>
+  <ol>
+    {nodes.map((node, index) => (
+      <li>
+        <details name={`flow-${slug}`} open={index === 0}>
+          <summary><span class="flow-index">{String(index + 1).padStart(2, "0")}</span><span>{node.title}</span><span class="flow-plus" aria-hidden="true">＋</span></summary>
+          <div class="flow-explanation">
+            <p>{node.purpose}</p>
+            <dl><div><dt>產出</dt><dd>{node.output}</dd></div><div><dt>需要留意</dt><dd>{node.boundary}</dd></div></dl>
+          </div>
+        </details>
+      </li>
+    ))}
+  </ol>
+</div>
+<style>
+  .flow-hint{font-size:13px;color:var(--muted)}
+  .project-flow ol{list-style:none;padding:0;position:relative}
+  .project-flow li{margin:0;padding:0 0 12px 20px;border-left:1px solid var(--line)}
+  .project-flow li:last-child{border-color:transparent}
+  .project-flow details{border:1px solid var(--line);background:var(--paper);position:relative}
+  .project-flow details::before{content:"";position:absolute;width:7px;height:7px;left:-24px;top:24px;border-radius:50%;background:var(--accent)}
+  .project-flow details[open]{background:var(--panel)}
+  .project-flow summary{display:flex;align-items:center;gap:14px;cursor:pointer;padding:18px;list-style:none;font-size:15px}
+  .project-flow summary::-webkit-details-marker{display:none}
+  .flow-index{font-size:11px;color:var(--accent)}
+  .flow-plus{margin-left:auto;transition:transform .2s}
+  details[open] .flow-plus{transform:rotate(45deg)}
+  .flow-explanation{padding:0 18px 18px;font-size:14px;line-height:1.85}
+  .flow-explanation p{margin:0 0 16px}
+  .flow-explanation dl{margin:0}.flow-explanation dl>div{margin-top:12px}
+  .flow-explanation dt{font-size:11px;color:var(--accent)}
+  .flow-explanation dd{margin:4px 0 0}
+  @media(prefers-reduced-motion:reduce){.flow-plus{transition:none}}
+</style>

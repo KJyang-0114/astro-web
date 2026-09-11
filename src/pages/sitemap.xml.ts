@@ -32,6 +32,8 @@ export function GET() {
   const personalRoutes = [
     "/about",
     "/resume",
+    "/now",
+    "/play",
     "/projects",
     "/ai",
     "/contact",

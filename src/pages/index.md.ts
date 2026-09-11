@@ -12,6 +12,9 @@ KJyang personal site, Web Highlighter Pro product pages, and KJyang Studio websi
 
 ## Personal site
 
+- [Now](https://kjyang0114.dev/now): Personal updates and selected playlists.
+- [A small pause](https://kjyang0114.dev/play): Interactive geometric linework with motion controls.
+
 - [Resume](https://kjyang0114.dev/resume): Software engineering experience, skills, availability, and contact details.
 
 - [About KJyang](https://kjyang0114.dev/about): Learning, development approach, and personal background.

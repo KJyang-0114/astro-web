@@ -1,17 +1,18 @@
 ---
-const { label = "FORM FOLLOWS LOGIC" } = Astro.props;
+const { label = "FORM FOLLOWS LOGIC", interactive = false } = Astro.props;
 ---
 
-<div class="art" data-wire-art>
+<div class="art" data-wire-art data-interactive={interactive ? "true" : undefined}>
   <div class="art-label">
     <span>{label}</span><button
       class="motion-toggle"
       type="button"
       aria-pressed="false">暫停動效 Ⅱ</button>
-  </div><canvas class="wire-art" aria-label="緩慢旋轉的幾何線稿" role="img"
+  </div><canvas class="wire-art" tabindex={interactive ? 0 : undefined} aria-label={interactive ? "幾何線稿。拖曳或使用方向鍵旋轉，Home 鍵回正。" : "緩慢旋轉的幾何線稿"} role="img"
   ></canvas><div class="art-label">
-    <span>[ FIG. 01 ]</span><span>LOGIC ↔ MAGIC</span>
+    <span>[ FIG. 01 ]</span>{!interactive && <a href="/play">歇一下 ↗</a>}<span>LOGIC ↔ MAGIC</span>
   </div><noscript><p>Logic &amp; Magic / 幾何線稿</p></noscript>
+  {interactive && <div class="art-controls"><div role="group" aria-label="線稿形態"><button type="button" data-art-shape="ribbon" aria-pressed="true">01 緞帶</button><button type="button" data-art-shape="orbit" aria-pressed="false">02 軌道</button><button type="button" data-art-shape="wave" aria-pressed="false">03 漣漪</button></div><button type="button" data-art-reset>回到中央 ↺</button></div>}
 </div>
 <script>
   import "../../scripts/wire-art";
