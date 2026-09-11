@@ -1,4 +1,5 @@
-import { ribbonPath } from "./wire-geometry";
+import { ribbonPath, wireVertices } from "./wire-geometry";
+import { bindArtControls, settleArtView, type ArtView } from "./wire-controls";
 import type * as Three from "three";
 
 /** Art is optional: content remains usable without WebGL, JavaScript, or motion. */
@@ -6,6 +7,7 @@ document.querySelectorAll<HTMLElement>("[data-wire-art]").forEach((host) => {
   const canvas = host.querySelector<HTMLCanvasElement>("canvas");
   const control = host.querySelector<HTMLButtonElement>(".motion-toggle");
   if (!canvas || !control) return;
+  const view = bindArtControls(host);
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   let stopped = reduced.matches;
   const update = () => {
@@ -28,7 +30,7 @@ document.querySelectorAll<HTMLElement>("[data-wire-art]").forEach((host) => {
     (entries) => {
       if (entries[0].isIntersecting) {
         observer.disconnect();
-        void initArt(host, canvas);
+        void initArt(host, canvas, view);
       }
     },
     { rootMargin: "150px" },
@@ -36,7 +38,7 @@ document.querySelectorAll<HTMLElement>("[data-wire-art]").forEach((host) => {
   observer.observe(host);
 });
 
-async function initArt(host: HTMLElement, canvas: HTMLCanvasElement) {
+async function initArt(host: HTMLElement, canvas: HTMLCanvasElement, view: ArtView) {
   let renderer: Three.WebGLRenderer;
   let THREE: typeof import("three");
   try {
@@ -48,7 +50,7 @@ async function initArt(host: HTMLElement, canvas: HTMLCanvasElement) {
       powerPreference: "low-power",
     });
   } catch {
-    initSvgArt(host, canvas);
+    initSvgArt(host, canvas, view);
     return;
   }
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5));
@@ -68,34 +70,14 @@ async function initArt(host: HTMLElement, canvas: HTMLCanvasElement) {
     transparent: true,
     opacity: 0.85,
   });
-  const geometry = new THREE.BufferGeometry();
-  const vertices: number[] = [];
-  // A twisted ribbon of rectangular frames, drawn as lines without surfaces or lights.
-  for (let i = 0; i < 32; i++) {
-    const angle = (i / 32) * Math.PI * 2;
-    const twist = angle * 0.5;
-    const corners = [
-      [-0.24, -0.38],
-      [0.24, -0.38],
-      [0.24, 0.38],
-      [-0.24, 0.38],
-    ];
-    const points = corners.map(([x, y]) => {
-      const radial = 1 + x * Math.cos(twist) - y * Math.sin(twist);
-      return [
-        radial * Math.cos(angle),
-        x * Math.sin(twist) + y * Math.cos(twist),
-        radial * Math.sin(angle),
-      ];
-    });
-    for (let j = 0; j < 4; j++)
-      vertices.push(...points[j], ...points[(j + 1) % 4]);
-  }
+  let geometry = new THREE.BufferGeometry();
+  const vertices = wireVertices(view.shape);
   geometry.setAttribute(
     "position",
     new THREE.Float32BufferAttribute(vertices, 3),
   );
-  group.add(new THREE.LineSegments(geometry, material));
+  const sculpture = new THREE.LineSegments(geometry, material);
+  group.add(sculpture);
   group.rotation.set(0.7, 0.25, 0.15);
   let frame = 0,
     last = 0,
@@ -135,10 +117,11 @@ async function initArt(host: HTMLElement, canvas: HTMLCanvasElement) {
       const dt = Math.min((time - last) / 1000, 0.05);
       last = time;
       elapsed += dt;
-      group.rotation.y += dt * 0.16;
+      settleArtView(view, dt);
+      group.rotation.y = .25 + elapsed * .16 + view.yaw;
       group.scale.setScalar(1 + Math.sin((elapsed * Math.PI) / 5) * 0.045);
       group.rotation.x +=
-        (0.7 + targetY + Math.sin(elapsed * 0.25) * 0.12 - group.rotation.x) *
+        (0.7 + targetY + view.pitch + Math.sin(elapsed * 0.25) * 0.12 - group.rotation.x) *
         0.025;
       group.rotation.z += (0.15 + targetX - group.rotation.z) * 0.025;
       draw();
@@ -166,6 +149,21 @@ async function initArt(host: HTMLElement, canvas: HTMLCanvasElement) {
   });
   intersection.observe(canvas);
   host.addEventListener("motionchange", resume);
+  let currentShape = view.shape;
+  const changeView = () => {
+    if (currentShape !== view.shape) {
+      geometry.dispose();
+      geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(wireVertices(view.shape), 3));
+      geometry.computeBoundingSphere();
+      sculpture.geometry = geometry;
+      currentShape = view.shape;
+    }
+    group.rotation.y = .25 + elapsed * .16 + view.yaw;
+    group.rotation.x = .7 + view.pitch + Math.sin(elapsed * .25) * .12;
+    draw();
+  };
+  host.addEventListener("artchange", changeView);
   const appearance = matchMedia("(prefers-color-scheme: dark)");
   appearance.addEventListener("change", colors);
   document.addEventListener("visibilitychange", resume);
@@ -173,7 +171,7 @@ async function initArt(host: HTMLElement, canvas: HTMLCanvasElement) {
   canvas.addEventListener(
     "pointermove",
     (event) => {
-      if (paused()) return;
+      if (paused() || host.hasAttribute("data-interactive")) return;
       const rect = canvas.getBoundingClientRect();
       targetX = ((event.clientX - rect.left) / rect.width) * 0.2 - 0.1;
       targetY = ((event.clientY - rect.top) / rect.height) * 0.2 - 0.1;
@@ -204,6 +202,7 @@ async function initArt(host: HTMLElement, canvas: HTMLCanvasElement) {
     resizeObserver.disconnect();
     intersection.disconnect();
     host.removeEventListener("motionchange", resume);
+    host.removeEventListener("artchange", changeView);
     appearance.removeEventListener("change", colors);
     document.removeEventListener("visibilitychange", resume);
     window.removeEventListener("pageshow", resume);
@@ -218,13 +217,17 @@ async function initArt(host: HTMLElement, canvas: HTMLCanvasElement) {
 }
 
 /** Equivalent living linework when WebGL is unavailable. No GPU required. */
-function initSvgArt(host: HTMLElement, canvas: HTMLCanvasElement) {
+function initSvgArt(host: HTMLElement, canvas: HTMLCanvasElement, view: ArtView) {
   const ns = "http://www.w3.org/2000/svg";
   const svg = document.createElementNS(ns, "svg");
   svg.setAttribute("viewBox", "0 0 400 400");
   svg.setAttribute("class", "wire-art");
   svg.setAttribute("role", "img");
   svg.setAttribute("aria-label", "緩慢呼吸與旋轉的幾何線稿");
+  if (host.hasAttribute("data-interactive")) {
+    svg.setAttribute("tabindex", "0");
+    svg.setAttribute("aria-label", "幾何線稿。拖曳或使用方向鍵旋轉，Home 鍵回正。");
+  }
   svg.dataset.renderer = "animated-svg";
   const path = document.createElementNS(ns, "path");
   path.setAttribute("fill", "none");
@@ -243,12 +246,14 @@ function initSvgArt(host: HTMLElement, canvas: HTMLCanvasElement) {
     tiltX = 0,
     tiltY = 0;
   const paused = () => host.classList.contains("paused");
-  const draw = () => path.setAttribute("d", ribbonPath(elapsed, tiltX, tiltY));
+  const draw = () => path.setAttribute("d", ribbonPath(elapsed, tiltX, tiltY + view.pitch, view.shape, view.yaw));
   function tick(now: number) {
     frame = 0;
     if (disposed || paused() || document.hidden || !visible) return;
     if (now - last >= 40) {
-      elapsed += Math.min((now - last) / 1000, 0.05);
+      const dt = Math.min((now - last) / 1000, 0.05);
+      elapsed += dt;
+      settleArtView(view, dt);
       last = now;
       tiltX += (targetX - tiltX) * 0.06;
       tiltY += (targetY - tiltY) * 0.06;
@@ -270,7 +275,7 @@ function initSvgArt(host: HTMLElement, canvas: HTMLCanvasElement) {
   svg.addEventListener(
     "pointermove",
     (event) => {
-      if (paused()) return;
+      if (paused() || host.hasAttribute("data-interactive")) return;
       const rect = svg.getBoundingClientRect();
       targetX = ((event.clientX - rect.left) / rect.width - 0.5) * 0.35;
       targetY = ((event.clientY - rect.top) / rect.height - 0.5) * 0.35;
@@ -281,6 +286,7 @@ function initSvgArt(host: HTMLElement, canvas: HTMLCanvasElement) {
     targetX = targetY = 0;
   });
   host.addEventListener("motionchange", resume);
+  host.addEventListener("artchange", draw);
   document.addEventListener("visibilitychange", resume);
   window.addEventListener("pageshow", resume);
   window.addEventListener("pagehide", (event) => {
@@ -290,6 +296,7 @@ function initSvgArt(host: HTMLElement, canvas: HTMLCanvasElement) {
     disposed = true;
     intersection.disconnect();
     host.removeEventListener("motionchange", resume);
+    host.removeEventListener("artchange", draw);
     document.removeEventListener("visibilitychange", resume);
     window.removeEventListener("pageshow", resume);
   });

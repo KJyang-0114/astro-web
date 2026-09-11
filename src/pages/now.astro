@@ -1,0 +1,36 @@
+---
+import PortfolioLayout from "../layouts/PortfolioLayout.astro";
+import SpotifyPlaylist from "../components/portfolio/SpotifyPlaylist.astro";
+import { playlists, nowUpdated } from "../data/now";
+---
+<PortfolioLayout title="Now — KJyang 的近況與歌單" description="寫程式以外，也留一點位置給音樂。KJyang 的近況、歌單與小實驗。">
+  <div class="now-page">
+    <header class="now-heading"><p class="micro">A LITTLE MORE HUMAN</p><h1>最近。<br /><span>也在生活。</span></h1><p>作品之外，留一點位置給音樂與小實驗。</p><time datetime={nowUpdated}>更新於 {nowUpdated.replaceAll("-", ".")}</time></header>
+    <div class="now-grid">
+      <section class="now-work"><span class="micro">01 / ON MY DESK</span><h2>把做過的事，<br />說得更清楚。</h2><p>最近在整理這個網站。把作品拆成可以探索的流程，也讓那些藏在背後的取捨，有地方被看見。</p><a class="text-link" href="/projects/discord">看看解題 Bot 的流程 ↗</a></section>
+      <section class="now-music"><div class="music-intro"><span class="micro">02 / ON REPEAT</span><h2>給日常，<br />一點背景音。</h2><p>有些歌，會想再聽一次。<br />把它們放在這裡，也分享給你。</p><span class="music-caption">按下播放，慢慢聽。</span></div><div class="music-player">
+        {playlists.length ? playlists.map(playlist => <SpotifyPlaylist {...playlist} />) : <div class="playlist-empty"><span aria-hidden="true">♫</span><p>歌單整理中。<br /><small>選好後，會放在這裡。</small></p></div>}
+      </div></section>
+    </div>
+    <a class="now-pause" href="/play"><div><span class="micro">03 / A SMALL PAUSE</span><h2>暫時不用完成什麼。</h2><p>轉一轉線條，歇一下。</p></div><span aria-hidden="true">↗</span></a>
+  </div>
+</PortfolioLayout>
+<style>
+  .now-page{max-width:1200px;padding:64px 40px 90px;margin:auto}
+  .now-heading{padding-bottom:55px;border-bottom:1px solid var(--line)}
+  h1{font-size:clamp(48px,7vw,90px);line-height:1.15;font-weight:400;letter-spacing:-.045em;margin:25px 0}
+  h1 span{color:var(--accent)}p{line-height:1.9;color:var(--muted);font-size:15px}
+  time{font-size:11px;color:var(--muted)}
+  .now-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:50px;padding:50px 0}
+  .now-work{max-width:680px}
+  .now-music{display:grid;grid-template-columns:minmax(220px,.75fr) minmax(0,1.25fr);gap:50px;align-items:center;border-top:1px solid var(--line);padding-top:50px}
+  .music-player{min-width:0;max-width:640px;width:100%;justify-self:end}
+  .music-caption{display:block;margin-top:36px;font-size:11px;color:var(--muted);letter-spacing:.03em}
+  h2{font-size:clamp(23px,3vw,32px);font-weight:400;line-height:1.6;margin:20px 0}
+  .now-work .text-link{display:inline-block;margin-top:22px;font-size:14px}
+  .playlist-empty{display:flex;gap:24px;align-items:center;border:1px solid var(--line);background:var(--panel);padding:28px;margin-top:30px;min-height:150px}
+  .playlist-empty>span{font-size:40px;color:var(--accent)}.playlist-empty small{font-size:12px}
+  .now-pause{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:35px 0;display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .now-pause>span{font-size:40px;color:var(--accent)}.now-pause h2{margin:12px 0}.now-pause p{margin-bottom:0}
+  @media(max-width:800px){.now-page{padding:40px 24px 60px}.now-grid{gap:40px}.now-music{grid-template-columns:minmax(0,1fr);gap:24px;padding-top:40px}.music-player{justify-self:start;max-width:none}.music-caption{margin-top:16px}}
+</style>

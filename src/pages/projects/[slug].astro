@@ -1,6 +1,8 @@
 ---
 import PortfolioLayout from "../../layouts/PortfolioLayout.astro";
 import { projects } from "../../data/projects";
+import { projectFlows } from "../../data/project-flows";
+import ProjectFlow from "../../components/portfolio/ProjectFlow.astro";
 export function getStaticPaths() {
   return projects.map((project) => ({
     params: { slug: project.slug },
@@ -50,9 +52,9 @@ const jsonLd = {
           做了哪些事
         </h2><ul>{project.build.map((text) => <li>{text}</li>)}</ul><h2>
           資料怎麼走
-        </h2><ol class="flow-list">
+        </h2>{projectFlows[project.slug] ? <ProjectFlow nodes={projectFlows[project.slug]} slug={project.slug} /> : <ol class="flow-list">
           {project.flow.map((step) => <li>{step}</li>)}
-        </ol>
+        </ol>}
       </section><aside>
         <span class="micro">CURRENT STATE</span><h2>{project.status}</h2><p>
           閱讀作品時，也一起看目前的範圍。

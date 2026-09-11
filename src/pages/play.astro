@@ -1,0 +1,27 @@
+---
+import PortfolioLayout from "../layouts/PortfolioLayout.astro";
+import WireArt from "../components/portfolio/WireArt.astro";
+---
+<PortfolioLayout title="歇一下 — KJyang" description="一點線條，一點呼吸。拖曳幾何線稿、切換形態，停留一下。">
+  <section class="play-page">
+    <header><div><p class="micro">A SMALL PAUSE</p><h1>不用趕。<br />在這裡，歇一下。</h1></div><p>拖曳看看。放開，它會慢慢回穩。<br />也可以按暫停，留住喜歡的角度。</p></header>
+    <WireArt interactive label="TAKE YOUR TIME" />
+    <footer><span>鍵盤：方向鍵旋轉 · Home 回正</span><a class="text-link" href="/">回到首頁 ↗</a></footer>
+  </section>
+</PortfolioLayout>
+<style is:global>
+  .play-page{max-width:1040px;margin:auto;padding:48px 24px 70px}
+  .play-page header{display:flex;justify-content:space-between;gap:32px;align-items:end;margin-bottom:28px}
+  .play-page h1{font-size:clamp(30px,4vw,50px);font-weight:400;letter-spacing:-.04em;line-height:1.4;margin:14px 0 0}
+  .play-page header>p,.play-page footer{font-size:13px;color:var(--muted);line-height:1.9}
+  .play-page .wire-art{width:100%;height:min(58vh,560px);aspect-ratio:auto;touch-action:none;cursor:grab}
+  .play-page .dragging .wire-art{cursor:grabbing}
+  .play-page .art{max-width:760px;margin:auto}
+  .play-page .art-label{display:flex;justify-content:space-between;gap:12px;padding:12px 0}
+  .art-controls{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;margin:20px 0}
+  .art-controls>div{display:flex;flex-wrap:wrap;gap:8px}
+  .art-controls button{background:transparent;color:var(--ink);font:inherit;font-size:13px;padding:10px 14px;cursor:pointer;border:1px solid var(--line)}
+  .art-controls button[aria-pressed="true"]{background:var(--panel);border-color:var(--accent);color:var(--accent)}
+  .play-page footer{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;margin-top:25px}
+  @media(max-width:600px){.play-page header{display:block}.play-page header>p{margin-top:20px}.play-page .wire-art{height:45vh;min-height:250px}}
+</style>

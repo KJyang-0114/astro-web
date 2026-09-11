@@ -17,6 +17,8 @@ const routes = [
   "/",
   "/about",
   "/resume",
+  "/now",
+  "/play",
   "/projects",
   "/ai",
   "/contact",
@@ -73,6 +75,20 @@ for (const route of routes) {
     JSON.parse(json);
 }
 const home = readFileSync(fileFor("/"), "utf8");
+const now = readFileSync(fileFor("/now"), "utf8");
+assert.ok(now.includes("https://open.spotify.com/embed/playlist/6LGXc0Cq1rXXgqUaPcxgxg"));
+assert.ok(now.includes("Daily"));
+assert.ok(now.includes('height="352"'));
+assert.doesNotMatch(now, /歌單整理中|user-read-currently-playing/);
+for (const slug of ["discord", "sift", "rl"]) {
+  const detail = readFileSync(fileFor(`/projects/${slug}`), "utf8");
+  assert.ok(detail.includes("data-project-flow"), `${slug}: interactive flow`);
+  assert.equal((detail.match(new RegExp(`name="flow-${slug}"`, "g")) || []).length, 5);
+  assert.ok(detail.includes("需要留意"));
+}
+const play = readFileSync(fileFor("/play"), "utf8");
+for (const shape of ["ribbon", "orbit", "wave"]) assert.ok(play.includes(`data-art-shape="${shape}"`));
+assert.ok(play.includes('data-interactive="true"'));
 assert.ok(home.includes("AI 讓我開始做；錯誤讓我學會驗證；"));
 assert.match(home, /class="hero-role">Software Engineer<\/p>/);
 assert.ok(
