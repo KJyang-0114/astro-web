@@ -17,6 +17,7 @@ const routes = [
   "/",
   "/about",
   "/resume",
+  "/en/resume",
   "/now",
   "/play",
   "/projects",
@@ -46,7 +47,7 @@ for (const route of routes) {
     1,
     `${route}: single main`,
   );
-  assert.match(html, /<html[^>]*lang="zh-Hant"/, `${route}: language`);
+  assert.match(html, route === "/en/resume" ? /<html[^>]*lang="en"/ : /<html[^>]*lang="zh-Hant"/, `${route}: language`);
   assert.match(
     html,
     /name="description" content="[^"]+"/,
@@ -136,9 +137,11 @@ for (const text of [
   "2025/9",
   "正式任職",
   "Fully Remote",
-  "Open to Remote / Contract / Part-time",
-  "Primary",
-  "Experience With",
+  "Open to Remote Opportunities",
+  "以遠端為必要條件",
+  "目前在學",
+  "PostgreSQL",
+  "React",
   "2026 年初",
   "NDA",
   "Sift",
@@ -171,3 +174,19 @@ assert.doesNotMatch(resume, /2025\.09 \/ 2025\.10/);
 console.log(
   "PASS: resume sections, supplied experience dates, contact details, and sitemap.",
 );
+
+const englishResume = readFileSync(fileFor("/en/resume"), "utf8");
+for (const [path, html] of [["/resume", resume], ["/en/resume", englishResume]]) {
+  assert.ok(html.includes(`rel="canonical" href="https://kjyang0114.dev${path}"`));
+  for (const language of ["zh-Hant", "en", "x-default"])
+    assert.ok(html.includes(`hreflang="${language}"`));
+  assert.ok(html.includes('href="/resume?lang=zh-Hant"'));
+  assert.ok(html.includes('href="/en/resume?lang=en"'));
+  for (const section of ["experience", "selected-projects", "open-source", "skills", "approach", "remote", "availability", "education", "links"])
+    assert.ok(html.includes(`id="${section}"`));
+  assert.doesNotMatch(html, /scratch-v222|aippt|helloai|light-point-plan|Full-time|full-time/);
+}
+for (const text of ["Sep 2025", "Early 2026", "NDA", "Currently enrolled", "Remote work required", "dozens of students", "Mac mini", "Print / Save PDF", "Expected Graduation: 2027"])
+  assert.ok(englishResume.includes(text), `English resume retains ${text}`);
+assert.ok(sitemap.includes("/en/resume"));
+console.log("PASS: bilingual resume content, canonical URLs, language links, and confidentiality exclusions.");

@@ -19,7 +19,11 @@ const items = studio
         ["聯絡", "/studio/contact"],
         ["EN", "/studio/en"],
       ]
-  : [
+  : english ? [
+      ["Home", "/"], ["Projects", "/projects"], ["About", "/about"],
+      ["Resume", "/en/resume"], ["Now", "/now"], ["AI Notes", "/ai"],
+      ["Studio ↗", "/studio"], ["Contact", "/contact"],
+    ] : [
       ["首頁", "/"],
       ["作品", "/projects"],
       ["關於", "/about"],
@@ -41,7 +45,7 @@ const active = (href: string) =>
   <a
     class="site-brand"
     href={studio ? (english ? "/studio/en" : "/studio") : "/"}
-    aria-label={studio ? "KJyang Studio" : "KJyang 首頁"}
+    aria-label={studio ? "KJyang Studio" : english ? "KJyang home" : "KJyang 首頁"}
     >KJyang<i>.</i>{studio && <small>STUDIO</small>}</a
   >
   <nav

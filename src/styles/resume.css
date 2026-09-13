@@ -15,6 +15,22 @@
   color: var(--muted);
   margin: 0 0 20px;
 }
+.resume-topline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-bottom: 24px;
+}
+.resume-topline .resume-eyebrow { margin: 0; }
+.resume-languages { display: flex; gap: 18px; font-size: 13px; }
+.resume-languages a { padding: 8px 0; color: var(--muted); }
+.resume-languages a[aria-current="page"] { color: var(--ink); border-bottom: 1px solid var(--accent); }
+.resume a:focus-visible, .resume button:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+html[lang="en"] .resume-intro { line-height: 1.8; }
+html[lang="en"] .resume-content { line-height: 1.75; }
+html[lang="en"] .resume-index a { line-height: 1.5; }
 .resume-availability {
   color: var(--accent);
   font-size: 14px;
@@ -285,6 +301,7 @@
   .skip-link,
   .resume-index,
   .resume-actions,
+  .resume-languages,
   #print-resume {
     display: none !important;
   }
