@@ -8,13 +8,15 @@ interface Props {
   description: string;
   jsonLd?: object;
   noindex?: boolean;
+  lang?: "zh-Hant" | "en";
+  resumeLanguages?: boolean;
 }
-const { title, description, jsonLd, noindex = false } = Astro.props;
-const canonical = new URL(Astro.url.pathname, "https://kjyang0114.dev").href;
+const { title, description, jsonLd, noindex = false, lang = "zh-Hant", resumeLanguages = false } = Astro.props;
+const canonical = new URL(resumeLanguages ? Astro.url.pathname.replace(/\/$/, "") : Astro.url.pathname, "https://kjyang0114.dev").href;
 ---
 
 <!doctype html>
-<html lang="zh-Hant">
+<html lang={lang}>
   <head
     ><meta charset="utf-8" /><meta
       name="viewport"
@@ -27,7 +29,7 @@ const canonical = new URL(Astro.url.pathname, "https://kjyang0114.dev").href;
     /><link rel="icon" href="/favicon-portfolio.svg" type="image/svg+xml" /><meta
       property="og:type"
       content="website"
-    /><meta property="og:locale" content="zh_TW" /><meta
+    /><meta property="og:locale" content={lang === "en" ? "en_US" : "zh_TW"} /><meta
       property="og:site_name"
       content="KJyang"
     /><meta property="og:title" content={title} /><meta
@@ -49,11 +51,18 @@ const canonical = new URL(Astro.url.pathname, "https://kjyang0114.dev").href;
           set:html={JSON.stringify(jsonLd).replace(/</g, "\\u003c")}
         />
       )
-    }</head
+    }
+    {resumeLanguages && <>
+      <link rel="alternate" hreflang="zh-Hant" href="https://kjyang0114.dev/resume" />
+      <link rel="alternate" hreflang="en" href="https://kjyang0114.dev/en/resume" />
+      <link rel="alternate" hreflang="x-default" href="https://kjyang0114.dev/resume" />
+    </>}
+    <slot name="head" />
+    </head
   ><body class="portfolio" id="top"
-    ><a class="skip-link" href="#main">跳到內容</a><Navigation /><main
+    ><a class="skip-link" href="#main">{lang === "en" ? "Skip to content" : "跳到內容"}</a><Navigation english={lang === "en"} /><main
       id="main"
     >
       <slot />
-    </main><Footer /></body>
+    </main><Footer english={lang === "en"} /></body>
 </html>

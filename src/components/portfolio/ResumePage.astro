@@ -1,0 +1,91 @@
+---
+import PortfolioLayout from "../../layouts/PortfolioLayout.astro";
+import { resumeCopy, type ResumeLanguage } from "../../data/resume";
+import languageScript from "../../scripts/resume-language.js?raw";
+import "../../styles/resume.css";
+interface Props { lang: ResumeLanguage }
+const { lang } = Astro.props;
+const c = resumeCopy[lang];
+const ids = ["experience", "selected-projects", "open-source", "skills", "approach", "remote", "availability", "education", "links"];
+const labels = ["PROFESSIONAL EXPERIENCE", "SELECTED PROJECTS", "OPEN SOURCE", "TECHNICAL SKILLS", "ENGINEERING APPROACH", "REMOTE WORK", "AVAILABILITY", "EDUCATION", "LINKS"];
+const eyebrow = (i: number) => `${String(i + 1).padStart(2, "0")} / ${labels[i]}`;
+const links = [
+  ["GitHub", "https://github.com/KJyang-0114", "github.com/KJyang-0114"],
+  ["Portfolio", "https://kjyang0114.dev", "kjyang0114.dev"],
+  ["Email", "mailto:hi@kjyang0114.dev", "hi@kjyang0114.dev"],
+  ["LinkedIn", "https://www.linkedin.com/in/kjyang0114/", "linkedin.com/in/kjyang0114"],
+];
+---
+<PortfolioLayout title={c.title} description={c.description} lang={lang} resumeLanguages>
+  <script slot="head" is:inline set:html={languageScript} />
+  <article class="resume">
+    <header class="resume-hero">
+      <div class="resume-topline">
+        <p class="resume-eyebrow">KJYANG / CURRICULUM VITAE</p>
+        <nav class="resume-languages" aria-label={c.language}>
+          <a href="/resume?lang=zh-Hant" lang="zh-Hant" hreflang="zh-Hant" aria-current={lang === "zh-Hant" ? "page" : undefined}>繁體中文</a>
+          <a href="/en/resume?lang=en" lang="en" hreflang="en" aria-current={lang === "en" ? "page" : undefined}>English</a>
+        </nav>
+      </div>
+      <p class="resume-availability">Open to Remote Opportunities</p>
+      <h1>KJyang <span>Software Engineer.</span></h1>
+      <p class="resume-disciplines">Full-stack · Backend · AI Integration</p>
+      <p class="resume-intro">{c.intro}</p>
+      <div class="resume-status"><span class="resume-dot" aria-hidden="true"></span>{c.available}<span>／ Taiwan, UTC+8</span></div>
+      <p class="resume-open">{c.open}</p>
+      <div class="resume-actions"><a href="mailto:hi@kjyang0114.dev">hi@kjyang0114.dev ↗</a><button type="button" id="print-resume">{c.print}</button></div>
+      <noscript><p>{c.noScript}</p></noscript>
+    </header>
+    <div class="resume-layout">
+      <nav class="resume-index" aria-label={c.index}><span>{c.index}</span>{ids.map((id, i) => <a href={`#${id}`}><small>{String(i + 1).padStart(2, "0")}</small>{c.headings[i]}</a>)}</nav>
+      <div class="resume-content">
+        <section id="experience">
+          <p class="resume-eyebrow">{eyebrow(0)}</p><h2>{c.headings[0]}</h2>
+          <div class="resume-entry"><h3>Software Developer</h3><p class="resume-company" lang="zh-Hant">雲書苑教育科技有限公司</p>
+            <p class="resume-meta">{c.employment} · <time datetime="2025-09">{lang === "en" ? "Sep 2025" : "2025/9"}</time> — {c.dates}</p>
+            <p>{c.role}</p><ul>{c.experience.map(item => <li>{item}</li>)}</ul><blockquote>{c.nda}</blockquote>
+          </div>
+        </section>
+        <section id="selected-projects">
+          <p class="resume-eyebrow">{eyebrow(1)}</p><h2>{c.headings[1]}</h2>
+          {c.projects.map(project => <div class="resume-entry">
+            <h3><a href={project.href}>{project.name} <span aria-hidden="true">↗</span></a></h3>
+            <p class="resume-meta">{project.category}</p><p>{project.description}</p>
+            <ul>{project.points.map(item => <li>{item}</li>)}</ul>
+            <p class="resume-tech"><strong>{c.tech}</strong><br />{project.tech}</p>
+          </div>)}
+        </section>
+        <section id="open-source">
+          <p class="resume-eyebrow">{eyebrow(2)}</p><h2>{c.headings[2]}</h2>
+          {["lodash", "highlight.js", "Aegis"].map((name, i) => <div class="resume-entry"><h3>{name}</h3><p>{c.openSource[i]}</p></div>)}
+        </section>
+        <section id="skills">
+          <p class="resume-eyebrow">{eyebrow(3)}</p><h2>{c.headings[3]}</h2>
+          <div class="resume-skills">{c.skills.map(group => <div><h3>{group.name}</h3><ul>{group.items.map(item => <li>{item}</li>)}</ul></div>)}</div>
+        </section>
+        <section id="approach">
+          <p class="resume-eyebrow">{eyebrow(4)}</p><h2>{c.headings[4]}</h2><p>{c.approach}</p>
+          <ol class="resume-workflow">{c.workflow.map(item => <li>{item}</li>)}</ol>
+        </section>
+        <section id="remote"><p class="resume-eyebrow">{eyebrow(5)}</p><h2>{c.headings[5]}</h2><p>{c.remote}</p></section>
+        <section id="availability">
+          <p class="resume-eyebrow">{eyebrow(6)}</p><h2>{c.headings[6]}</h2><p>{c.availability}</p>
+          <div class="resume-pair"><div><h3>{c.formatsTitle}</h3><ul>{c.formats.map(item => <li>{item}</li>)}</ul></div>
+            <div><h3>{c.interestsTitle}</h3><ul>{c.interests.map(item => <li>{item}</li>)}</ul></div></div>
+        </section>
+        <section id="education"><p class="resume-eyebrow">{eyebrow(7)}</p><h2>{c.headings[7]}</h2>
+          <h3 lang="zh-Hant">{c.education}</h3><p>{c.educationNote}</p><p class="resume-meta">Expected Graduation: 2027</p>
+        </section>
+        <section id="links"><p class="resume-eyebrow">{eyebrow(8)}</p><h2>{c.headings[8]}</h2>
+          <dl class="resume-links">{links.map(([label, href, text]) => <div><dt>{label}</dt><dd><a href={href}>{text} ↗</a></dd></div>)}</dl>
+        </section>
+      </div>
+    </div>
+  </article>
+</PortfolioLayout>
+<script>
+  document.querySelector("#print-resume")?.addEventListener("click", () => window.print());
+  document.querySelectorAll<HTMLAnchorElement>(".resume-languages a").forEach(link => {
+    link.addEventListener("click", () => { link.hash = window.location.hash; });
+  });
+</script>
