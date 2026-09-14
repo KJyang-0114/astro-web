@@ -60,8 +60,8 @@ export const demos: Demo[] = [
     address: "台北市松山區八德路四段 312 號",
     hours: "週一至週六 09:00-20:00",
     mapLabel: "查看服務範圍",
-    heroImage: "/demo-assets/ac-hero.png",
-    supportImage: "/demo-assets/ac-hero.png",
+    heroImage: "/studio-assets/ac-living.webp",
+    supportImage: "/studio-assets/ac-living.webp",
     trust: ["到府前先確認費用區間", "支援大金、日立、國際、三菱", "安裝後保固條件寫清楚"],
     services: [
       { title: "分離式冷氣安裝", text: "評估室內外機位置、排水、銅管與電源，減少後續漏水與噪音問題。" },
@@ -114,8 +114,8 @@ export const demos: Demo[] = [
     address: "台中市西區公益路 128 號 2 樓",
     hours: "週一至週六 10:00-21:00",
     mapLabel: "Google 地圖導航",
-    heroImage: "/demo-assets/dental-hero.png",
-    supportImage: "/demo-assets/dental-hero.png",
+    heroImage: "/studio-assets/clinic-daylight.webp",
+    supportImage: "/studio-assets/clinic-daylight.webp",
     trust: ["初診先檢查與說明", "清楚列出治療選項", "預約制降低候診時間"],
     services: [
       { title: "一般牙科", text: "洗牙、補牙、蛀牙檢查、牙周評估與日常口腔照護建議。" },

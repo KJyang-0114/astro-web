@@ -2,6 +2,7 @@
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 import { absoluteStudioUrl } from "@data/seo";
+import { getDemo } from "@data/demos";
 import { workCases } from "@data/work";
 
 const schema = [
@@ -35,14 +36,14 @@ const schema = [
       <div class="wrap work-hero-grid">
         <div>
           <span>Selected Work</span>
-          <h1>不是放幾張圖，是把網站怎麼成交講清楚</h1>
+          <h1>不同生意，各有自己的樣子。</h1>
           <p>
-            這裡整理四個 demo 的設計思考。每個 case 都會說明產業問題、第一屏、CTA、手機版、FAQ 和 SEO/GEO 基礎。
+            四個虛構品牌，四種設計探索。可以先看完整網站，再讀每個畫面背後的安排；這些不是實際客戶或成效案例。
           </p>
         </div>
         <div class="work-hero-panel">
           <b>CASE STUDY SYSTEM</b>
-          <p>Demo 負責展示畫面，case study 負責展示判斷。客戶看到的不只是漂亮，而是知道每個區塊為什麼存在。</p>
+          <p>從品牌的語氣，到訪客的下一步。把美感與使用方式放在一起思考。</p>
         </div>
       </div>
     </section>
@@ -51,7 +52,7 @@ const schema = [
       <div class="wrap work-case-grid">
         {workCases.map((work, index) => (
           <a class:list={["work-case-card", `work-case-${work.slug}`]} href={`/studio/work/${work.slug}`}>
-            <div>
+            <img class="work-cover" src={getDemo(work.demoSlug).heroImage} alt={`${work.industry}概念素材`} width="1200" height="800" loading="lazy" /><div>
               <span>{String(index + 1).padStart(2, "0")} / {work.industry}</span>
               <h2>{work.title}</h2>
               <p>{work.description}</p>

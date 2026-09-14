@@ -1,0 +1,28 @@
+---
+import SiteShell from "../SiteShell.astro";
+import { getDemo, type DemoSlug } from "../../data/demos";
+const { slug } = Astro.props as { slug: DemoSlug };
+const demo = getDemo(slug);
+const designs = {
+  'interior-design': {label:'YAN XU / INTERIOR',title:'日常，自有風景。',intro:'一道光、一種材質。從生活的習慣開始，慢慢靠近喜歡的空間。',image:'/demo-assets/interior-hero.png',services:'生活的樣子，從這裡展開。',step:'從想像，到日常。',cta:'聊聊你的空間',name:'岩序室內設計'},
+  'dental-clinic': {label:'QINGHE / DENTAL',title:'好好說明，\n安心看牙。',intro:'從第一次諮詢開始，讓每一步照顧都清楚。先認識環境與初診流程，帶著問題來，也帶著理解離開。',image:'/studio-assets/clinic-daylight.webp',services:'為不同的需要，安排照顧。',step:'第一次來，不用匆忙。',cta:'了解初診流程',name:'晴禾牙醫診所'},
+  'ac-service': {label:'ANFENG / AIR & LIVING',title:'家的舒適，\n從細節開始。',intro:'安裝前看懂空間，完工後照顧日常。從冷氣安裝、清洗到維修，先確認現場，再安排適合的服務。',image:'/studio-assets/ac-living.webp',services:'一台冷氣，不同階段的照顧。',step:'先看清楚，再動手。',cta:'整理我的需求',name:'安峰冷氣工程'},
+  'tutoring-center': {label:'LEARNING / EVERY DAY',title:'把不懂的，\n慢慢學會。',intro:'看見每個問題背後的思考。從學習狀況與目標開始，找到適合自己的節奏。',image:'/demo-assets/tutor-hero.png',services:'找到適合現在的起點。',step:'從認識你開始。',cta:'認識課程安排',name:demo.businessName},
+};
+const d=designs[slug];
+---
+<SiteShell title={`${d.name}｜網站設計概念 — KJyang Studio`} description={`${d.name}的完整網站設計概念，展示服務、流程與聯絡體驗。此為虛構品牌，不接受實際預約。`} canonicalPath={`/studio/demo/${slug}`} noindex>
+<main class:list={['concept-site',`concept-${slug}`]}>
+<aside class="concept-notice"><a href="/studio/work">← 回到 Studio</a><span>虛構品牌 · 圖片為概念素材 · 不接受實際預約</span><a href="/studio/contact">委託類似設計 ↗</a></aside>
+<nav class="concept-nav" aria-label="範例網站導覽"><a href="#concept-top">{d.name}<small>{d.label}</small></a><div><a href="#services">服務內容</a><a href="#journey">流程</a><a href="#questions">常見問題</a><a href="#inquiry">{slug==='dental-clinic'?'初診指引':'需求整理'} ↗</a></div></nav>
+<section class="concept-hero" id="concept-top"><div class="concept-copy"><span>{d.label}</span><h1>{d.title}</h1><p>{d.intro}</p><a class="concept-button" href={slug==='dental-clinic'?'#journey':'#inquiry'}>{d.cta} <span>↗</span></a></div><figure><img src={d.image} alt={`${d.name}概念空間，非實際店家照片`} width="1536" height="1024" fetchpriority="high"/><figcaption>01 / {slug==='interior-design'?'SPACES FOR LIVING':'A LITTLE MORE AT EASE'}</figcaption></figure><div class="concept-hero-foot"><span>{demo.industry}</span><span>每一步，都值得好好對待。</span></div></section>
+<section class="concept-section" id="services"><header><span>01 / SERVICES</span><h2>{d.services}</h2></header><div class="concept-services">{demo.services.map((item,i)=><article><span class="concept-number">0{i+1}</span><h3>{item.title}</h3><p>{item.text}</p><a href="#inquiry">了解與整理需求 ↗</a></article>)}</div></section>
+<section class="concept-section concept-journey" id="journey"><header><span>02 / THE PROCESS</span><h2>{d.step}</h2><p>{slug==='dental-clinic'?'可先整理希望了解的項目，再由真實診所確認適合的時間與安排。':'先釐清想改善的地方、現有條件與時間，再確認範圍與下一步。'}</p></header><ol>{demo.process.map((item,i)=><li><span>0{i+1}</span><div><h3>{item.title}</h3><p>{item.text}</p></div></li>)}</ol></section>
+<section class="concept-section" id="questions"><header><span>03 / BEFORE WE BEGIN</span><h2>你可能想先知道。</h2></header><div class="concept-questions">{demo.faq.map(item=><details><summary>{item.title}<span aria-hidden="true">＋</span></summary><p>{item.text}</p></details>)}</div></section>
+<section class="concept-section concept-inquiry" id="inquiry"><header><span>04 / YOUR NEXT STEP</span><h2>從一個問題開始。</h2><p>體驗需求整理流程。這是網站功能示範，資料不會傳送，也不會成立預約。</p></header><form data-concept-form><label>想了解的項目<select name="service">{demo.services.map(item=><option>{item.title}</option>)}</select></label><label>希望先了解什麼？<textarea name="question" rows="3" maxlength="800" placeholder="例如：需要準備什麼資料？" required></textarea></label><button class="concept-button" type="submit">預覽需求摘要 ↗</button><output aria-live="polite"></output></form></section>
+<div class="concept-end"><span>{d.name} / DESIGN CONCEPT</span><a href="/studio/contact">喜歡這個方向？聊聊你的網站 ↗</a></div>
+</main>
+<script>
+document.querySelectorAll<HTMLFormElement>('[data-concept-form]').forEach(form=>{form.addEventListener('submit',event=>{event.preventDefault();const data=new FormData(form);const output=form.querySelector('output');if(output){output.textContent=`項目：${data.get('service')}\n問題：${data.get('question')}\n\n示範完成。沒有送出資料或成立預約。`;}});});
+</script>
+</SiteShell>

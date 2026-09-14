@@ -1,24 +1,22 @@
 ---
+import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 import { maintenancePlans, studioPlans } from "@data/studio";
 ---
 
 <SiteShell title="Pricing | KJyang Studio" description="Website build and care price ranges for KJyang Studio." canonicalPath="/studio/en/pricing" lang="en">
   <main class="studio-en-v2 en-subpage">
-    <nav class="en-v2-nav">
-      <a class="en-v2-brand" href="/studio/en"><img src="/brand/kjyang-mark.svg" alt="" /><span>KJyang Studio</span></a>
-      <div class="en-v2-links"><a href="/studio/en/services">Services</a><a href="/studio/en/pricing">Pricing</a><a href="/studio/en/contact">Contact</a><a href="/studio">中文</a></div>
-    </nav>
+    <StudioNav />
     <section class="en-v2-hero en-page-hero">
       <div class="en-v2-wrap en-v2-hero-grid">
         <div class="en-v2-copy">
           <span class="en-v2-kicker">CLEAR STARTING RANGE</span>
-          <h1>Price ranges before scope gets messy.</h1>
+          <h1>A clear starting point for your budget.</h1>
           <p>Final quotes depend on content, page count, design depth, functionality, deployment needs, and maintenance scope.</p>
         </div>
         <div class="en-price-stack">
-          {studioPlans.map((plan) => <article><b>{plan.title}</b><strong>{plan.price}</strong><p>{plan.text}</p></article>)}
-          {maintenancePlans.slice(0, 1).map(([title, price, text]) => <article><b>{title}</b><strong>{price}</strong><p>{text}</p></article>)}
+          {studioPlans.map((plan, i) => <article><b>{plan.title}</b><strong>{plan.price}</strong><p>{["One page for a focused service, with clear content, contact links and launch setup.", "A multi-page website for services, work, an introduction and contact information.", "Booking, accounts, payments or integrations are scoped and quoted separately."][i]}</p></article>)}
+          {maintenancePlans.slice(0, 1).map(([title, price, text]) => <article><b>{title}</b><strong>{price}</strong><p>{"Hosting, SSL, backups, basic monitoring and minor content updates. Scope agreed before work begins."}</p></article>)}
         </div>
       </div>
     </section>

@@ -9,7 +9,8 @@
     "preview": "astro preview --host 0.0.0.0 --port 3000",
     "astro": "astro",
     "verify:site": "npm run build && node scripts/verify-site.mjs && node scripts/verify-resume-language.mjs && node scripts/verify-discovery.mjs",
-    "verify:motion": "node scripts/verify-wire-art.mjs"
+    "verify:motion": "node scripts/verify-wire-art.mjs",
+    "verify:studio": "npm run build && node scripts/verify-studio.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",

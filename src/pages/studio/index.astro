@@ -1,225 +1,39 @@
 ---
-import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
-import { demos } from "@data/demos";
-import { studioGuides } from "@data/guides";
-import { insightPosts } from "@data/insights";
+import StudioNav from "@components/StudioNav.astro";
 import { buildStudioSchemas } from "@data/seo";
-import { maintenancePlans, studioContact, studioPlans, studioProcess, studioServices } from "@data/studio";
-
-const proof = [
-  ["設計", "不是套模板，會依冷氣、牙醫、補習、室內設計等行業調整資訊架構。"],
-  ["代碼", "使用現代前端架構製作快速、安全、穩定、可部署的網站。"],
-  ["部署", "協助主機、DNS、SSL、備份和監控，網站不是丟檔案就結束。"]
-];
-
-const comparison = [
-  ["AI 初稿", "適合快速發想畫面和文案方向，但常缺少真實內容整理、手機 CTA、部署和維護責任。"],
-  ["模板網站", "適合預算很低或臨時頁面，但多數行業資訊架構會長得太像，難呈現服務差異。"],
-  ["KJyang Studio", "依行業重新安排首屏、服務、流程、FAQ、LINE 入口、前端代碼和部署上線。"]
-];
+import { studioPlans } from "@data/studio";
 ---
+<SiteShell title="小商家網站設計與製作｜一頁式、品牌網站 — KJyang Studio" description="為小商家與工作室整理內容、設計品牌網站，從手機版面、聯絡入口到部署與維護。查看完整設計範例、費用與合作流程。" canonicalPath="/studio" schema={buildStudioSchemas().filter(entry => entry["@type"] !== "FAQPage")} alternates={[{hrefLang:"zh-Hant",href:"/studio"},{hrefLang:"en",href:"/studio/en"},{hrefLang:"x-default",href:"/studio"}]}>
+<StudioNav /><main class="atelier-home">
 
-<SiteShell
-  title="小商家網站設計與製作｜一頁式、品牌網站 — KJyang Studio"
-  description="為小商家整理服務內容、設計一頁式或多頁品牌網站，加入 LINE 與表單聯絡入口，協助部署上線與後續維護。查看設計範例、製作費用與合作流程。"
-  canonicalPath="/studio"
-  schema={buildStudioSchemas()}
-  alternates={[
-    { hrefLang: "zh-Hant", href: "/studio" },
-    { hrefLang: "en", href: "/studio/en" },
-    { hrefLang: "x-default", href: "/studio" }
-  ]}
->
-  <main class="studio-index">
-    <StudioNav />
-
-    <section class="studio-index-hero">
-      <div class="wrap studio-index-grid">
-        <div class="studio-index-copy">
-          <img class="studio-wordmark" src="/brand/kjyang-logo.svg" alt="KJyang Studio" />
-          <span>WEBSITE DESIGN / CODE / DEPLOY</span>
-          <h1>幫小商家做一個能拿詢問的網站</h1>
-          <p>
-            從服務介紹、手機版面到 LINE 與表單入口，協助整理內容、設計製作與部署上線。適合需要一頁式網站或多頁品牌網站的小商家。
-          </p>
-          <div class="action-row">
-            <a class="btn studio-index-primary" href="/studio/contact">預約諮詢</a>
-            <a class="btn studio-index-secondary" href="/studio/demo">看 Demo</a>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="introduction">
+        <div class="kicker"><span class="short-rule"></span>網站設計與開發 <span class="kicker-en">/ INDEPENDENT STUDIO</span></div>
+        <h1 id="hero-title"><span>讓品牌，</span><span class="indent">有自己的</span><span>樣子<span class="full-stop">。</span></span></h1>
+        <div class="intro-note"><span class="note-index">01 —</span><p>好看的第一眼，清楚的每一步。<br>把你的特色，做成真正好用的網站。</p></div>
+        <a class="explore" href="#work">看設計，也看細節 <span aria-hidden="true">↗</span></a>
+        <div class="signature"><svg viewBox="0 0 70 40" aria-hidden="true"><path d="M4 26C11 5 25 1 28 10S17 38 15 31 38 4 41 9 25 34 34 30 53 2 59 9 43 32 66 19"/></svg><span>由想法，到上線。<br>每一步，都好好對待。</span></div>
+      </div>
+      <div class="gallery" id="work" tabindex="-1" aria-label="概念網站展示">
+        <div class="gallery-heading"><span>SELECTED DIRECTIONS</span><span class="gallery-tag">設計探索 / 2026</span></div>
+        <div class="artboard" data-project="interior">
+          <span class="edge-label" aria-hidden="true">FORM / FUNCTION / FEELING</span>
+          <div class="website">
+            <div class="website-nav"><span id="sample-brand">岩序<span class="sample-english">YAN XU</span></span><span class="website-menu" id="sample-menu">作品　 關於　 聯絡 ↗</span></div>
+            <div class="website-image"><img id="sample-image" src="/demo-assets/interior-hero.png" alt="室內設計概念素材：住宅與材質" width="1600" height="900"><span class="image-index" aria-hidden="true">01</span><span id="sample-category">RESIDENTIAL / INTERIOR</span></div>
+            <div class="website-editorial"><div><span class="sample-eyebrow" id="sample-eyebrow">空間裡，留下生活。</span><h2 id="sample-title">日常，自有風景。</h2></div><p id="sample-copy">一道光、一種材質。<br>慢慢靠近，喜歡的生活。</p><span class="editorial-arrow" aria-hidden="true">↗</span></div>
+            <div class="website-bottom"><span id="sample-bottom">品牌網站概念</span><span id="sample-bottom-end">SCROLL TO EXPLORE ↓</span></div>
           </div>
+          <span class="crop-mark top" aria-hidden="true"></span><span class="crop-mark bottom" aria-hidden="true"></span>
         </div>
-        <div class="studio-orbit" aria-label="KJyang Studio core offer">
-          {proof.map(([title, text]) => (
-            <a href="/studio/services">
-              <b>{title}</b>
-              <span>{text}</span>
-            </a>
-          ))}
-          <a href="/studio/pricing">
-            <b>價格</b>
-            <span>查看網站製作與維護費用，依需求安排預算。</span>
-          </a>
-        </div>
+        <a id="concept-link" href="/studio/demo/interior-design" class="gallery-caption"><div><span class="caption-index" id="caption-index">01</span><h3 id="caption-title">岩序室內設計</h3><span class="concept">概念設計</span></div><span id="caption-type">空間 · 品牌形象</span></a>
+        <div class="gallery-bottom"><div class="project-tabs" role="group" aria-label="選擇概念作品"><button type="button" data-select="0" aria-pressed="true">01 <span>空間</span></button><button type="button" data-select="1" aria-pressed="false">02 <span>診所</span></button><button type="button" data-select="2" aria-pressed="false">03 <span>冷氣</span></button></div><span class="gallery-footnote">點作品名稱，探索完整網站 ↗</span></div>
+        <span class="sr-only" id="gallery-status" aria-live="polite" aria-atomic="true">第 1 件，共 3 件：岩序室內設計</span>
       </div>
     </section>
+    <section class="approach" id="approach"><div class="section-heading"><span>THE WAY WE WORK</span><span>設計與工程，都有照顧到。</span></div><div class="approach-grid"><h2>外在有美感，<br>裡面有安排。</h2><div class="approach-details"><p>從內容整理、視覺設計，到網站製作與上線。<br>先看懂你的需求，再找到適合的呈現。</p><ol><li><span>01</span><b>找出特色</b><small>釐清受眾與內容</small></li><li><span>02</span><b>形成樣子</b><small>版面、細節與互動</small></li><li><span>03</span><b>好好上線</b><small>製作、測試與後續照顧</small></li></ol></div></div></section>
 
-    <section class="studio-brandkit" aria-label="KJyang Studio brand system">
-      <div class="wrap studio-brandkit-grid">
-        <div class="brandkit-cover">
-          <img src="/brand/kjyang-cover.svg" alt="KJyang Studio 品牌封面" />
-        </div>
-        <div class="brandkit-copy">
-          <span>KJYANG STUDIO</span>
-          <h2>網站要看起來值得花錢，也要交付得出去</h2>
-          <p>
-            小商家不只需要漂亮首頁。需要手機 CTA、清楚服務內容、可上線的代碼、穩定主機和後續維護。
-          </p>
-          <div>
-            {studioServices.slice(0, 4).map((item) => (
-              <article>
-                <b>{item.title}</b>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="studio-compare-section" aria-label="AI、模板與 KJyang Studio 交付差異">
-      <div class="wrap studio-compare-head">
-        <span>NOT TEMPLATE WORK</span>
-        <h2>AI 可以做初稿，但正式網站要能被客戶使用</h2>
-        <p>
-          客戶不只是在買一張好看的首頁截圖，而是在買一個能被搜尋、能被理解、能聯絡、能上線和能維護的網站。
-        </p>
-      </div>
-      <div class="wrap studio-compare-grid">
-        {comparison.map(([title, text], index) => (
-          <article class={index === 2 ? "is-featured" : ""}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <h3>{title}</h3>
-            <p>{text}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <section class="studio-index-demos" id="demos">
-      <div class="wrap studio-showcase-head">
-        <span>DEMO LIBRARY</span>
-        <h2>四個 demo，讓客戶直接看設計能力</h2>
-      </div>
-      <div class="wrap studio-showcase-grid">
-        {demos.map((demo, index) => (
-          <a class:list={["studio-showcase-card", `showcase-${demo.theme}`]} href={`/studio/demo/${demo.slug}`}>
-            <img src={demo.heroImage} alt={`${demo.businessName}${demo.industry}網站展示`} loading={index === 0 ? "eager" : "lazy"} />
-            <div>
-              <span>{demo.serviceArea}</span>
-              <h3>{demo.businessName}</h3>
-              <p>{demo.headline}</p>
-              <b>{demo.primaryCta}</b>
-            </div>
-          </a>
-        ))}
-      </div>
-    </section>
-
-    <section class="studio-index-delivery" id="delivery">
-      <div class="wrap studio-delivery-grid">
-        <h2>價格先公開區間，合作前先確認適不適合</h2>
-        <div>
-          {studioPlans.map((plan, index) => (
-            <article>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <b>{plan.title}<br />{plan.price}</b>
-              <p>{plan.text}</p>
-            </article>
-          ))}
-          {maintenancePlans.slice(0, 1).map(([title, price, text]) => (
-            <article>
-              <span>04</span>
-              <b>{title}<br />{price}</b>
-              <p>{text}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="studio-card-section">
-      <div class="wrap studio-showcase-head">
-        <span>SEO / GEO CONTENT</span>
-        <h2>把客戶會問的問題，整理成搜尋和 AI 都看得懂的頁面</h2>
-      </div>
-      <div class="wrap studio-service-grid">
-        {studioGuides.map((guide, index) => (
-          <a class="studio-link-card" href={`/studio/${guide.slug}`}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <h2>{guide.title}</h2>
-            <p>{guide.summary}</p>
-          </a>
-        ))}
-      </div>
-    </section>
-
-    <section class="studio-insights-strip">
-      <div class="wrap studio-showcase-head">
-        <span>INSIGHTS</span>
-        <h2>長期更新網站設計、LINE 詢問和部署維護觀念</h2>
-      </div>
-      <div class="wrap insights-mini-grid">
-        {insightPosts.slice(0, 3).map((post) => (
-          <a class="insight-mini-card" href={`/studio/insights/${post.slug}`}>
-            <span>{post.category} / {post.date}</span>
-            <h3>{post.title}</h3>
-            <p>{post.summary}</p>
-          </a>
-        ))}
-        <a class="insight-mini-card insight-mini-all" href="/studio/insights">
-          <span>ALL POSTS</span>
-          <h3>看所有知識庫文章</h3>
-          <p>每天可新增一篇，慢慢累積可信任的內容基底。</p>
-        </a>
-      </div>
-    </section>
-
-    <section class="studio-lite-section">
-      <div class="wrap studio-lite-grid">
-        <div>
-          <h2>合作流程不複雜</h2>
-          <p>先看 demo，再聊需求和預算。適合才開始做，不適合就不硬賣。</p>
-        </div>
-        <div>
-          {studioProcess.slice(0, 3).map(([num, title, text]) => (
-            <article>
-              <span>{num}</span>
-              <b>{title}</b>
-              <p>{text}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="studio-final-cta">
-      <div class="wrap studio-final-grid">
-        <h2>想做網站，先用 LINE 或電話聊清楚</h2>
-        <div class="line-contact-card studio-real-contact">
-          <div class="line-qr" aria-label="KJyang Studio LINE QR code">
-            <img src={studioContact.lineQr} alt="KJyang Studio LINE QR code" loading="lazy" />
-          </div>
-          <div>
-            <b>LINE / PHONE</b>
-            <strong>{studioContact.lineId}</strong>
-            <p>電話：{studioContact.phone}。可用 LINE 傳需求、參考網站和預算。</p>
-          </div>
-        </div>
-        <div class="action-row">
-          <a class="btn studio-index-primary" href={studioContact.lineUrl}>LINE 聯絡</a>
-          <button class="btn studio-index-secondary fake-phone" type="button">電話</button>
-        </div>
-      </div>
-    </section>
-  </main>
-</SiteShell>
+<section class="approach"><div class="section-heading"><span>A PLACE TO START</span><span>依需求，選擇適合的規模。</span></div><div class="atelier-plans">{studioPlans.map((plan,i)=><a href="/studio/pricing"><span>0{i+1}</span><h2>{plan.nameZh}</h2><strong>{plan.price}</strong><p>{plan.text}</p><span>查看方案與交付範圍 ↗</span></a>)}</div></section>
+<section class="approach"><div class="approach-grid"><h2>先聊清楚，<br/>再開始設計。</h2><div class="approach-details"><p>帶著你的服務、參考網站或一個還沒成形的想法都可以。先一起整理受眾、內容與預算，再確認範圍與時程。</p><a class="explore" href="/studio/process">了解完整合作流程 ↗</a><a class="explore" href="/studio/contact">討論你的網站 ↗</a></div></div></section>
+</main><script>import "../../scripts/studio-gallery.js";</script></SiteShell>
