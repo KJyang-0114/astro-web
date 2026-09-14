@@ -39,9 +39,19 @@ export default defineConfig({
 
   integrations: [
     sitemap({
-      i18n: {
-        defaultLocale: 'zh-TW',
-        locales: { 'zh-TW': 'zh-TW' },
+      filter: (page) => {
+        const path = new URL(page).pathname;
+        return !/^\/studio\/(?:en\/)?demo(?:\/|$)/.test(path)
+          && !/\.(?:txt|xml|json|md)$/.test(path)
+          && !path.startsWith('/.well-known/');
+      },
+      serialize: (item) => {
+        const url = new URL(item.url);
+        if (url.pathname !== '/web-highlighter-pro/') {
+          url.pathname = url.pathname.replace(/\/$/, '') || '/';
+        }
+        item.url = url.href;
+        return item;
       },
     }),
   ],

@@ -4,6 +4,7 @@ import { studioGuides } from "@data/guides";
 import { insightPosts } from "@data/insights";
 import { servicePages, studioBeliefs, whyUsBlocks } from "@data/trust";
 import { workCases } from "@data/work";
+import { personalDiscovery } from "../data/personal-discovery";
 
 export function GET() {
   const services = studioServices.map((item) => `- ${item.title}: ${item.text}`).join("\n");
@@ -49,6 +50,8 @@ export function GET() {
 ## Site Summary
 
 kjyang0114.dev is KJyang's personal domain. Current public sections include the personal homepage, Web Highlighter Pro, and KJyang Studio.
+
+${personalDiscovery()}
 
 ## Web Highlighter Pro
 

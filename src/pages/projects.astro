@@ -2,6 +2,22 @@
 import PortfolioLayout from "../layouts/PortfolioLayout.astro";
 import WireArt from "../components/portfolio/WireArt.astro";
 import { projects } from "../data/projects";
+import { person } from "../data/person";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  url: "https://kjyang0114.dev/projects",
+  name: "KJyang / 楊凱捷的軟體開發作品",
+  author: { "@id": person["@id"], "@type": "Person", name: person.name },
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: projects.length,
+    itemListElement: projects.map((project, i) => ({
+      "@type": "ListItem", position: i + 1, name: project.title,
+      url: `https://kjyang0114.dev/projects/${project.slug}`,
+    })),
+  },
+};
 const groups = [
   { key: "type", label: "領域", values: ["AI", "Web", "工具"] },
   {
@@ -13,15 +29,16 @@ const groups = [
 ---
 
 <PortfolioLayout
-  title="作品集 — KJyang | Build · Verify · Deliver"
-  description="從同學使用的 Discord 解題 Bot，到 Sift、2048 RL 與跨裝置工具。閱讀 KJyang 的作品、實作方式、目前狀態與 GitHub 原始碼。"
+  title="軟體開發作品｜AI 應用、Web 與開源工具 — 楊凱捷 KJyang"
+  description="楊凱捷（KJyang）的軟體作品：Discord 解題機器人、Sift 程式碼分析、2048 強化學習與 Web 工具。每個專案附實作方式、限制與 GitHub 原始碼。"
+  jsonLd={jsonLd}
 >
   <div class="work-page">
     <div class="page-heading">
       <span class="micro">PROJECTS / BUILD · VERIFY · DELIVER</span><h1>
         Selected<span>({String(projects.length).padStart(2, "0")})</span>
       </h1><p>
-        每一個作品，都從一個問題開始。打開看看做了什麼、怎麼運作，以及還在探索的部分。
+        我是楊凱捷 / KJyang。這些是我在鶯歌工商資訊科就學期間，課外持續開發的作品。打開看看怎麼運作，以及還在探索的部分。
       </p>
     </div><div class="work-layout">
       <aside>
@@ -79,7 +96,7 @@ const groups = [
                       <p>{project.description}</p>
                       <div class="flow">{project.flow.join(" → ")}</div>
                       <a class="text-link" href={`/projects/${project.slug}`}>
-                        閱讀完整作品 ↗
+                        {project.title}：實作與原始碼 ↗
                       </a>
                     </>
                   </div>

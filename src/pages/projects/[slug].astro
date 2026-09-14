@@ -3,6 +3,7 @@ import PortfolioLayout from "../../layouts/PortfolioLayout.astro";
 import { projects } from "../../data/projects";
 import { projectFlows } from "../../data/project-flows";
 import ProjectFlow from "../../components/portfolio/ProjectFlow.astro";
+import { person } from "../../data/person";
 export function getStaticPaths() {
   return projects.map((project) => ({
     params: { slug: project.slug },
@@ -10,24 +11,37 @@ export function getStaticPaths() {
   }));
 }
 const { project } = Astro.props;
+const canonical = `https://kjyang0114.dev/projects/${project.slug}`;
 const jsonLd = {
   "@context": "https://schema.org",
+  "@graph": [{
   "@type": "SoftwareSourceCode",
+  "@id": `${canonical}#source`,
+  url: canonical,
   name: project.title,
   description: project.description,
   codeRepository: project.github,
   programmingLanguage: project.tech,
-  author: { "@type": "Person", name: "楊凱捷" },
+  ...(project.image ? { image: `https://kjyang0114.dev/projects/${project.image}` } : {}),
+  author: { "@type": "Person", "@id": person["@id"], name: person.name, url: person.url },
+  }, {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "首頁", item: "https://kjyang0114.dev/" },
+      { "@type": "ListItem", position: 2, name: "作品", item: "https://kjyang0114.dev/projects" },
+      { "@type": "ListItem", position: 3, name: project.title, item: canonical },
+    ],
+  }],
 };
 ---
 
 <PortfolioLayout
-  title={`${project.title} — KJyang 作品`}
-  description={project.lead}
+  title={`${project.searchTitle} — KJyang`}
+  description={project.description}
   jsonLd={jsonLd}
   ><article class="project-page">
-    <a class="text-link" href={`/projects#${project.slug}`}>← 所有作品</a
-    ><header class="project-header">
+    <nav class="project-breadcrumbs" aria-label="所在位置"><a href="/">首頁</a><span aria-hidden="true">/</span><a href="/projects">作品</a><span aria-hidden="true">/</span><span aria-current="page">{project.title}</span></nav>
+    <header class="project-header">
       <span class="micro">{project.category} / {project.status}</span><h1>
         {project.title}
       </h1><p>{project.lead}</p><div class="project-tags">
@@ -86,5 +100,9 @@ const jsonLd = {
       )
     }<a class="next-page" href="/contact"
       ><span>有相關想法，來聊聊。</span><b>↗</b></a>
-  </article></PortfolioLayout
+</article></PortfolioLayout
 >
+<style>
+  .project-breadcrumbs { display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; color: var(--muted); margin-bottom: 24px; }
+  .project-breadcrumbs a:hover { color: var(--accent); }
+</style>

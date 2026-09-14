@@ -134,7 +134,7 @@ console.log(
 const resume = readFileSync(fileFor("/resume"), "utf8");
 for (const text of [
   "雲書苑教育科技有限公司",
-  "2025/9",
+  "2025/10",
   "正式任職",
   "Fully Remote",
   "Open to Remote Opportunities",
@@ -186,7 +186,7 @@ for (const [path, html] of [["/resume", resume], ["/en/resume", englishResume]])
     assert.ok(html.includes(`id="${section}"`));
   assert.doesNotMatch(html, /scratch-v222|aippt|helloai|light-point-plan|Full-time|full-time/);
 }
-for (const text of ["Sep 2025", "Early 2026", "NDA", "Currently enrolled", "Remote work required", "dozens of students", "Mac mini", "Print / Save PDF", "Expected Graduation: 2027"])
+for (const text of ["Oct 2025", "Early 2026", "NDA", "Currently enrolled", "Remote work required", "dozens of students", "Mac mini", "Print / Save PDF", "Expected Graduation: 2027"])
   assert.ok(englishResume.includes(text), `English resume retains ${text}`);
 assert.ok(sitemap.includes("/en/resume"));
 console.log("PASS: bilingual resume content, canonical URLs, language links, and confidentiality exclusions.");

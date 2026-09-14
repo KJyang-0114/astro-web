@@ -1,5 +1,6 @@
 ---
 import PortfolioLayout from "../layouts/PortfolioLayout.astro";
+import { person } from "../data/person";
 const beliefs = [
   [
     "工具用好就是實力",
@@ -17,23 +18,18 @@ const beliefs = [
 ];
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "AboutPage",
-  mainEntity: {
-    "@type": "Person",
-    name: "楊凱捷",
-    alternateName: ["KJyang", "imw1nt0r"],
-    description: "鶯歌工商資訊科學生，探索 Web 與 AI 應用",
-    sameAs: [
-      "https://github.com/KJyang-0114",
-      "https://www.instagram.com/imw1nt0r/",
-    ],
-  },
+  "@type": "ProfilePage",
+  "@id": "https://kjyang0114.dev/about#profile",
+  url: "https://kjyang0114.dev/about",
+  name: "關於楊凱捷 / KJyang",
+  inLanguage: "zh-Hant",
+  mainEntity: person,
 };
 ---
 
 <PortfolioLayout
-  title="關於我 — KJyang / 楊凱捷"
-  description="鶯歌工商資訊科高三，從 HTML 自學到 Web 與 LLM 應用。分享學習、驗證、真實交付，以及程式以外的 aespa 與 Winter。"
+  title="關於楊凱捷｜鶯歌工商資訊科的自學與開發經歷 — KJyang"
+  description="我是楊凱捷（KJyang），就讀鶯歌工商資訊科。從 HTML 自學到 Python、Web 與 AI 整合，這裡記錄我的學習方式、公開作品與遠端開發經歷。"
   jsonLd={jsonLd}
 >
   <div class="about-page">
@@ -42,7 +38,7 @@ const jsonLd = {
     </h1><div class="about-grid">
       <section>
         <h2>楊凱捷 / KJyang</h2><p>
-          我是鶯歌工商資訊科高三學生，住在新北市。學校教硬體與基礎，課外則自己研究
+          我是楊凱捷，也叫 KJyang，就讀鶯歌工商資訊科，住在新北市。學校教硬體與基礎，課外則自己研究
           AI 和 Web，兩邊互補。
         </p><p>
           從 HTML、CSS、JavaScript 開始，慢慢寫到 React、Vue、Python FastAPI 與
@@ -51,6 +47,12 @@ const jsonLd = {
         </p><p>
           遇到不懂的地方，會用 LLM
           解釋文件、比較方案、建立初稿，再自己動手執行、讀錯誤、核對結果。工具能幫我更快開始，判斷與最後交付仍由我負責。
+        </p><p>
+          課外寫的程式，也放在這裡。像是從題目圖片開始的
+          <a href="/projects/discord">Discord 解題機器人</a>、研究程式碼分析的
+          <a href="/projects/sift">Sift</a>，以及用
+          <a href="/projects/rl">2048 練習強化學習</a>。
+          每個作品頁都保留實作方式、目前限制與原始碼，方便接著看下去。
         </p><a class="text-link" href="https://github.com/KJyang-0114"
           >在 GitHub 看我的紀錄 ↗</a>
       </section><div class="timeline">

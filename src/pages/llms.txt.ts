@@ -2,6 +2,7 @@ import { absoluteStudioUrl, indexableStudioRoutes } from "@data/seo";
 import { insightPosts } from "@data/insights";
 import { studioContact } from "@data/studio";
 import { workCases } from "@data/work";
+import { personalDiscovery } from "../data/personal-discovery";
 
 function describeRoute(path: string) {
   const insight = insightPosts.find((post) => path === `/studio/insights/${post.slug}`);
@@ -45,6 +46,8 @@ export function GET() {
     `# kjyang0114.dev
 
 > Personal site for KJyang plus KJyang Studio website services and Web Highlighter Pro product information.
+
+${personalDiscovery()}
 
 ## Products
 
