@@ -1,13 +1,14 @@
 ---
 import PortfolioLayout from "../layouts/PortfolioLayout.astro";
+import { person } from "../data/person";
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
   name: "AI 探索 — KJyang",
-  description: "從基礎概念到未來展望，一次搞懂人工智慧。",
+  description: "AI 基礎概念、應用、限制與常見迷思的入門筆記。",
   url: "https://kjyang0114.dev/ai",
-  author: { "@type": "Person", name: "楊凱捷", alternateName: "KJyang" },
+  author: { "@type": "Person", "@id": person["@id"], name: person.name },
 };
 
 const abilities = [
@@ -109,7 +110,7 @@ const guidelines = [
 ---
 
 <PortfolioLayout
-  title="AI 入門筆記 — KJyang"
+  title="AI 入門筆記｜人工智慧概念、應用與限制 — KJyang"
   description="從 AI 基礎概念、應用、限制與常見迷思開始，理解工具，再練習核對與使用。"
   jsonLd={jsonLd}
   ><div class="ai-page">

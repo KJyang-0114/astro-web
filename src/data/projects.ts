@@ -1,5 +1,6 @@
 export interface Project {
   title: string;
+  searchTitle: string;
   slug: string;
   description: string;
   tags: string[];
@@ -17,6 +18,7 @@ export interface Project {
 export const projects: Project[] = [
   {
     title: "Discord 解題機器人",
+    searchTitle: "Discord 解題機器人｜Python、Mathpix OCR 與 AI 問答",
     description:
       "同學上傳老師題目圖片；Mathpix OCR 後交給 LLM 生成步驟，切分長回覆，並以 SQLite 保存追問上下文。數十名同學、約運行一年；不宣稱未量測答對率。",
     tags: ["Python", "discord.py", "LLM API", "圖片 OCR"],
@@ -39,6 +41,7 @@ export const projects: Project[] = [
   },
   {
     title: "Sift",
+    searchTitle: "Sift｜Go 程式碼分析工具・Semgrep 與 SARIF",
     description:
       "Go 寫的 AI code scanner。以 Semgrep rules、package verification、選擇性 LLM 分析與 SARIF 把錯誤變成可重跑檢查。",
     tags: ["Go", "Semgrep", "SARIF", "SQLite"],
@@ -67,6 +70,7 @@ export const projects: Project[] = [
   },
   {
     title: "Simple-2048-RL",
+    searchTitle: "Simple-2048-RL｜Python DQN 強化學習實驗",
     description:
       "DQN 強化學習訓練 AI 玩 2048。環境建置、神經網路、訓練 pipeline 全部從頭刻。想驗證強化學習在策略遊戲上到底能走多遠。",
     tags: ["Python", "DQN", "強化學習", "AI"],
@@ -89,6 +93,7 @@ export const projects: Project[] = [
   },
   {
     title: "Website & Studio",
+    searchTitle: "個人網站與 Studio｜Astro、TypeScript 與 Docker 部署",
     slug: "website",
     description:
       "個人作品、網站服務與內容整理，從 Astro 前端一路到部署與維護。",
@@ -97,7 +102,7 @@ export const projects: Project[] = [
     tech: "TypeScript",
     status: "個人網站",
     lead: "讓作品被理解，也讓服務更容易找到。",
-    flow: ["內容與架構", "Astro / TypeScript", "響應式介面", "Docker / VPS"],
+    flow: ["內容與架構", "Astro / TypeScript", "響應式介面", "Docker / Mac mini"],
     build: [
       "以個人網站累積作品、分享學習與開發紀錄。",
       "將網站設計服務獨立成 Studio，整理價格、流程、Demo 與聯絡方式。",
@@ -109,6 +114,7 @@ export const projects: Project[] = [
   },
   {
     title: "Online Clipboard",
+    searchTitle: "Online Clipboard｜React 與 Firebase 跨裝置剪貼簿",
     description:
       "跨裝置即時同步剪貼簿。不用登入，24 小時自動過期，支援三種語言（中/英/日）。A 手機複製，B 電腦貼上。",
     tags: ["React", "TypeScript", "Firebase", "i18n"],
@@ -129,6 +135,7 @@ export const projects: Project[] = [
   },
   {
     title: "Element Remover Pro",
+    searchTitle: "Element Remover Pro｜移除網頁元素的 Chrome 擴充套件",
     description:
       "Chrome 擴充套件，點一下就能把網頁上不想看的元素刪掉。支援三種模式（單選/多選/相似），可撤銷重做，多語言介面。",
     tags: ["JavaScript", "CSS", "Chrome Extension", "多語言"],
@@ -145,6 +152,7 @@ export const projects: Project[] = [
   },
   {
     title: "Character Studio",
+    searchTitle: "Character Studio｜FastAPI 對話資料解析與格式轉換",
     description:
       "FastAPI 後端原型：偵測 LINE、Discord、JSON 與純文字對話，拆出 sender、role、timestamp 與統計。",
     tags: ["FastAPI", "Pydantic", "Parser", "Structured Data"],
@@ -164,6 +172,7 @@ export const projects: Project[] = [
   },
   {
     title: "Nyx-Core",
+    searchTitle: "Nyx-Core｜YOLO 即時視覺衍生研究",
     description:
       "保留上游 commit history 的 YOLO 即時視覺衍生研究。README 明確列出 Passer1072/RookieAI_yolov8 來源與本人有限 diff。",
     tags: ["Python", "YOLO", "TensorRT", "AI"],

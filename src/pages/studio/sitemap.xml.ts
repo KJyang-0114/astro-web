@@ -1,12 +1,10 @@
 import { absoluteStudioUrl, indexableStudioRoutes } from "@data/seo";
 
 export function GET() {
-  const lastmod = new Date().toISOString().slice(0, 10);
   const urls = indexableStudioRoutes
     .map(
       (route) => `  <url>
     <loc>${absoluteStudioUrl(route.path)}</loc>
-    <lastmod>${lastmod}</lastmod>
     <changefreq>${route.changefreq}</changefreq>
     <priority>${route.priority}</priority>
   </url>`
