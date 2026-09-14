@@ -1,14 +1,12 @@
 ---
+import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 import { studioContact } from "@data/studio";
 ---
 
 <SiteShell title="Contact | KJyang Studio" description="Contact KJyang Studio for website design, frontend implementation, deployment, and maintenance." canonicalPath="/studio/en/contact" lang="en">
   <main class="studio-en-v2 en-subpage">
-    <nav class="en-v2-nav">
-      <a class="en-v2-brand" href="/studio/en"><img src="/brand/kjyang-mark.svg" alt="" /><span>KJyang Studio</span></a>
-      <div class="en-v2-links"><a href="/studio/en/services">Services</a><a href="/studio/en/pricing">Pricing</a><a href="/studio/en/contact">Contact</a><a href="/studio">中文</a></div>
-    </nav>
+    <StudioNav />
     <section class="en-v2-hero en-page-hero">
       <div class="en-v2-wrap en-v2-hero-grid">
         <div class="en-v2-copy">

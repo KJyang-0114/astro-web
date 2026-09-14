@@ -1,5 +1,6 @@
 ---
 import DemoNotice from "@components/DemoNotice.astro";
+import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 
 const demos = [
@@ -10,19 +11,7 @@ const demos = [
 
 <SiteShell title="English Demo Library | KJyang Studio" description="English website demo library for service business websites." canonicalPath="/studio/en/demo" lang="en" noindex>
   <main class="studio-index en-site">
-    <nav class="site-nav studio-index-nav">
-      <a class="brand studio-brand" href="/studio/en">
-        <img src="/brand/kjyang-mark.svg" alt="" />
-        <span>KJyang Studio</span>
-      </a>
-      <div class="nav-links">
-        <a href="/studio/en">Home</a>
-        <a href="/studio/en/services">Services</a>
-        <a href="/studio/en/pricing">Pricing</a>
-        <a href="/studio/en/contact">Contact</a>
-        <a href="/studio">中文</a>
-      </div>
-    </nav>
+    <StudioNav />
     <DemoNotice lang="en" />
     <section class="studio-subpage-hero">
       <div class="wrap">

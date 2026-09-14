@@ -89,6 +89,7 @@ document.querySelectorAll<HTMLFormElement>(".contact-form").forEach((form) => {
 
   const send = async (event: Event) => {
     event.preventDefault();
+    if (!form.reportValidity()) return;
     const fields = Array.from(form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>("input, textarea, select"))
       .map((input) => [formLabelText(input), input.value.trim()])
       .filter(([, value]) => value)
@@ -99,12 +100,17 @@ document.querySelectorAll<HTMLFormElement>(".contact-form").forEach((form) => {
 
     try {
       await copyText(message);
-      status.textContent = "需求已整理並複製。LINE 開啟後直接貼上傳給我。";
-      window.open(form.dataset.lineUrl || defaultLineUrl, "_blank", "noopener,noreferrer");
+      status.textContent = "需求已複製。點下方連結開啟 LINE，再貼上傳送。";
     } catch {
-      status.textContent = "LINE 已開啟；若沒有自動複製，請手動複製欄位內容傳給我。";
-      window.open(form.dataset.lineUrl || defaultLineUrl, "_blank", "noopener,noreferrer");
+      status.textContent = "瀏覽器無法複製。請手動複製欄位內容，再點下方連結開啟 LINE。";
     }
+    const link = document.createElement("a");
+    link.href = form.dataset.lineUrl || defaultLineUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "開啟 LINE ↗";
+    link.style.display = "block";
+    status.append(link);
   };
 
   form.addEventListener("submit", send);

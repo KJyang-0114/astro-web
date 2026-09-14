@@ -1,5 +1,7 @@
 ---
 import "@styles/studio-global.css";
+import "@styles/studio-atelier.css";
+import StudioFooter from "./studio/StudioFooter.astro";
 
 type Props = {
   title: string;
@@ -35,6 +37,8 @@ const alternateUrls = alternates.map((alternate) => ({
 <html lang={lang}>
   <head>
     <meta charset="utf-8" />
+    <link rel="icon" href="/brand/kjyang-mark.svg" type="image/svg+xml" />
+    <meta name="color-scheme" content="light" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -53,8 +57,10 @@ const alternateUrls = alternates.map((alternate) => ({
     <meta name="twitter:image" content={ogImageUrl} />
     {schema.map((entry) => <script type="application/ld+json" set:html={JSON.stringify(entry)} />)}
   </head>
-  <body>
-    <slot />
+  <body class="studio-surface">
+    <a class="studio-skip" href="#studio-content">{lang === "en" ? "Skip to content" : "跳到內容"}</a>
+    <div id="studio-content" tabindex="-1"><slot /></div>
+    <StudioFooter english={lang === "en"} />
     <script>
       import "../scripts/motion";
     </script>

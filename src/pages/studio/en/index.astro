@@ -1,4 +1,5 @@
 ---
+import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 
 const systems = [
@@ -33,19 +34,7 @@ const launchChecks = ["Mobile layout", "CTA path", "SEO metadata", "FAQ schema",
   ]}
 >
   <main class="en-premium">
-    <nav class="en-premium-nav" aria-label="English studio navigation">
-      <a class="en-premium-brand" href="/studio/en" aria-label="KJyang Studio English home">
-        <img src="/brand/kjyang-mark.svg" alt="" />
-        <span>KJyang Studio</span>
-      </a>
-      <div class="en-premium-links">
-        <a href="/studio/en/services">Services</a>
-        <a href="/studio/en/pricing">Pricing</a>
-        <a href="/studio/en/demo">Demos</a>
-        <a href="/studio/en/contact">Contact</a>
-        <a href="/studio">中文</a>
-      </div>
-    </nav>
+    <StudioNav />
 
     <section class="en-premium-hero">
       <div class="en-premium-wrap en-premium-hero-grid">

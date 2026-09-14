@@ -1,7 +1,7 @@
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" rx="96" fill="#0B0D10"/>
-  <path d="M116 104H396V408H116V104Z" stroke="#F4E8D0" stroke-width="18"/>
-  <path d="M156 360V152H203V247L298 152H360L260 250L367 360H303L203 254V360H156Z" fill="#F4E8D0"/>
-  <path d="M308 104H396V192" stroke="#F0A94A" stroke-width="18"/>
-  <path d="M324 188L396 104" stroke="#F0A94A" stroke-width="18"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <title>KJyang Studio</title>
+  <rect width="64" height="64" rx="15" fill="#F3EEE5"/>
+  <path d="M17 16v32M43 16 23 32l21 16" stroke="#7F4358" stroke-width="5" stroke-linecap="square" stroke-linejoin="miter"/>
+  <path d="M47 27v12c0 7-3 10-9 10" stroke="#382B35" stroke-width="3"/>
+  <circle cx="48" cy="15" r="3" fill="#7F4358"/>
 </svg>
