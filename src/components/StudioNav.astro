@@ -5,7 +5,7 @@ const base = english ? '/studio/en' : '/studio';
 const links = english ? [["Services", "/studio/en/services"], ["Pricing", "/studio/en/pricing"], ["Demos", "/studio/en/demo"], ["中文", "/studio"]] : [["作品", "/studio/work"], ["服務", "/studio/services"], ["價格", "/studio/pricing"], ["流程", "/studio/process"]];
 ---
 <header class="navigation">
-<a class="wordmark" href={base} aria-label={english?'KJyang Studio home':'KJyang Studio 首頁'}>KJyang<span>studio</span><img class="studio-symbol" src="/brand/kjyang-mark.svg" width="25" height="25" alt="" aria-hidden="true" /></a>
+<a class="wordmark" href={base} aria-label={english?'KJyang Studio home':'KJyang Studio 首頁'}>KJyang<span>studio</span></a>
 <span class="nav-note">{english?'Independent design. Thoughtful delivery.':'獨立設計。完整製作。'}</span>
 <nav aria-label={english?'Studio navigation':'Studio 主選單'}>{links.map(([label,href])=><a href={href} aria-current={current===href?'page':undefined}>{label}</a>)}<a class="contact-link" href={`${base}/contact`}>{english?'Let’s talk':'聊聊你的想法'} <span>↗</span></a></nav>
 <details class="studio-mobile-menu"><summary>{english?'Menu ＋':'選單 ＋'}</summary><nav aria-label={english?'Studio mobile navigation':'Studio 手機選單'}>{links.map(([label,href])=><a href={href}>{label}</a>)}{!english&&<a href="/studio/about">關於 Studio</a>}<a href={`${base}/contact`}>{english?'Contact':'聯絡'}</a></nav></details>
