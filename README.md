@@ -5,9 +5,17 @@
 - Website：[kjyang0114.dev](https://kjyang0114.dev/)
 - Studio：[kjyang0114.dev/studio](https://kjyang0114.dev/studio/)
 
-| 個人首頁 | Studio |
-|---|---|
-| ![Personal website](assets/personal-home.png) | ![Studio](assets/studio-home.png) |
+## 網站預覽
+
+正式站桌面畫面，更新於 2026-10-05。
+
+### 個人首頁
+
+[![楊凱捷 KJyang 個人首頁：Human, then Code.](assets/personal-home.png)](https://kjyang0114.dev/)
+
+### KJyang Studio
+
+[![KJyang Studio：讓品牌，有自己的樣子。](assets/studio-home.png)](https://kjyang0114.dev/studio/)
 
 ## 主要功能
 
@@ -30,9 +38,8 @@ public/              品牌、圖片與靜態產品檔案
 
 ## 核心程式
 
-| 結構化內容 | Build 與部署檢查 |
-|---|---|
-| ![Structured service data](assets/services-code.png) | ![Deployment workflow](assets/deploy-code.png) |
+- [Studio 服務與方案資料](src/data/studio.ts)
+- [GitHub Actions 部署流程](.github/workflows/deploy-macmini.yml)
 
 ## 實作重點
 
@@ -74,7 +81,7 @@ docker compose up --build
 ## 個人網站重新設計（2026-09）
 
 個人站採用 Human, then Code 視覺方向，淺深色自動跟隨系統。
-Studio、產業 Demo、產品頁與既有遊戲功能維持原版。
+Studio 與四個中文產業 Demo 另採暖色編輯式設計；產品頁與既有遊戲功能保留各自版型。
 
 - `/`：個人定位、代表作品互動、網站服務入口。
 - `/projects`：8 個作品的領域／語言篩選與可展開索引。
