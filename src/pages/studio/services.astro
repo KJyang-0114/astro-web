@@ -1,48 +1,77 @@
 ---
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
-import { studioServices } from "@data/studio";
+import { absoluteStudioUrl, founderPerson } from "@data/seo";
+import { studioContact, studioFacts, studioServices } from "@data/studio";
 import { servicePages } from "@data/trust";
----
 
-<SiteShell title="網站設計與製作服務｜內容規劃、開發與上線 — KJyang Studio" description="提供小商家網站設計、前端開發、手機版面、主機部署與維護。了解各項交付內容，依頁面數、內容與功能需求選擇適合的網站方案。" canonicalPath="/studio/services">
-  <main class="studio-index">
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "小店網站與預約系統製作",
+    description: "楊凱捷一人接案：網站設計、前端製作、網域與主機設定、線上預約與後台、上線後維護。一頁式網站 NT$18,000 起。",
+    url: absoluteStudioUrl("/studio/services"),
+    provider: founderPerson,
+    areaServed: studioFacts.areaServed,
+    serviceType: studioServices.map((s) => s.title),
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "服務項目",
+      itemListElement: servicePages.map((s) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: s.title,
+          description: s.description,
+          url: absoluteStudioUrl(`/studio/services/${s.slug}`)
+        }
+      }))
+    }
+  }
+];
+---
+<SiteShell title="服務項目｜小店網站製作、改版、維護、預約系統 — KJyang Studio" description="我幫小店做網站、改舊網站、處理上線和主機，也做過線上預約和排班後台。設計和程式都是我自己來，一頁式 NT$18,000 起，約 2 到 3 週。" canonicalPath="/studio/services" schema={schema}>
+  <main class="studio-index s-case">
     <StudioNav />
-    <section class="studio-subpage-hero">
-      <div class="wrap">
-        <span>Services</span>
-        <h1>我們主打網站設計、代碼編寫、部署上線</h1>
-        <p>從內容與版面規劃、前端開發，到主機部署與後續維護。先確認你需要哪些頁面、訪客要完成什麼，再決定設計與功能。</p>
-      </div>
+    <header class="s-wrap s-case-hero">
+      <p class="s-eyebrow">服務</p>
+      <h1>我可以幫你做的事</h1>
+      <p class="s-lead">從決定首頁放什麼、寫程式、買網域，到上線後改價格換照片，都是我一個人做。你不用分別找設計師、工程師和主機商。</p>
+      <ul class="s-hero-facts">
+        <li><b>{studioFacts.startPrice} 起</b>一頁式網站</li>
+        <li><b>{studioFacts.onePageWeeks}</b>資料給齊後上線</li>
+        <li><b>{studioFacts.areaShort}</b>每天 {studioFacts.replyShort} 看 LINE</li>
+      </ul>
+    </header>
+
+    <section class="s-wrap s-section" aria-labelledby="what-title">
+      <div class="s-head"><p class="s-eyebrow">我做的部分</p><h2 id="what-title">一個網站從頭到尾的 5 件事</h2></div>
+      <ul class="s-svc-list">
+        {studioServices.map((s) => <li><b>{s.title}</b><p>{s.text}</p></li>)}
+      </ul>
     </section>
-    <section class="studio-card-section">
-      <div class="wrap studio-service-grid">
-        {studioServices.map((item, index) => (
-          <article>
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <h2>{item.title}</h2>
-            <p>{item.text}</p>
-          </article>
-        ))}
-      </div>
-      <div class="wrap service-page-links">
-        {servicePages.map((service) => (
-          <a href={`/studio/services/${service.slug}`}>
-            <span>{service.title}</span>
-            <p>{service.description}</p>
+
+    <section class="s-wrap s-section" aria-labelledby="pick-title">
+      <div class="s-head"><p class="s-eyebrow">看你現在的情況</p><h2 id="pick-title">你是哪一種？</h2></div>
+      <div class="s-svc-links">
+        {servicePages.map((s) => (
+          <a class="s-case-card" href={`/studio/services/${s.slug}`}>
+            <h3>{s.title}</h3>
+            <p>{s.description}</p>
+            <b>看我會怎麼做 →</b>
           </a>
         ))}
       </div>
+      <p class="s-more-link"><a href="/studio/work/spa-booking-system">需要線上預約？看我幫 Weilspa 做的預約與排班系統 →</a></p>
     </section>
-    <section class="studio-final-cta">
-      <div class="wrap">
-        <span>Next step</span>
-        <h2>先看 Demo，再決定適合一頁式或多頁網站。</h2>
-        <p>如果你已經有店名、服務項目和大概預算，可以直接用 LINE 或表單開始諮詢。</p>
-        <div class="action-row">
-          <a class="btn studio-index-primary" href="/studio/demo">看設計 Demo</a>
-          <a class="btn studio-index-secondary" href="/studio/contact">LINE 諮詢</a>
-        </div>
+
+    <section class="s-wrap s-cta-band">
+      <h2>不確定是哪一種也沒關係</h2>
+      <p>{studioFacts.freeCheck}</p>
+      <div class="s-actions">
+        <a class="s-btn s-btn-primary" href={studioContact.lineUrl} data-cta="services-line">LINE 傳店名給我</a>
+        <a class="s-btn" href="/studio/pricing">看價格和包含什麼</a>
       </div>
     </section>
   </main>

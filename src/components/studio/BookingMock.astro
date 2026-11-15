@@ -1,0 +1,23 @@
+---
+// 預約流程示意：全部是示範資料。
+const slots = [["10:00","可申請"],["11:30","已滿"],["13:00","可申請"],["14:30","可申請"],["16:00","已滿"],["17:30","班表未排"]];
+---
+<div class="s-phones" role="img" aria-label="手機預約流程示意：選時段、送出申請、等待店家確認">
+  <div class="s-phone">
+    <div class="s-phone-bar">選時段 <small>示意</small></div>
+    <p class="s-phone-step">北大店・臉部保養 90 分</p>
+    <p class="s-phone-day">11 月 21 日（六）</p>
+    <ul class="s-slots">{slots.map(([t, st]) => <li data-state={st}><b>{t}</b><span>{st}</span></li>)}</ul>
+  </div>
+  <div class="s-phone">
+    <div class="s-phone-bar">確認申請 <small>示意</small></div>
+    <dl class="s-phone-summary"><div><dt>門市</dt><dd>北大店</dd></div><div><dt>療程</dt><dd>臉部保養</dd></div><div><dt>時間</dt><dd>11/21（六）13:00</dd></div><div><dt>美容師</dt><dd>不指定</dd></div></dl>
+    <p class="s-phone-warn">送出的是申請，店家確認後才算預約成功。</p>
+    <span class="s-phone-btn">送出申請</span>
+  </div>
+  <div class="s-phone">
+    <div class="s-phone-bar">我的預約 <small>示意</small></div>
+    <p class="s-phone-badge">等待店家確認</p>
+    <p class="s-phone-small">店家確認後會用 LINE 通知你。前一天 21:00 前可以自己取消。</p>
+  </div>
+</div>

@@ -1,49 +1,45 @@
 ---
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
-import { maintenancePlans, studioPlans } from "@data/studio";
+import { maintenancePlans, studioContact, studioFacts, studioPlans } from "@data/studio";
 ---
-
-<SiteShell title="網站製作費用｜一頁式、多頁網站與維護價格 — KJyang Studio" description="查看一頁式網站、多頁網站、客製功能與後續維護的費用區間。說明影響報價的頁面數、內容量、設計與部署需求；網域由客戶持有、費用另計。" canonicalPath="/studio/pricing">
-  <main class="studio-index">
+<SiteShell title="網站製作價格｜一頁式 NT$18,000 起、包含什麼一次看清楚 — KJyang Studio" description="一頁式網站 NT$18,000 - 28,000、多頁網站 NT$35,000 - 58,000、預約系統另外報價。逐項列出包含、不包含、幾週完成、你要準備什麼，以及維護月費。" canonicalPath="/studio/pricing">
+  <main class="studio-index s-case">
     <StudioNav />
-    <section class="studio-subpage-hero">
-      <div class="wrap">
-        <span>Pricing</span>
-        <h1>網站製作與維護，需要多少預算？</h1>
-        <p>實際報價會看頁面數、內容量、設計需求、部署方式和功能複雜度。網域費另計，客戶持有。</p>
-      </div>
-    </section>
-    <section class="studio-card-section">
-      <div class="wrap studio-pricing-grid">
-        {studioPlans.map((plan) => (
-          <article>
-            <h2>{plan.nameZh}</h2>
-            <strong>{plan.price}</strong>
-            <p>{plan.text}</p>
-          </article>
-        ))}
-      </div>
-      <div class="wrap studio-maintenance-grid">
-        {maintenancePlans.map(([title, price, text]) => (
-          <article>
-            <b>{title}</b>
-            <strong>{price}</strong>
-            <p>{text}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-    <section class="studio-final-cta">
-      <div class="wrap">
-        <span>Budget fit</span>
-        <h2>價格先公開，細節再依內容和功能確認。</h2>
-        <p>想先知道你的需求大概落在哪個區間，可以傳目前網站或同行參考給我。</p>
-        <div class="action-row">
-          <a class="btn studio-index-primary" href="/studio/contact">預約諮詢報價</a>
-          <a class="btn studio-index-secondary" href="/studio/process">看合作流程</a>
+    <header class="s-wrap s-case-hero">
+      <p class="s-eyebrow">價格</p>
+      <h1>網站做下去多少錢、包含什麼</h1>
+      <p class="s-lead">下面是區間。實際金額看頁數、照片和文字準備好了沒、要不要預約功能。我會在報價單上逐項寫清楚，你同意了才開始。</p>
+    </header>
+    {studioPlans.map((plan) => (
+      <section class="s-wrap s-section" aria-label={plan.nameZh}>
+        <div class="s-head"><p class="s-eyebrow">{plan.nameZh}・大約 {plan.weeks}</p><h2>{plan.price}</h2></div>
+        <p class="s-lead">{plan.text}</p>
+        <div class="s-incl">
+          <div><h4>包含</h4><ul class="s-plan-list">{plan.includes.map((i) => <li>{i}</li>)}</ul></div>
+          <div><h4>不包含</h4><ul class="s-plan-list">{plan.excludes.map((i) => <li>{i}</li>)}</ul></div>
+          <div><h4>你要準備</h4><ul class="s-plan-list">{plan.prepare.map((i) => <li>{i}</li>)}</ul></div>
         </div>
-      </div>
+      </section>
+    ))}
+    <section class="s-wrap s-section" aria-labelledby="care">
+      <div class="s-head"><p class="s-eyebrow">上線之後</p><h2 id="care">維護月費（可以不買）</h2></div>
+      <div class="s-plans">{maintenancePlans.map(([t, p, d]) => <article class="s-plan"><h3>{t}</h3><strong>{p}</strong><p>{d}</p></article>)}</div>
+      <p class="s-fine">不買維護也可以：網域和主機帳號都在你名下，之後要改再單次報價。</p>
+    </section>
+    <section class="s-wrap s-section" aria-labelledby="terms">
+      <div class="s-head"><p class="s-eyebrow">付款與修改</p><h2 id="terms">先講好，之後比較不會吵架</h2></div>
+      <dl class="s-kv">
+        <div><dt>付款</dt><dd>{studioFacts.payment}。</dd></div>
+        <div><dt>修改</dt><dd>{studioFacts.revisions}。</dd></div>
+        <div><dt>常見加價</dt><dd>多加頁面、我幫你寫大部分文案、英文版、預約或會員功能。都會先報價，你同意才做。</dd></div>
+        <div><dt>網域</dt><dd>每年大約 NT$500 - 1,000，直接付給網域商，登記在你名下。</dd></div>
+      </dl>
+    </section>
+    <section class="s-wrap s-cta-band">
+      <h2>不確定落在哪一個？</h2>
+      <p>{studioFacts.freeCheck}</p>
+      <div class="s-actions"><a class="s-btn s-btn-primary" href={studioContact.lineUrl} data-cta="pricing-line">LINE 傳店名給我</a><a class="s-btn" href="/studio/process">看流程</a></div>
     </section>
   </main>
 </SiteShell>

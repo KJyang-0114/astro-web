@@ -1,86 +1,52 @@
 ---
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
-import { absoluteStudioUrl } from "@data/seo";
+import { absoluteStudioUrl, founderPerson } from "@data/seo";
 import { fitChecks, studioBeliefs } from "@data/trust";
+import { studioContact, studioFacts } from "@data/studio";
+import { realCases } from "@data/cases";
 
-const schema = [
-  {
-    "@context": "https://schema.org",
-    "@type": "AboutPage",
-    name: "About KJyang Studio",
-    url: absoluteStudioUrl("/studio/about"),
-    inLanguage: "zh-Hant",
-    about: {
-      "@type": "Organization",
-      name: "KJyang Studio",
-      url: absoluteStudioUrl("/studio")
-    }
-  }
-];
+const schema = [{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: "關於楊凱捷與 KJyang Studio",
+  url: absoluteStudioUrl("/studio/about"),
+  inLanguage: "zh-Hant",
+  mainEntity: founderPerson
+}];
 ---
-
-<SiteShell
-  title="關於 KJyang Studio | 網站設計、代碼與部署"
-  description="KJyang Studio 是小型網站工作室，主打網站設計、前端代碼編寫、部署上線、主機設定與後續維護。"
-  canonicalPath="/studio/about"
-  schema={schema}
->
-  <main class="studio-index">
+<SiteShell title="關於我｜楊凱捷，一人接案做小店網站 — KJyang Studio" description="我是楊凱捷，鶯歌工商資訊科高三，一人接案幫北部小店做網站和預約系統。說明我做過什麼、能做什麼、不能做什麼。" canonicalPath="/studio/about" schema={schema}>
+  <main class="studio-index s-case">
     <StudioNav />
-
-    <section class="about-hero">
-      <div class="wrap about-hero-grid">
-        <div>
-          <span>About KJyang Studio</span>
-          <h1>設計的細節，和上線之後。</h1>
-        </div>
-        <p>
-          我是楊凱捷，KJyang Studio 由我負責設計與開發。從內容整理、視覺細節，到網站製作、部署與後續維護，希望每個階段都清楚、有交代。
-        </p>
+    <header class="s-wrap s-case-hero">
+      <p class="s-eyebrow">關於我</p>
+      <h1>我是楊凱捷，KJyang Studio 只有我一個人</h1>
+      <p class="s-lead">鶯歌工商資訊科高三。我自學寫網站和架主機，做過完全遠端的軟體開發工作。現在一邊上學，一邊幫小店做網站和預約系統。</p>
+    </header>
+    <div class="s-wrap s-case-body">
+      <div>
+        <section>
+          <h2>為什麼接案</h2>
+          <p>幫 Weilspa 做預約系統的時候，我發現兩位老闆最在意的是每天少回幾則 LINE、改價格不用等人，網站漂不漂亮反而排在後面。小店需要的通常是一個講得清楚、價格公開、做完還找得到的人，這件事我做得到。</p>
+          <p>學生身份我不打算藏。你找我，得到的是比較彈性的時間、公開的價格，還有直接跟寫程式的人講話。代價是我還在上學，訊息不一定馬上回，但每天上午 10 點到晚上 10 點之間會看。</p>
+        </section>
+        <section>
+          <h2>我做過的</h2>
+          {realCases.map((c) => <p><a class="s-link" href={`/studio/work/${c.slug}`}>{c.name}</a>：{c.kind}。{c.status}。</p>)}
+          <p>另外，我在一家教育科技公司做過完全遠端的軟體開發，負責前端、後端和 AI 功能串接。細節可以看<a class="s-link" href="/resume">我的履歷</a>。</p>
+        </section>
+        <section>
+          <h2>適不適合找我</h2>
+          {fitChecks.map(([t, d]) => <p><b>{t}：</b>{d}</p>)}
+        </section>
       </div>
-    </section>
-
-    <section class="belief-section">
-      <div class="wrap belief-grid">
-        {studioBeliefs.map((item, index) => (
-          <article>
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <h2>{item.title}</h2>
-            <p>{item.text}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <section class="fit-section">
-      <div class="wrap fit-grid">
-        <div>
-          <span>Fit check</span>
-          <h2>先確認彼此的期待。</h2>
-          <p>一起確認需求、預算與時間，讓設計和交付都有共同的方向。</p>
-        </div>
-        <div>
-          {fitChecks.map(([title, text]) => (
-            <article>
-              <b>{title}</b>
-              <p>{text}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="studio-final-cta">
-      <div class="wrap">
-        <span>Start with context</span>
-        <h2>先傳目前狀況，不用一開始就講很完整。</h2>
-        <p>可以先傳行業、目前網站、參考風格、預算範圍和想做的頁面。我會先判斷適合哪種方案。</p>
-        <div class="action-row">
-          <a class="btn studio-index-primary" href="/studio/contact">聯絡 KJyang Studio</a>
-          <a class="btn studio-index-secondary" href="/studio/work">看作品案例</a>
-        </div>
-      </div>
-    </section>
+      <aside class="s-side">
+        <h2>我會寫進報價單的事</h2>
+        <ul>{studioBeliefs.map((b) => <li><b>{b.title}</b>：{b.text}</li>)}</ul>
+        <h2>怎麼找我</h2>
+        <p class="s-fine">LINE／電話 {studioContact.lineId}<br />{studioFacts.reply}<br />{studioFacts.area}</p>
+        <a class="s-btn s-btn-primary" href={studioContact.lineUrl} data-cta="about-line">LINE 傳給我</a>
+      </aside>
+    </div>
   </main>
 </SiteShell>

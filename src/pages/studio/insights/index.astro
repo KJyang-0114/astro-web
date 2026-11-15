@@ -2,85 +2,59 @@
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 import { insightPosts } from "@data/insights";
-import { absoluteStudioUrl } from "@data/seo";
+import { absoluteStudioUrl, founderPerson } from "@data/seo";
+import { studioContact, studioFacts } from "@data/studio";
 
-const latestPost = insightPosts[0];
+const description = "小店網站多少錢、要不要做網站、LINE 預約和預約系統差在哪、手機第一屏放什麼、上線之後怎麼維護。楊凱捷用自己做過的案子寫的 6 篇文章。";
 const schema = [
   {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "KJyang Studio Insights",
-    description: "小商家網站設計、LINE 詢問、部署維護、SEO/GEO 基礎與網站規劃文章。",
+    name: "文章",
+    description,
     url: absoluteStudioUrl("/studio/insights"),
     inLanguage: "zh-Hant",
-    mainEntity: insightPosts.map((post) => ({
-      "@type": "Article",
-      headline: post.title,
-      url: absoluteStudioUrl(`/studio/insights/${post.slug}`),
-      datePublished: post.date
-    }))
+    author: founderPerson,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: insightPosts.map((post, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: absoluteStudioUrl(`/studio/insights/${post.slug}`),
+        name: post.title
+      }))
+    }
   }
 ];
 ---
-
-<SiteShell
-  title="網站設計知識庫 | KJyang Studio"
-  description="KJyang Studio 定期整理小商家網站設計、LINE CTA、部署維護、價格規劃和 SEO/GEO 基礎文章。"
-  canonicalPath="/studio/insights"
-  schema={schema}
->
-  <main class="studio-index">
+<SiteShell title="文章｜小店網站的價格、預約、手機版與維護 — KJyang Studio" description={description} canonicalPath="/studio/insights" schema={schema}>
+  <main class="studio-index s-case">
     <StudioNav />
-
-    <section class="studio-subpage-hero insights-hero">
-      <div class="wrap insights-hero-grid">
-        <div>
-          <span>KJyang Studio Insights</span>
-          <h1>小商家網站設計知識庫</h1>
-          <p>
-            固定整理網站設計、手機版體驗、LINE 詢問、部署維護、價格規劃和 SEO/GEO 基礎。
-            目標不是寫空泛行銷文，而是把店家真的會遇到的網站問題講清楚。
-          </p>
-        </div>
-        <a class="insights-featured" href={`/studio/insights/${latestPost.slug}`}>
-          <span>Latest / {latestPost.date}</span>
-          <h2>{latestPost.title}</h2>
-          <p>{latestPost.summary}</p>
-          <b>閱讀最新文章</b>
-        </a>
-      </div>
-    </section>
-
-    <section class="insights-list-section">
-      <div class="wrap insights-list-head">
-        <span>Daily publishing base</span>
-        <h2>先建立可信任的長期內容，而不是只放一頁等運氣</h2>
-        <p>每天新增一篇可以從這裡累積。文章會進 sitemap、llms.txt 和結構化資料，讓搜尋和 AI 比較容易理解 KJyang Studio 的服務主題。</p>
-      </div>
-      <div class="wrap insights-list">
-        {insightPosts.map((post, index) => (
-          <a class="insight-card" href={`/studio/insights/${post.slug}`}>
-            <div>
-              <span>{post.category}</span>
-              <time datetime={post.date}>{post.date}</time>
-            </div>
-            <h2>{post.title}</h2>
-            <p>{post.summary}</p>
-            <b>{String(index + 1).padStart(2, "0")}</b>
-          </a>
+    <header class="s-wrap s-case-hero">
+      <p class="s-eyebrow">文章</p>
+      <h1>開店的人常問我的幾件事</h1>
+      <p class="s-lead">做網站之前，老闆最常問的是多少錢、到底要不要做、預約要不要上網。我把回答寫成下面 6 篇，裡面的例子都是我自己做過的案子。</p>
+    </header>
+    <section class="s-wrap s-section" aria-labelledby="posts">
+      <div class="s-head"><h2 id="posts">全部文章</h2></div>
+      <ol class="s-posts">
+        {insightPosts.map((post) => (
+          <li>
+            <a href={`/studio/insights/${post.slug}`}>
+              <small>{post.category}・<time datetime={post.date}>{post.date}</time></small>
+              <h3>{post.title}</h3>
+              <p>{post.summary}</p>
+            </a>
+          </li>
         ))}
-      </div>
+      </ol>
     </section>
-
-    <section class="studio-final-cta">
-      <div class="wrap">
-        <span>KJyang Studio</span>
-        <h2>想看實際網站設計，可以直接看 demo。</h2>
-        <p>文章負責說明觀念，demo 負責展示設計、資訊架構和詢問流程。</p>
-        <div class="action-row">
-          <a class="btn studio-index-primary" href="/studio/demo">看網站 Demo</a>
-          <a class="btn studio-index-secondary" href="/studio/contact">聯絡 KJyang Studio</a>
-        </div>
+    <section class="s-wrap s-cta-band">
+      <h2>想直接問你的店？</h2>
+      <p>{studioFacts.freeCheck}</p>
+      <div class="s-actions">
+        <a class="s-btn s-btn-primary" href={studioContact.lineUrl} data-cta="insights-line">LINE 傳店名給我</a>
+        <a class="s-btn" href="/studio/pricing">看價格</a>
       </div>
     </section>
   </main>

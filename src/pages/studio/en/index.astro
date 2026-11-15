@@ -1,30 +1,31 @@
 ---
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
+import { studioFacts } from "@data/studio";
 
 const systems = [
-  ["01", "Brand-grade direction", "A visual system with clear hierarchy, restrained motion, responsive layouts, and industry-aware content structure."],
-  ["02", "Frontend implementation", "Pages coded for real delivery: semantic structure, clean CSS, mobile stability, metadata, schema, and launch checks."],
-  ["03", "Deployment and care", "VPS, Docker, DNS, SSL, backups, monitoring, and maintenance can be handled without turning the client into a technical operator."]
+  ["01", "Design and code", "I decide what goes on the first screen based on what your customers ask most, then write the code myself. No Wix or WordPress templates. Every site is tested on real phones and inside LINE's in-app browser."],
+  ["02", "Booking and admin tools", "Online appointment requests, staff schedules and simple admin pages. I built one for Weilspa, a beauty spa with two branches: customers request a time slot, the owners confirm it from their phones."],
+  ["03", "Launch and care", "I buy and set up the domain (registered in your name), DNS and HTTPS. After launch, send me a message on LINE when you need a price or photo changed."]
 ];
 
 const demos = [
-  ["Home Service Dispatch", "Urgent repair website direction with quote flow, service zones, pricing logic, proof, and mobile-first conversion.", "/studio/en/demo/home-service"],
-  ["Dental Clinic Appointment", "Premium healthcare direction with calm appointment flow, treatment clarity, location trust, and first-visit guidance.", "/studio/en/demo/dental-clinic"]
+  ["Home Service", "A layout for repair and home-service businesses: quote request, service area, price guide and FAQ.", "/studio/en/demo/home-service"],
+  ["Dental Clinic", "A layout for a small clinic: first-visit steps, treatment list, location and FAQ.", "/studio/en/demo/dental-clinic"]
 ];
 
 const proof = [
-  ["Not a template swap", "Each industry needs a different first screen, CTA path, FAQ strategy, and trust sequence."],
-  ["Not just an AI mockup", "The site must survive mobile, content changes, deployment, metadata, and post-launch maintenance."],
-  ["No ranking promises", "Basic SEO/GEO structure can be included, but search rankings and AI citations are never guaranteed."]
+  ["Prices are published", `A one-page site starts at ${studioFacts.startPrice}. The written quote lists every page, the timeline and what is not included.`],
+  ["The domain is yours", "Domain and hosting accounts are registered in your name. The code uses common tools (Astro, Next.js) and comes with notes, so another developer can take it over."],
+  ["No ranking promises", "Basic search setup is included, but nobody can guarantee Google rankings, and I won't."]
 ];
 
-const launchChecks = ["Mobile layout", "CTA path", "SEO metadata", "FAQ schema", "Sitemap", "Deployment", "SSL", "Care plan"];
+const launchChecks = ["Real phones", "LINE in-app browser", "Contact buttons", "Page titles", "Sitemap", "Domain", "HTTPS", "Auto deploy"];
 ---
 
 <SiteShell
-  title="KJyang Studio | Premium Website Design, Code, and Launch"
-  description="KJyang Studio designs, codes, deploys, and maintains premium websites for small businesses and service professionals."
+  title="KJyang Studio | Websites and Booking Systems for Small Businesses in Taiwan"
+  description="Kai-Jie Yang, a high-school senior in New Taipei, Taiwan, designs, codes, launches and maintains websites and booking systems for small businesses. Based in northern Taiwan, works online. One-page sites from NT$18,000."
   canonicalPath="/studio/en"
   lang="en"
   alternates={[
@@ -39,21 +40,21 @@ const launchChecks = ["Mobile layout", "CTA path", "SEO metadata", "FAQ schema",
     <section class="en-premium-hero">
       <div class="en-premium-wrap en-premium-hero-grid">
         <div class="en-premium-copy">
-          <span>Premium websites / coded properly / launched cleanly</span>
-          <h1>Websites that feel designed before they feel generated.</h1>
+          <span>Kai-Jie Yang · New Taipei, Taiwan · works online</span>
+          <h1>Websites and booking systems for small businesses, built by one person.</h1>
           <p>
-            KJyang Studio creates polished websites for small businesses, clinics, service teams, studios, and independent professionals that need more than a quick AI-looking page.
+            I'm Kai-Jie Yang, a high-school senior in New Taipei, Taiwan. I design, code, launch and maintain websites for small shops, studios and local services. I'm based in northern Taiwan and work online. One-page sites start at {studioFacts.startPrice}.
           </p>
           <div class="en-premium-actions">
-            <a class="en-premium-btn primary" href="/studio/en/contact">Start a project</a>
+            <a class="en-premium-btn primary" href="/studio/en/contact">Contact me</a>
             <a class="en-premium-btn secondary" href="/studio/en/services">View services</a>
           </div>
         </div>
 
         <aside class="en-premium-board" aria-label="Project system preview">
           <div class="en-premium-board-top">
-            <span>Project board</span>
-            <b>Client-ready system</b>
+            <span>What you get</span>
+            <b>One person, start to finish</b>
           </div>
           <div class="en-premium-window">
             <div class="en-premium-window-title">
@@ -63,15 +64,15 @@ const launchChecks = ["Mobile layout", "CTA path", "SEO metadata", "FAQ schema",
             <div class="en-premium-window-body">
               <article>
                 <small>Positioning</small>
-                <b>Clear offer in first viewport</b>
+                <b>What you do, where, and how much, on the first screen</b>
               </article>
               <article>
-                <small>Conversion</small>
-                <b>Contact path, proof, FAQ, pricing logic</b>
+                <small>Contact</small>
+                <b>LINE, phone and map buttons that work on phones</b>
               </article>
               <article>
                 <small>Delivery</small>
-                <b>Frontend, schema, deploy, maintenance</b>
+                <b>Code, domain, HTTPS, updates after launch</b>
               </article>
             </div>
           </div>
@@ -86,8 +87,8 @@ const launchChecks = ["Mobile layout", "CTA path", "SEO metadata", "FAQ schema",
 
     <section class="en-premium-system">
       <div class="en-premium-wrap en-premium-section-head">
-        <span>Operating system</span>
-        <h2>A website studio workflow, not a screenshot factory.</h2>
+        <span>What I do</span>
+        <h2>Design, code, launch and care, all done by me.</h2>
       </div>
       <div class="en-premium-wrap en-premium-system-grid">
         {systems.map(([num, title, text]) => (
@@ -103,8 +104,8 @@ const launchChecks = ["Mobile layout", "CTA path", "SEO metadata", "FAQ schema",
     <section class="en-premium-demos">
       <div class="en-premium-wrap en-premium-section-head light">
         <span>Demo directions</span>
-        <h2>Two sample websites built to show decision quality.</h2>
-        <p>These are sample websites only. They demonstrate layout, copy structure, CTA planning, and industry-specific UX.</p>
+        <h2>Two sample websites with fictional brands.</h2>
+        <p>These businesses are made up and are not clients. They show how a layout can change by industry. My real projects are on the <a href="/studio/work">work page</a> (in Chinese).</p>
       </div>
       <div class="en-premium-wrap en-premium-demo-grid">
         {demos.map(([title, text, href]) => (
@@ -123,9 +124,9 @@ const launchChecks = ["Mobile layout", "CTA path", "SEO metadata", "FAQ schema",
     <section class="en-premium-proof">
       <div class="en-premium-wrap en-premium-proof-grid">
         <div>
-          <span>Why it looks different</span>
-          <h2>Premium is mostly restraint, structure, and follow-through.</h2>
-          <p>Cheap website work usually stops at a visual draft. Real business websites need content strategy, stable UI, routing, contact behavior, and launch ownership.</p>
+          <span>How I work</span>
+          <h2>Clear prices, your own accounts, no ranking promises.</h2>
+          <p>You talk directly to the person who builds the site. My own site runs on a Mac mini with Docker behind Cloudflare and deploys automatically through GitHub Actions, and I look after client sites the same way.</p>
         </div>
         <div class="en-premium-proof-list">
           {proof.map(([title, text]) => (
@@ -142,7 +143,7 @@ const launchChecks = ["Mobile layout", "CTA path", "SEO metadata", "FAQ schema",
       <div class="en-premium-wrap en-premium-launch-panel">
         <div>
           <span>Launch checklist</span>
-          <h2>Designed to go live, not just look good in preview.</h2>
+          <h2>What I check before a site goes live.</h2>
         </div>
         <ul>
           {launchChecks.map((item) => <li>{item}</li>)}
@@ -154,11 +155,11 @@ const launchChecks = ["Mobile layout", "CTA path", "SEO metadata", "FAQ schema",
       <div class="en-premium-wrap en-premium-final-grid">
         <div>
           <span>Next step</span>
-          <h2>Send business context. Get a practical scope recommendation.</h2>
-          <p>Share business type, current website, reference sites, budget range, and whether deployment or ongoing care is needed.</p>
+          <h2>Send me your shop name or current website.</h2>
+          <p>I'll take a look for free and reply with 3 things you could change right away, and which plan would fit. Chinese or English is fine.</p>
         </div>
         <div class="en-premium-actions">
-          <a class="en-premium-btn primary" href="/studio/en/contact">Contact KJyang Studio</a>
+          <a class="en-premium-btn primary" href="/studio/en/contact">Contact me</a>
           <a class="en-premium-btn secondary dark" href="/studio/en/pricing">View pricing</a>
         </div>
       </div>

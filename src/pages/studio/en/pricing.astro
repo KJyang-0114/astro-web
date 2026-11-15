@@ -4,19 +4,19 @@ import SiteShell from "@components/SiteShell.astro";
 import { maintenancePlans, studioPlans } from "@data/studio";
 ---
 
-<SiteShell title="Pricing | KJyang Studio" description="Website build and care price ranges for KJyang Studio." canonicalPath="/studio/en/pricing" lang="en">
+<SiteShell title="Pricing | KJyang Studio" description="Price ranges for websites and booking systems by Kai-Jie Yang: one-page sites from NT$18,000, multi-page sites from NT$35,000, booking systems quoted separately." canonicalPath="/studio/en/pricing" lang="en">
   <main class="studio-en-v2 en-subpage">
     <StudioNav />
     <section class="en-v2-hero en-page-hero">
       <div class="en-v2-wrap en-v2-hero-grid">
         <div class="en-v2-copy">
-          <span class="en-v2-kicker">CLEAR STARTING RANGE</span>
+          <span class="en-v2-kicker">Pricing</span>
           <h1>A clear starting point for your budget.</h1>
-          <p>Final quotes depend on content, page count, design depth, functionality, deployment needs, and maintenance scope.</p>
+          <p>Final quotes depend on page count, whether your photos and text are ready, and whether you need booking features. Every quote is written down before work starts: 50% before I start, 50% before launch.</p>
         </div>
         <div class="en-price-stack">
-          {studioPlans.map((plan, i) => <article><b>{plan.title}</b><strong>{plan.price}</strong><p>{["One page for a focused service, with clear content, contact links and launch setup.", "A multi-page website for services, work, an introduction and contact information.", "Booking, accounts, payments or integrations are scoped and quoted separately."][i]}</p></article>)}
-          {maintenancePlans.slice(0, 1).map(([title, price, text]) => <article><b>{title}</b><strong>{price}</strong><p>{"Hosting, SSL, backups, basic monitoring and minor content updates. Scope agreed before work begins."}</p></article>)}
+          {studioPlans.map((plan, i) => <article><b>{plan.title}</b><strong>{plan.price.startsWith("NT$") ? plan.price : "Quoted per project"}</strong><p>{["One mobile-first page with services, prices, location, hours, FAQ, and LINE, phone and map buttons. About 2 to 3 weeks.", "A home page plus 4 or more pages (services, work, about, contact). About 4 to 6 weeks.", "Online booking, staff schedules, member data or an admin page. I map out your current process first, then quote time and cost."][i]}</p></article>)}
+          {maintenancePlans.slice(0, 1).map(([title, price, text]) => <article><b>{title}</b><strong>{price}</strong><p>{"Hosting, HTTPS, backups, fixing the site if it goes down, and 2 small text or photo edits per month. Optional."}</p></article>)}
         </div>
       </div>
     </section>

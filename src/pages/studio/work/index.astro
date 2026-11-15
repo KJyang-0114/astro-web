@@ -1,81 +1,102 @@
 ---
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
-import { absoluteStudioUrl } from "@data/seo";
+import { absoluteStudioUrl, founderPerson } from "@data/seo";
 import { getDemo } from "@data/demos";
+import { realCases } from "@data/cases";
 import { workCases } from "@data/work";
+import { studioContact, studioFacts } from "@data/studio";
 
 const schema = [
   {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "KJyang Studio Works",
-    description: "KJyang Studio demo case studies for small business website design, CTA planning, mobile layout, and deployment-ready structure.",
+    name: "楊凱捷的網站作品與設計範例",
+    description: "3 個真實作品（Weilspa 預約與排班系統、粉絲資訊站與網頁遊戲、這個網站本身），以及 4 個虛構品牌的產業設計範例。",
     url: absoluteStudioUrl("/studio/work"),
     inLanguage: "zh-Hant",
-    mainEntity: workCases.map((work) => ({
-      "@type": "CreativeWork",
-      name: work.title,
-      url: absoluteStudioUrl(`/studio/work/${work.slug}`),
-      genre: work.industry
-    }))
+    creator: founderPerson,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: [
+        ...realCases.map((c, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          item: {
+            "@type": "CreativeWork",
+            name: c.name,
+            url: absoluteStudioUrl(`/studio/work/${c.slug}`),
+            description: c.kind,
+            creator: founderPerson
+          }
+        })),
+        ...workCases.map((w, i) => ({
+          "@type": "ListItem",
+          position: realCases.length + i + 1,
+          item: {
+            "@type": "CreativeWork",
+            name: w.title,
+            url: absoluteStudioUrl(`/studio/work/${w.slug}`),
+            genre: "設計範例（虛構品牌）",
+            about: w.industry,
+            creator: founderPerson
+          }
+        }))
+      ]
+    }
   }
 ];
 ---
-
-<SiteShell
-  title="作品案例 | KJyang Studio"
-  description="KJyang Studio 作品案例，用 case study 說明不同行業網站的設計策略、CTA、手機版、FAQ 與 SEO/GEO 基礎。"
-  canonicalPath="/studio/work"
-  schema={schema}
->
-  <main class="studio-index">
+<SiteShell title="作品｜Weilspa 預約系統、粉絲資訊站與產業設計範例 — KJyang Studio" description="我做過的 3 個真實作品：Weilspa（雙門市美容 SPA）的預約與排班系統、自己經營的粉絲資訊站與網頁遊戲、這個自動部署的網站。另外有 4 個虛構品牌的設計範例。" canonicalPath="/studio/work" schema={schema}>
+  <main class="studio-index s-case">
     <StudioNav />
+    <header class="s-wrap s-case-hero">
+      <p class="s-eyebrow">作品</p>
+      <h1>我做過的東西</h1>
+      <p class="s-lead">上面 3 個是真的在用、或已經做完的作品，每個都寫了原本的問題、我怎麼做、現在的狀態。下面 4 個是我自己編的店，用來示範不同產業的網站可以怎麼排。</p>
+    </header>
 
-    <section class="studio-subpage-hero work-hero">
-      <div class="wrap work-hero-grid">
-        <div>
-          <span>Selected Work</span>
-          <h1>不同生意，各有自己的樣子。</h1>
-          <p>
-            四個虛構品牌，四種設計探索。可以先看完整網站，再讀每個畫面背後的安排；這些不是實際客戶或成效案例。
-          </p>
-        </div>
-        <div class="work-hero-panel">
-          <b>CASE STUDY SYSTEM</b>
-          <p>從品牌的語氣，到訪客的下一步。把美感與使用方式放在一起思考。</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="work-index-section">
-      <div class="wrap work-case-grid">
-        {workCases.map((work, index) => (
-          <a class:list={["work-case-card", `work-case-${work.slug}`]} href={`/studio/work/${work.slug}`}>
-            <img class="work-cover" src={getDemo(work.demoSlug).heroImage} alt={`${work.industry}概念素材`} width="1200" height="800" loading="lazy" /><div>
-              <span>{String(index + 1).padStart(2, "0")} / {work.industry}</span>
-              <h2>{work.title}</h2>
-              <p>{work.description}</p>
-            </div>
-            <ul>
-              {work.stats.map(([num, label]) => (
-                <li><b>{num}</b><small>{label}</small></li>
-              ))}
-            </ul>
+    <section class="s-wrap s-section" aria-labelledby="real-title">
+      <div class="s-head"><p class="s-eyebrow">真實作品</p><h2 id="real-title">親手做完的三個專案</h2></div>
+      <div class="s-cases">
+        {realCases.map((c) => (
+          <a class="s-case-card" href={`/studio/work/${c.slug}`}>
+            <small>{c.kind}</small>
+            <h3>{c.name}</h3>
+            <p>{c.summary}</p>
+            <span class="s-case-status">{c.status}</span>
+            <b>看怎麼做的 →</b>
           </a>
         ))}
       </div>
     </section>
 
-    <section class="studio-final-cta">
-      <div class="wrap">
-        <span>Demo to delivery</span>
-        <h2>看完 case，再回頭看 demo 會更清楚。</h2>
-        <p>正式網站會依真實商家資料重新規劃，不是直接把樣本套上店名。</p>
-        <div class="action-row">
-          <a class="btn studio-index-primary" href="/studio/demo">看 Demo</a>
-          <a class="btn studio-index-secondary" href="/studio/contact">討論需求</a>
-        </div>
+    <section class="s-wrap s-section" aria-labelledby="concept-title">
+      <div class="s-head">
+        <p class="s-eyebrow">虛構品牌・不是客戶</p>
+        <h2 id="concept-title">設計範例</h2>
+        <p class="s-lead">這 4 個店名、照片和內容都是我編的，不是客戶，也沒有真的營業。做這些是為了示範室內設計、診所、冷氣、補習班這幾種店，客人想先看到的東西不一樣，網站的順序也跟著不一樣。</p>
+      </div>
+      <div class="s-concepts">
+        {workCases.map((w) => (
+          <a class="s-case-card s-concept-card" href={`/studio/work/${w.slug}`}>
+            <img src={getDemo(w.demoSlug).heroImage} alt={`${w.brand}範例網站的示意照片`} width="1200" height="800" loading="lazy" />
+            <small>虛構品牌・{w.industry}</small>
+            <h3>{w.brand}</h3>
+            <p>{w.forWho}</p>
+            <b>看版面怎麼排 →</b>
+          </a>
+        ))}
+      </div>
+      <p class="s-more-link"><a href="/studio/demo">直接打開 4 個範例網站 →</a></p>
+    </section>
+
+    <section class="s-wrap s-cta-band">
+      <h2>想知道你的店適合哪一種？</h2>
+      <p>{studioFacts.freeCheck}</p>
+      <div class="s-actions">
+        <a class="s-btn s-btn-primary" href={studioContact.lineUrl} data-cta="work-line">LINE 傳店名給我</a>
+        <a class="s-btn" href="/studio/pricing">看價格</a>
       </div>
     </section>
   </main>

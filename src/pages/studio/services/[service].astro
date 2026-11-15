@@ -1,7 +1,8 @@
 ---
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
-import { absoluteStudioUrl } from "@data/seo";
+import { absoluteStudioUrl, founderPerson } from "@data/seo";
+import { maintenancePlans, studioContact, studioFacts } from "@data/studio";
 import { getServicePage, servicePages } from "@data/trust";
 
 export function getStaticPaths() {
@@ -11,6 +12,14 @@ export function getStaticPaths() {
 }
 
 const service = getServicePage(Astro.params.service ?? "");
+const careFrom = maintenancePlans[0][1].replace(" / month", "");
+const priceText =
+  service.slug === "website-maintenance"
+    ? `維護月費 ${careFrom} 起，包含主機、HTTPS、備份和每月 2 次小修改。不買月費也可以，要改的時候再單次報價。`
+    : service.slug === "deployment-hosting"
+      ? "要看你的程式是什麼、想放在哪裡，所以我會先看過檔案再報價。網域和主機帳號都開在你名下。"
+      : `一頁式網站 ${studioFacts.startPrice} 起，大約 ${studioFacts.onePageWeeks}；多頁網站大約 ${studioFacts.multiPageWeeks}。付款是${studioFacts.payment}。`;
+const others = servicePages.filter((s) => s.slug !== service.slug);
 const schema = [
   {
     "@context": "https://schema.org",
@@ -18,53 +27,60 @@ const schema = [
     name: service.title,
     description: service.description,
     url: absoluteStudioUrl(`/studio/services/${service.slug}`),
-    provider: {
-      "@type": "Organization",
-      name: "KJyang Studio",
-      url: absoluteStudioUrl("/studio")
-    },
-    areaServed: ["Taiwan", "International"]
+    provider: founderPerson,
+    areaServed: studioFacts.areaServed,
+    inLanguage: "zh-Hant"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "KJyang Studio", item: absoluteStudioUrl("/studio") },
+      { "@type": "ListItem", position: 2, name: "服務", item: absoluteStudioUrl("/studio/services") },
+      { "@type": "ListItem", position: 3, name: service.title, item: absoluteStudioUrl(`/studio/services/${service.slug}`) }
+    ]
   }
 ];
 ---
-
-<SiteShell title={`${service.title} | KJyang Studio`} description={service.description} canonicalPath={`/studio/services/${service.slug}`} schema={schema}>
-  <main class="studio-index">
+<SiteShell title={`${service.title}｜北部小店・一人接案 — KJyang Studio`} description={service.description} canonicalPath={`/studio/services/${service.slug}`} schema={schema}>
+  <main class="studio-index s-case">
     <StudioNav />
-    <section class="studio-subpage-hero service-detail-hero">
-      <div class="wrap">
-        <span>Service</span>
-        <h1>{service.title}</h1>
-        <p>{service.description}</p>
-      </div>
-    </section>
+    <header class="s-wrap s-case-hero">
+      <a class="s-back" href="/studio/services">← 所有服務</a>
+      <p class="s-eyebrow">服務・{studioFacts.areaShort}</p>
+      <h1>{service.title}</h1>
+      <p class="s-lead">{service.description}</p>
+    </header>
 
-    <section class="service-detail-section">
-      <div class="wrap service-detail-grid">
-        <div>
-          <span>Outcome</span>
-          <h2>{service.promise}</h2>
-          <p>正式合作會先確認需求、頁數、內容、預算、部署方式和維護範圍，再進入設計與開發。</p>
-        </div>
-        <div class="service-includes">
-          {service.includes.map((item, index) => (
-            <article>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <b>{item}</b>
-            </article>
-          ))}
-        </div>
+    <div class="s-wrap s-case-body">
+      <div>
+        <section>
+          <h2>做完之後</h2>
+          <p>{service.promise}</p>
+        </section>
+        <section>
+          <h2>實際會遇到的情況</h2>
+          <p class="s-scenario">{service.scenario}</p>
+        </section>
+        <section>
+          <h2>費用</h2>
+          <p>{priceText}實際金額我會在報價單上逐項寫清楚，你同意了才開始。</p>
+        </section>
       </div>
-    </section>
+      <aside class="s-side">
+        <h2>包含哪些</h2>
+        <ul>{service.includes.map((item) => <li>{item}</li>)}</ul>
+        <h2>其他服務</h2>
+        <ul>{others.map((o) => <li><a href={`/studio/services/${o.slug}`}>{o.title}</a></li>)}</ul>
+      </aside>
+    </div>
 
-    <section class="studio-final-cta">
-      <div class="wrap">
-        <span>Next step</span>
-        <h2>先看作品案例，再判斷需求落在哪個方案。</h2>
-        <div class="action-row">
-          <a class="btn studio-index-primary" href="/studio/work">看作品案例</a>
-          <a class="btn studio-index-secondary" href="/studio/contact">聯絡諮詢</a>
-        </div>
+    <section class="s-wrap s-cta-band">
+      <h2>先傳店名給我就好</h2>
+      <p>{studioFacts.freeCheck}</p>
+      <div class="s-actions">
+        <a class="s-btn s-btn-primary" href={studioContact.lineUrl} data-cta={`service-${service.slug}-line`}>LINE 傳給我</a>
+        <a class="s-btn" href="/studio/pricing">看價格和包含什麼</a>
       </div>
     </section>
   </main>

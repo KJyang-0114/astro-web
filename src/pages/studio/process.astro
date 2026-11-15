@@ -1,40 +1,30 @@
 ---
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
-import { studioProcess } from "@data/studio";
+import { studioContact, studioFacts, studioProcess } from "@data/studio";
 ---
-
-<SiteShell title="網站製作流程｜需求、設計、確認到上線 — KJyang Studio" description="第一次委託製作網站，從哪裡開始？了解需求討論、內容準備、設計確認、開發部署與維護流程，先釐清預算、交付內容與上線方式。" canonicalPath="/studio/process">
-  <main class="studio-index">
+<SiteShell title="網站製作流程｜從傳 LINE 到上線要幾天 — KJyang Studio" description="找我做網站會經過 5 步：免費看一次、報價、設計、製作測試、上線交接。每一步大約幾天、你要給我什麼、我會給你什麼。" canonicalPath="/studio/process">
+  <main class="studio-index s-case">
     <StudioNav />
-    <section class="studio-subpage-hero">
-      <div class="wrap">
-        <span>Process</span>
-        <h1>先講清楚，再開始做</h1>
-        <p>網站不是只交一個畫面。從需求、內容、設計、前端、部署到維護，每一步都要能落地。</p>
-      </div>
+    <header class="s-wrap s-case-hero">
+      <p class="s-eyebrow">流程</p>
+      <h1>從傳 LINE 到網站上線，會經過 5 步</h1>
+      <p class="s-lead">一頁式網站大約 {studioFacts.onePageWeeks}，多頁網站 {studioFacts.multiPageWeeks}。時間從你把資料給齊那天開始算，最常卡住的是照片和價目。</p>
+    </header>
+    <section class="s-wrap s-section"><ol class="s-steps">{studioProcess.map(([n, t, d]) => <li><span>{n}</span><div><b>{t}</b><p>{d}</p></div></li>)}</ol></section>
+    <section class="s-wrap s-section" aria-labelledby="handover">
+      <div class="s-head"><p class="s-eyebrow">交接</p><h2 id="handover">上線那天你會拿到</h2></div>
+      <dl class="s-kv">
+        <div><dt>網域帳號</dt><dd>登記在你名下，密碼你自己保管。</dd></div>
+        <div><dt>程式碼</dt><dd>放在你可以存取的 GitHub，換人接手也看得懂。</dd></div>
+        <div><dt>改內容說明</dt><dd>一份簡單文件：要改價格、換照片時找誰、怎麼做。</dd></div>
+        <div><dt>流量統計</dt><dd>幫你開好 Google Search Console 和流量統計，看得到有多少人搜到你。</dd></div>
+      </dl>
     </section>
-    <section class="studio-card-section">
-      <div class="wrap studio-process-list">
-        {studioProcess.map(([num, title, text]) => (
-          <article>
-            <span>{num}</span>
-            <h2>{title}</h2>
-            <p>{text}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-    <section class="studio-final-cta">
-      <div class="wrap">
-        <span>Start clean</span>
-        <h2>流程越清楚，交付後越少來回修改。</h2>
-        <p>先把目標、內容、預算和上線方式整理好，再進入設計與開發。</p>
-        <div class="action-row">
-          <a class="btn studio-index-primary" href="/studio/contact">開始網站諮詢</a>
-          <a class="btn studio-index-secondary" href="/studio/demo">先看 Demo</a>
-        </div>
-      </div>
+    <section class="s-wrap s-cta-band">
+      <h2>第一步是免費的</h2>
+      <p>{studioFacts.freeCheck}</p>
+      <div class="s-actions"><a class="s-btn s-btn-primary" href={studioContact.lineUrl} data-cta="process-line">LINE 傳店名給我</a><a class="s-btn" href="/studio/pricing">看價格</a></div>
     </section>
   </main>
 </SiteShell>

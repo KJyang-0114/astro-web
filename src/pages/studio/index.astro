@@ -1,39 +1,98 @@
 ---
 import SiteShell from "@components/SiteShell.astro";
 import StudioNav from "@components/StudioNav.astro";
-import { buildStudioSchemas } from "@data/seo";
-import { studioPlans } from "@data/studio";
+import BookingMock from "@components/studio/BookingMock.astro";
+import { buildStudioSchemas, studioFaq } from "@data/seo";
+import { studioContact, studioFacts, studioPlans, studioProcess } from "@data/studio";
+import { studioBeliefs } from "@data/trust";
+import { realCases } from "@data/cases";
 ---
-<SiteShell title="小商家網站設計與製作｜一頁式、品牌網站 — KJyang Studio" description="為小商家與工作室整理內容、設計品牌網站，從手機版面、聯絡入口到部署與維護。查看完整設計範例、費用與合作流程。" canonicalPath="/studio" schema={buildStudioSchemas().filter(entry => entry["@type"] !== "FAQPage")} alternates={[{hrefLang:"zh-Hant",href:"/studio"},{hrefLang:"en",href:"/studio/en"},{hrefLang:"x-default",href:"/studio"}]}>
-<StudioNav /><main class="atelier-home">
-
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="introduction">
-        <div class="kicker"><span class="short-rule"></span>網站設計與開發 <span class="kicker-en">/ INDEPENDENT STUDIO</span></div>
-        <h1 id="hero-title"><span>讓品牌，</span><span class="indent">有自己的</span><span>樣子<span class="full-stop">。</span></span></h1>
-        <div class="intro-note"><span class="note-index">01 —</span><p>好看的第一眼，清楚的每一步。<br>把你的特色，做成真正好用的網站。</p></div>
-        <a class="explore" href="#work">看設計，也看細節 <span aria-hidden="true">↗</span></a>
-        <div class="signature"><svg viewBox="0 0 70 40" aria-hidden="true"><path d="M4 26C11 5 25 1 28 10S17 38 15 31 38 4 41 9 25 34 34 30 53 2 59 9 43 32 66 19"/></svg><span>由想法，到上線。<br>每一步，都好好對待。</span></div>
+<SiteShell title="小店網站與預約系統製作｜北部・一頁式 NT$18,000 起 — KJyang Studio" description="楊凱捷一人接案，幫北部小店、工作室、美容 SPA 做網站和線上預約系統。設計、程式、上線、之後的修改都自己處理。一頁式 NT$18,000 起，約 2 到 3 週上線。" canonicalPath="/studio" schema={buildStudioSchemas()} alternates={[{hrefLang:"zh-Hant",href:"/studio"},{hrefLang:"en",href:"/studio/en"},{hrefLang:"x-default",href:"/studio"}]}>
+<StudioNav />
+<main class="studio-index s-home">
+  <section class="s-hero" aria-labelledby="hero-title">
+    <div class="s-hero-copy">
+      <p class="s-eyebrow">楊凱捷・一人接案・{studioFacts.areaShort}</p>
+      <h1 id="hero-title">幫小店做客人看得懂、<br />找得到你的網站</h1>
+      <p class="s-lead">我幫北部的小店、工作室做網站和線上預約系統。設計、寫程式、上線、之後改價格換照片，都是我自己來，傳 LINE 找的就是做網站的人。</p>
+      <ul class="s-hero-facts">
+        <li><b>{studioFacts.startPrice} 起</b>一頁式網站</li>
+        <li><b>{studioFacts.onePageWeeks}</b>資料給齊後上線</li>
+        <li><b>{studioFacts.replyShort}</b>每天看 LINE</li>
+      </ul>
+      <div class="s-actions">
+        <a class="s-btn s-btn-primary" href={studioContact.lineUrl} data-cta="hero-line">LINE 傳店名，免費看一次</a>
+        <a class="s-btn" href="/studio/pricing" data-cta="hero-pricing">看價格和包含什麼</a>
       </div>
-      <div class="gallery" id="work" tabindex="-1" aria-label="概念網站展示">
-        <div class="gallery-heading"><span>SELECTED DIRECTIONS</span><span class="gallery-tag">設計探索 / 2026</span></div>
-        <div class="artboard" data-project="interior">
-          <span class="edge-label" aria-hidden="true">FORM / FUNCTION / FEELING</span>
-          <div class="website">
-            <div class="website-nav"><span id="sample-brand">岩序<span class="sample-english">YAN XU</span></span><span class="website-menu" id="sample-menu">作品　 關於　 聯絡 ↗</span></div>
-            <div class="website-image"><img id="sample-image" src="/demo-assets/interior-hero.png" alt="室內設計概念素材：住宅與材質" width="1600" height="900"><span class="image-index" aria-hidden="true">01</span><span id="sample-category">RESIDENTIAL / INTERIOR</span></div>
-            <div class="website-editorial"><div><span class="sample-eyebrow" id="sample-eyebrow">空間裡，留下生活。</span><h2 id="sample-title">日常，自有風景。</h2></div><p id="sample-copy">一道光、一種材質。<br>慢慢靠近，喜歡的生活。</p><span class="editorial-arrow" aria-hidden="true">↗</span></div>
-            <div class="website-bottom"><span id="sample-bottom">品牌網站概念</span><span id="sample-bottom-end">SCROLL TO EXPLORE ↓</span></div>
-          </div>
-          <span class="crop-mark top" aria-hidden="true"></span><span class="crop-mark bottom" aria-hidden="true"></span>
-        </div>
-        <a id="concept-link" href="/studio/demo/interior-design" class="gallery-caption"><div><span class="caption-index" id="caption-index">01</span><h3 id="caption-title">岩序室內設計</h3><span class="concept">概念設計</span></div><span id="caption-type">空間 · 品牌形象</span></a>
-        <div class="gallery-bottom"><div class="project-tabs" role="group" aria-label="選擇概念作品"><button type="button" data-select="0" aria-pressed="true">01 <span>空間</span></button><button type="button" data-select="1" aria-pressed="false">02 <span>診所</span></button><button type="button" data-select="2" aria-pressed="false">03 <span>冷氣</span></button></div><span class="gallery-footnote">點作品名稱，探索完整網站 ↗</span></div>
-        <span class="sr-only" id="gallery-status" aria-live="polite" aria-atomic="true">第 1 件，共 3 件：岩序室內設計</span>
-      </div>
-    </section>
-    <section class="approach" id="approach"><div class="section-heading"><span>THE WAY WE WORK</span><span>設計與工程，都有照顧到。</span></div><div class="approach-grid"><h2>外在有美感，<br>裡面有安排。</h2><div class="approach-details"><p>從內容整理、視覺設計，到網站製作與上線。<br>先看懂你的需求，再找到適合的呈現。</p><ol><li><span>01</span><b>找出特色</b><small>釐清受眾與內容</small></li><li><span>02</span><b>形成樣子</b><small>版面、細節與互動</small></li><li><span>03</span><b>好好上線</b><small>製作、測試與後續照顧</small></li></ol></div></div></section>
+      <p class="s-fine">傳店名、網站或 IG，我回你 3 個可以馬上改的地方。看完不用付錢。</p>
+    </div>
+    <div class="s-hero-visual">
+      <BookingMock />
+      <p class="s-note">我幫 Weilspa 做的預約流程（示意畫面、示範資料）</p>
+    </div>
+  </section>
 
-<section class="approach"><div class="section-heading"><span>A PLACE TO START</span><span>依需求，選擇適合的規模。</span></div><div class="atelier-plans">{studioPlans.map((plan,i)=><a href="/studio/pricing"><span>0{i+1}</span><h2>{plan.nameZh}</h2><strong>{plan.price}</strong><p>{plan.text}</p><span>查看方案與交付範圍 ↗</span></a>)}</div></section>
-<section class="approach"><div class="approach-grid"><h2>先聊清楚，<br/>再開始設計。</h2><div class="approach-details"><p>帶著你的服務、參考網站或一個還沒成形的想法都可以。先一起整理受眾、內容與預算，再確認範圍與時程。</p><a class="explore" href="/studio/process">了解完整合作流程 ↗</a><a class="explore" href="/studio/contact">討論你的網站 ↗</a></div></div></section>
-</main><script>import "../../scripts/studio-gallery.js";</script></SiteShell>
+  <section class="s-wrap s-section" aria-labelledby="work-title">
+    <div class="s-head"><p class="s-eyebrow">真實作品</p><h2 id="work-title">做過的東西，都可以點進去看</h2></div>
+    <div class="s-cases">
+      {realCases.map((c) => (
+        <a class="s-case-card" href={`/studio/work/${c.slug}`}>
+          <small>{c.kind}</small>
+          <h3>{c.name}</h3>
+          <p>{c.summary}</p>
+          <span class="s-case-status">{c.status}</span>
+          <b>看怎麼做的 →</b>
+        </a>
+      ))}
+    </div>
+    <p class="s-more-link"><a href="/studio/work">另外還有 4 個不同產業的設計範例 →</a></p>
+  </section>
+
+  <section class="s-wrap s-section s-me" aria-labelledby="me-title">
+    <div class="s-head"><p class="s-eyebrow">關於我</p><h2 id="me-title">我是楊凱捷，鶯歌工商資訊科高三</h2></div>
+    <div class="s-me-grid">
+      <div>
+        <p>我自學寫網站和架主機，做過完全遠端的軟體開發工作，也一直在經營自己的網站。接案是因為我發現很多店家其實不需要很貴的網站公司，需要的是一個講得清楚、找得到、做完不會消失的人。</p>
+        <p>學生的好處是時間彈性、價格合理、你問什麼我都會直接回答。我知道你可能擔心「做完之後找不到人」，所以下面這四件事我都寫進報價單：</p>
+        <a class="s-link" href="/studio/about">更多關於我 →</a>
+      </div>
+      <ul class="s-promises">{studioBeliefs.map((b) => <li><b>{b.title}</b><p>{b.text}</p></li>)}</ul>
+    </div>
+  </section>
+
+  <section class="s-wrap s-section" aria-labelledby="price-title">
+    <div class="s-head"><p class="s-eyebrow">價格</p><h2 id="price-title">價格寫在這裡，報價單也會寫清楚</h2></div>
+    <div class="s-plans">
+      {studioPlans.map((plan) => (
+        <article class="s-plan">
+          <h3>{plan.nameZh}</h3>
+          <strong>{plan.price}</strong>
+          <p>{plan.text}</p>
+          <p class="s-plan-weeks">大約 {plan.weeks}</p>
+          <ul>{plan.includes.slice(0, 4).map((i) => <li>{i}</li>)}</ul>
+        </article>
+      ))}
+    </div>
+    <p class="s-more-link"><a href="/studio/pricing">看完整的包含／不包含、維護月費 →</a></p>
+  </section>
+
+  <section class="s-wrap s-section" aria-labelledby="process-title">
+    <div class="s-head"><p class="s-eyebrow">流程</p><h2 id="process-title">找我做網站，會經過這 5 步</h2></div>
+    <ol class="s-steps">{studioProcess.map(([n, t, d]) => <li><span>{n}</span><div><b>{t}</b><p>{d}</p></div></li>)}</ol>
+  </section>
+
+  <section class="s-wrap s-section" aria-labelledby="faq-title">
+    <div class="s-head"><p class="s-eyebrow">常見問題</p><h2 id="faq-title">大家常問我的</h2></div>
+    <div class="s-faq">{studioFaq.map((f) => <details><summary>{f.question}</summary><p>{f.answer}</p></details>)}</div>
+  </section>
+
+  <section class="s-wrap s-cta-band">
+    <h2>先傳店名給我就好</h2>
+    <p>{studioFacts.freeCheck}</p>
+    <div class="s-actions">
+      <a class="s-btn s-btn-primary" href={studioContact.lineUrl} data-cta="bottom-line">LINE 傳給我</a>
+      <a class="s-btn" href="/studio/contact" data-cta="bottom-contact">其他聯絡方式</a>
+    </div>
+  </section>
+</main>
+</SiteShell>

@@ -1,5 +1,6 @@
-import { maintenancePlans, studioContact, studioPlans, studioProcess, studioServices } from "./studio";
-import { studioGuides } from "./guides";
+import { maintenancePlans, studioContact, studioFacts, studioPlans, studioServices } from "./studio";
+import { realCases } from "./cases";
+import { person } from "./person";
 import { insightPosts } from "./insights";
 import { servicePages } from "./trust";
 import { workCases } from "./work";
@@ -31,6 +32,12 @@ export const indexableStudioRoutes = [
     changefreq: "monthly",
     title: "Works"
   },
+  ...realCases.map((item) => ({
+    path: `/studio/work/${item.slug}`,
+    priority: "0.85",
+    changefreq: "monthly",
+    title: item.name
+  })),
   ...workCases.map((work) => ({
     path: `/studio/work/${work.slug}`,
     priority: "0.8",
@@ -42,12 +49,6 @@ export const indexableStudioRoutes = [
     priority: "0.8",
     changefreq: "monthly",
     title: "About"
-  },
-  {
-    path: "/studio/why-us",
-    priority: "0.75",
-    changefreq: "monthly",
-    title: "Why KJyang Studio"
   },
   {
     path: "/studio/pricing",
@@ -93,27 +94,53 @@ export const indexableStudioRoutes = [
   },
   {
     path: "/studio/insights",
-    priority: "0.8",
-    changefreq: "daily",
+    priority: "0.7",
+    changefreq: "monthly",
     title: "Insights"
   },
-  ...studioGuides.map((guide) => ({
-    path: `/studio/${guide.slug}`,
-    priority: guide.slug === "website-design-for-local-business" ? "0.8" : "0.7",
-    changefreq: "monthly",
-    title: guide.title
-  })),
   ...insightPosts.map((post) => ({
     path: `/studio/insights/${post.slug}`,
     priority: "0.7",
-    changefreq: "weekly",
+    changefreq: "monthly",
     title: post.title
   }))
 ];
 
+export const founderPerson = {
+  "@type": "Person",
+  "@id": person["@id"],
+  name: person.name,
+  alternateName: person.alternateName,
+  url: person.url,
+  sameAs: person.sameAs
+};
+
 export function absoluteStudioUrl(path: string) {
   return new URL(path, studioOrigin).toString();
 }
+
+export const studioFaq = [
+  {
+    question: "你還是學生，網站做完之後找得到你嗎？",
+    answer: "找得到。我每天上午 10 點到晚上 10 點會看 LINE。網域和主機帳號登記在你名下，程式碼也會交給你，就算哪天我真的沒辦法接，換別的工程師也接得起來。"
+  },
+  {
+    question: "我只有 IG 和 Google 地圖，還需要網站嗎？",
+    answer: "不一定。如果客人都是熟客、靠 LINE 就接得完，先把 Google 商家資料補齊就好。如果常被問價格、營業時間、怎麼預約，或想讓沒追蹤你的人也搜得到，網站就有用。免費看一次的時候我會直接跟你說要不要做。"
+  },
+  {
+    question: "多久可以上線？",
+    answer: "一頁式大約 2 到 3 週，多頁網站 4 到 6 週，從資料給齊那天開始算。最常拖到時間的是照片和價目，所以我會先給你一份要準備的清單。"
+  },
+  {
+    question: "線上預約系統跟用 LINE 預約差在哪？",
+    answer: "LINE 預約要一則一則回，忙的時候客人要等。預約系統讓客人自己看哪些時段可以約、送出申請，你有空再一次確認。我幫一間兩家門市的美容 SPA 做過一套，主要就是讓老闆少回訊息。"
+  },
+  {
+    question: "會保證 Google 排名嗎？",
+    answer: "不會，誰保證都不要信。我會做好基本設定（標題、說明、地區、網站地圖），送到 Google Search Console，並教你怎麼看有多少人搜到你。"
+  }
+];
 
 export function buildStudioSchemas() {
   const organizationId = `${absoluteStudioUrl("/studio")}#organization`;
@@ -130,16 +157,19 @@ export function buildStudioSchemas() {
       logo: absoluteStudioUrl("/brand/kjyang-mark.svg"),
       image: absoluteStudioUrl("/brand/kjyang-cover.svg"),
       description:
-        "KJyang Studio designs, codes, deploys, and maintains conversion-focused websites for small businesses.",
+        "楊凱捷一人經營的網站接案品牌：幫北部小店、工作室做網站、線上預約系統，負責設計、程式、上線與之後的維護。",
+      founder: founderPerson,
+      email: studioContact.email,
+      areaServed: studioFacts.areaServed,
       contactPoint: [
         {
           "@type": "ContactPoint",
           contactType: "sales",
-          telephone: studioContact.phone,
+          telephone: studioContact.phoneIntl,
           availableLanguage: ["zh-Hant", "en"]
         }
       ],
-      sameAs: [studioContact.lineUrl]
+      sameAs: [studioContact.lineUrl, ...person.sameAs, person.url]
     },
     {
       "@context": "https://schema.org",
@@ -156,16 +186,16 @@ export function buildStudioSchemas() {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
       "@id": serviceId,
-      name: "KJyang Studio website design and deployment",
+      name: "KJyang Studio 小店網站與預約系統製作",
       url: absoluteStudioUrl("/studio/services"),
       image: absoluteStudioUrl("/brand/kjyang-cover.svg"),
       provider: {
         "@id": organizationId
       },
-      areaServed: ["Taiwan", "International"],
+      areaServed: studioFacts.areaServed,
       serviceType: studioServices.map((service) => service.title),
       description:
-        "Website design, frontend coding, deployment support, hosting setup, SSL, backups, monitoring, maintenance, and basic SEO/GEO setup without ranking guarantees.",
+        "小店網站設計與製作、線上預約與後台、網域與主機設定、上線後維護。一頁式網站 NT$18,000 起。",
       offers: {
         "@type": "OfferCatalog",
         name: "Website build and maintenance price ranges",
@@ -196,32 +226,11 @@ export function buildStudioSchemas() {
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "KJyang Studio 主要做什麼？",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "KJyang Studio 主要提供網站設計、前端代碼編寫、部署上線、主機設定、SSL、備份、監控與後續維護。"
-          }
-        },
-        {
-          "@type": "Question",
-          name: "SEO 和 GEO 會保證排名嗎？",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "不保證排名或 AI 引用結果。服務包含基礎 SEO/GEO 設定，例如 title、description、schema、FAQ、語意內容與 sitemap。"
-          }
-        },
-        {
-          "@type": "Question",
-          name: "合作流程是什麼？",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: studioProcess.map(([num, title]) => `${num} ${title}`).join("、")
-          }
-        }
-      ]
+      mainEntity: studioFaq.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
     }
   ];
 }

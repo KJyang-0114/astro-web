@@ -1,8 +1,11 @@
 ---
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
-import { absoluteStudioUrl } from "@data/seo";
+import { absoluteStudioUrl, founderPerson } from "@data/seo";
+import { getDemo } from "@data/demos";
 import { getWorkCase, workCases } from "@data/work";
+import { realCases } from "@data/cases";
+import { studioContact } from "@data/studio";
 
 export function getStaticPaths() {
   return workCases.map((item) => ({
@@ -11,6 +14,8 @@ export function getStaticPaths() {
 }
 
 const work = getWorkCase(Astro.params.case ?? "");
+const demo = getDemo(work.demoSlug);
+const others = workCases.filter((item) => item.slug !== work.slug);
 const schema = [
   {
     "@context": "https://schema.org",
@@ -19,135 +24,82 @@ const schema = [
     description: work.description,
     url: absoluteStudioUrl(`/studio/work/${work.slug}`),
     inLanguage: "zh-Hant",
-    creator: {
-      "@type": "Organization",
-      name: "KJyang Studio",
-      url: absoluteStudioUrl("/studio")
-    },
+    genre: "設計範例（虛構品牌）",
     about: work.industry,
+    creator: founderPerson,
     workExample: absoluteStudioUrl(work.demoUrl)
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: work.faq.map((item) => ({
-      "@type": "Question",
-      name: item.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.answer
-      }
-    }))
   },
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "KJyang Studio",
-        item: absoluteStudioUrl("/studio")
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "作品案例",
-        item: absoluteStudioUrl("/studio/work")
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: work.title,
-        item: absoluteStudioUrl(`/studio/work/${work.slug}`)
-      }
+      { "@type": "ListItem", position: 1, name: "KJyang Studio", item: absoluteStudioUrl("/studio") },
+      { "@type": "ListItem", position: 2, name: "作品", item: absoluteStudioUrl("/studio/work") },
+      { "@type": "ListItem", position: 3, name: work.title, item: absoluteStudioUrl(`/studio/work/${work.slug}`) }
     ]
   }
 ];
 ---
-
-<SiteShell title={`${work.title} | KJyang Studio`} description={work.description} canonicalPath={`/studio/work/${work.slug}`} schema={schema}>
-  <main class="studio-index">
+<SiteShell title={`${work.brand}｜${work.industry}網站設計範例（虛構品牌） — KJyang Studio`} description={work.description} canonicalPath={`/studio/work/${work.slug}`} schema={schema}>
+  <main class="studio-index s-case">
     <StudioNav />
-
-    <article class="work-detail">
-      <header class="work-detail-hero">
-        <div class="wrap work-detail-grid">
-          <div>
-            <a class="insight-back" href="/studio/work">← 回作品案例</a>
-            <span>{work.eyebrow}</span>
-            <h1>{work.title}</h1>
-            <p>{work.description}</p>
-          </div>
-          <aside class="work-detail-panel">
-            <b>{work.industry}</b>
-            <dl>
-              <div><dt>Problem</dt><dd>{work.problem}</dd></div>
-              <div><dt>Strategy</dt><dd>{work.strategy}</dd></div>
-            </dl>
-          </aside>
-        </div>
-      </header>
-
-      <section class="work-strategy-section">
-        <div class="wrap work-strategy-grid">
-          <article>
-            <span>VISUAL</span>
-            <h2>{work.visualTone}</h2>
-          </article>
-          <article>
-            <span>CTA</span>
-            <h2>{work.ctaPlan}</h2>
-          </article>
-          <article>
-            <span>MOBILE</span>
-            <h2>{work.mobilePlan}</h2>
-          </article>
-          <article>
-            <span>SEO / GEO</span>
-            <h2>{work.seoPlan}</h2>
-          </article>
-        </div>
-      </section>
-
-      <section class="work-story-section">
-        <div class="wrap work-story-grid">
-          <div class="work-story-list">
-            {work.sections.map((section, index) => (
-              <section>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <h2>{section.title}</h2>
-                <p>{section.body}</p>
-              </section>
-            ))}
-          </div>
-          <aside class="work-decision-board">
-            <span>Design decisions</span>
-            <h2>這個 demo 的關鍵判斷</h2>
-            <ul>
-              {work.decisions.map((decision) => <li>{decision}</li>)}
-            </ul>
-            <a class="btn studio-index-primary" href={work.demoUrl}>看實際 Demo</a>
-          </aside>
-        </div>
-      </section>
-    </article>
-
-    <section class="faq-section guide-faq">
-      <div class="wrap faq-grid">
-        <div>
-          <h2 class="section-title">常見問題</h2>
-          <p class="section-copy">case study 是展示設計判斷，不代表真實營業店家。</p>
-        </div>
-        <div class="faq-list">
-          {work.faq.map((item) => (
-            <details>
-              <summary>{item.question}</summary>
-              <p>{item.answer}</p>
-            </details>
-          ))}
-        </div>
+    <header class="s-wrap s-case-hero">
+      <a class="s-back" href="/studio/work">← 所有作品</a>
+      <p class="s-eyebrow">設計範例・{work.industry}</p>
+      <h1>{work.brand}</h1>
+      <p class="s-lead">{work.description}</p>
+      <p class="s-status"><b>這是什麼</b>我自己編的店名和內容，用來示範{work.industry}網站可以怎麼排。照片是示意素材，頁面上的表單不會送出任何資料。</p>
+      <p class="s-links"><a class="s-link" href={work.demoUrl}>打開這個範例網站 ↗</a></p>
+    </header>
+    <section class="s-wrap s-case-visual" aria-label="範例網站第一屏">
+      <img class="s-concept-shot" src={demo.heroImage} alt={`${work.brand}範例網站使用的示意照片`} width="1200" height="800" loading="lazy" />
+      <p class="s-note">範例網站使用的示意照片，不是真的店家。</p>
+    </section>
+    <div class="s-wrap s-case-body">
+      <div>
+        <section>
+          <h2>適合哪種店</h2>
+          <p>{work.forWho}</p>
+        </section>
+        <section>
+          <h2>第一個畫面</h2>
+          <p>{work.firstScreen}</p>
+        </section>
+        <section>
+          <h2>按下去之後</h2>
+          <p>{work.nextStep}</p>
+        </section>
+      </div>
+      <aside class="s-side">
+        <h2>如果是真的店，我還會改</h2>
+        <ul>{work.realShopNotes.map((note) => <li>{note}</li>)}</ul>
+        <h2>範例裡的服務項目</h2>
+        <p class="s-tags">{demo.services.map((s) => <span>{s.title}</span>)}</p>
+      </aside>
+    </div>
+    <section class="s-wrap s-section" aria-labelledby="real-title">
+      <div class="s-head"><p class="s-eyebrow">真實作品</p><h2 id="real-title">想看真的有人在用的東西</h2></div>
+      <div class="s-cases">
+        {realCases.map((c) => (
+          <a class="s-case-card" href={`/studio/work/${c.slug}`}>
+            <small>{c.kind}</small>
+            <h3>{c.name}</h3>
+            <span class="s-case-status">{c.status}</span>
+            <b>看怎麼做的 →</b>
+          </a>
+        ))}
       </div>
     </section>
+    <section class="s-wrap s-cta-band">
+      <h2>你的店也想要類似的版面？</h2>
+      <p>傳店名或 IG 給我，我先免費看一次，回你 3 個可以馬上改的地方，也會說哪個範例比較接近你需要的。</p>
+      <div class="s-actions">
+        <a class="s-btn s-btn-primary" href={studioContact.lineUrl} data-cta={`concept-${work.slug}-line`}>LINE 傳給我</a>
+        <a class="s-btn" href="/studio/pricing">看價格</a>
+      </div>
+    </section>
+    <nav class="s-wrap s-more" aria-label="其他設計範例">
+      {others.map((o) => <a href={`/studio/work/${o.slug}`}><small>設計範例・{o.industry}</small><b>{o.brand} →</b></a>)}
+    </nav>
   </main>
 </SiteShell>

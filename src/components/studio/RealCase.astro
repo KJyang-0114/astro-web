@@ -1,0 +1,80 @@
+---
+import StudioNav from "@components/StudioNav.astro";
+import SiteShell from "@components/SiteShell.astro";
+import BookingMock from "./BookingMock.astro";
+import { absoluteStudioUrl, founderPerson } from "@data/seo";
+import { getRealCase, realCases } from "@data/cases";
+import { studioContact } from "@data/studio";
+
+const { slug } = Astro.props;
+const item = getRealCase(slug);
+const others = realCases.filter((c) => c.slug !== slug);
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: item.name,
+    description: item.summary,
+    url: absoluteStudioUrl(`/studio/work/${item.slug}`),
+    inLanguage: "zh-Hant",
+    creator: founderPerson,
+    ...(item.url ? { workExample: item.url } : {})
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "KJyang Studio", item: absoluteStudioUrl("/studio") },
+      { "@type": "ListItem", position: 2, name: "作品", item: absoluteStudioUrl("/studio/work") },
+      { "@type": "ListItem", position: 3, name: item.name, item: absoluteStudioUrl(`/studio/work/${item.slug}`) }
+    ]
+  }
+];
+---
+<SiteShell title={`${item.name}｜真實作品 — KJyang Studio`} description={item.summary.slice(0, 120)} canonicalPath={`/studio/work/${item.slug}`} schema={schema}>
+  <main class="studio-index s-case">
+    <StudioNav />
+    <header class="s-wrap s-case-hero">
+      <a class="s-back" href="/studio/work">← 所有作品</a>
+      <p class="s-eyebrow">真實作品・{item.kind}</p>
+      <h1>{item.name}</h1>
+      <p class="s-lead">{item.summary}</p>
+      <p class="s-status"><b>目前狀態</b>{item.status}</p>
+      <p class="s-links">{item.url && <a class="s-link" href={item.url} rel="noopener" target="_blank">打開網站 ↗</a>}{item.links?.map(([label, href]) => <a class="s-link" href={href} rel="noopener" target="_blank">{label} ↗</a>)}</p>
+      <dl class="s-facts">{item.facts.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+    </header>
+    {item.slug === "spa-booking-system" && (
+      <section class="s-wrap s-case-visual" aria-label="預約流程示意">
+        <BookingMock />
+        <p class="s-note">示意畫面，用示範資料重畫，不是店家的真實預約。</p>
+      </section>
+    )}
+    <div class="s-wrap s-case-body">
+      <div>
+        {item.sections.map((s) => (
+          <section>
+            <h2>{s.title}</h2>
+            {s.body.map((p) => <p>{p}</p>)}
+          </section>
+        ))}
+      </div>
+      <aside class="s-side">
+        <h2>這次學到的</h2>
+        <ul>{item.lessons.map((l) => <li>{l}</li>)}</ul>
+        <h2>用到的工具</h2>
+        <p class="s-tags">{item.stack.map((t) => <span>{t}</span>)}</p>
+      </aside>
+    </div>
+    <section class="s-wrap s-cta-band">
+      <h2>你的店也有類似的麻煩？</h2>
+      <p>傳店名或 IG 給我，我先免費看一次，回你 3 個可以馬上改的地方。</p>
+      <div class="s-actions">
+        <a class="s-btn s-btn-primary" href={studioContact.lineUrl} data-cta={`case-${item.slug}-line`}>LINE 傳給我</a>
+        <a class="s-btn" href="/studio/pricing">看價格</a>
+      </div>
+    </section>
+    <nav class="s-wrap s-more" aria-label="其他作品">
+      {others.map((o) => <a href={`/studio/work/${o.slug}`}><small>{o.kind}</small><b>{o.name} →</b></a>)}
+    </nav>
+  </main>
+</SiteShell>
