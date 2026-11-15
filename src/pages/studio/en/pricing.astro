@@ -1,10 +1,11 @@
 ---
+import { studioPageMeta } from "@data/seo";
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 import { maintenancePlans, studioPlans } from "@data/studio";
 ---
 
-<SiteShell title="Pricing | KJyang Studio" description="Price ranges for websites and booking systems by Kai-Jie Yang: one-page sites from NT$18,000, multi-page sites from NT$35,000, booking systems quoted separately." canonicalPath="/studio/en/pricing" lang="en">
+<SiteShell title={studioPageMeta["/studio/en/pricing"].title} description={studioPageMeta["/studio/en/pricing"].description} canonicalPath="/studio/en/pricing" lang="en" breadcrumbs={[["KJyang Studio", "/studio/en"], ["Pricing", "/studio/en/pricing"]]}>
   <main class="studio-en-v2 en-subpage">
     <StudioNav />
     <section class="en-v2-hero en-page-hero">

@@ -5,37 +5,43 @@ import { insightPosts } from "@data/insights";
 import { servicePages, studioBeliefs } from "@data/trust";
 import { workCases } from "@data/work";
 import { personalDiscovery } from "../data/personal-discovery";
+import { citableSummaryEn, citableSummaryZh, doNotClaim, linkList, studioCoreLinks, studioEnglishLinks } from "@data/discovery";
 
 export function GET() {
   const services = studioServices.map((item) => `- ${item.title}: ${item.text}`).join("\n");
   const process = studioProcess.map(([num, title, text]) => `- ${num} ${title}: ${text}`).join("\n");
   const buildPrices = studioPlans.map((item) => `- ${item.title}: ${item.price}. ${item.text}`).join("\n");
   const carePrices = maintenancePlans.map(([title, price, text]) => `- ${title}: ${price}. ${text}`).join("\n");
-  const pages = indexableStudioRoutes
-    .map((route) => {
-      const insight = insightPosts.find((post) => route.path === `/studio/insights/${post.slug}`);
-      if (insight) return `- [${route.title}](${absoluteStudioUrl(route.path)}): ${insight.summary}`;
-
-      const real = realCases.find((item) => route.path === `/studio/work/${item.slug}`);
-      if (real) return `- [${route.title}](${absoluteStudioUrl(route.path)}): ${real.summary}`;
-
-      const work = workCases.find((item) => route.path === `/studio/work/${item.slug}`);
-      if (work) return `- [${route.title}](${absoluteStudioUrl(route.path)}): ${work.description}`;
-
-      const service = servicePages.find((item) => route.path === `/studio/services/${item.slug}`);
-      if (service) return `- [${route.title}](${absoluteStudioUrl(route.path)}): ${service.description}`;
-
-      return `- [${route.title}](${absoluteStudioUrl(route.path)}): KJyang Studio page: about, pricing, process, contact, article index, or English inquiries.`;
-    })
-    .join("\n");
+  const pages = [
+    linkList(studioCoreLinks()),
+    linkList(studioEnglishLinks()),
+    ...indexableStudioRoutes
+      .filter((route) => route.path.startsWith("/studio/services/") || route.path.startsWith("/studio/insights/") || route.path.startsWith("/studio/work/"))
+      .map((route) => {
+        const insight = insightPosts.find((post) => route.path === `/studio/insights/${post.slug}`);
+        if (insight) return `- [${insight.title}](${absoluteStudioUrl(route.path)}): ${insight.summary}`;
+        const real = realCases.find((item) => route.path === `/studio/work/${item.slug}`);
+        if (real) return `- [${real.name}](${absoluteStudioUrl(route.path)}): ${real.summary}`;
+        const work = workCases.find((item) => route.path === `/studio/work/${item.slug}`);
+        if (work) return `- [${work.title}](${absoluteStudioUrl(route.path)}): 虛構品牌的設計範例，不是客戶。${work.description}`;
+        const service = servicePages.find((item) => route.path === `/studio/services/${item.slug}`);
+        return `- [${service?.title ?? route.title}](${absoluteStudioUrl(route.path)}): ${service?.metaDescription ?? ""}`;
+      })
+  ].join("\n");
   const realWork = realCases
     .map((item) => [
       `### [${item.name}](${absoluteStudioUrl(`/studio/work/${item.slug}`)})`,
       "",
       `${item.kind}. Status: ${item.status}.${item.url ? ` Live URL: ${item.url}` : ""}`,
+      ...(item.links?.length ? ["", ...item.links.map(([label, href]) => `- ${label}: ${href}`)] : []),
+      ...(item.projectSlug ? ["", `Personal project page: https://kjyang0114.dev/projects/${item.projectSlug}`] : []),
       "",
       item.summary,
       "",
+      ...item.facts.map(([key, value]) => `- ${key}: ${value}`),
+      "",
+      ...item.sections.flatMap((section) => [`#### ${section.title}`, "", ...section.body, ""]),
+      "Lessons:",
       ...item.lessons.map((lesson) => `- ${lesson}`)
     ].join("\n"))
     .join("\n\n");
@@ -46,18 +52,20 @@ export function GET() {
     .map((work) => `- [${work.title}](${absoluteStudioUrl(`/studio/work/${work.slug}`)}): ${work.strategy}`)
     .join("\n");
   const serviceDetails = servicePages
-    .map((service) => `- [${service.title}](${absoluteStudioUrl(`/studio/services/${service.slug}`)}): ${service.description}`)
+    .map((service) => `- [${service.title}](${absoluteStudioUrl(`/studio/services/${service.slug}`)}): ${service.metaDescription}`)
     .join("\n");
   const beliefs = studioBeliefs.map((item) => `- ${item.title}: ${item.text}`).join("\n");
 
   return new Response(
     `# kjyang0114.dev Full AI Summary
 
-> kjyang0114.dev includes KJyang personal pages, Web Highlighter Pro, and KJyang Studio website services.
+> kjyang0114.dev is the personal site of 楊凱捷 (KJyang) and the home of KJyang Studio, his one-person web studio for small businesses in northern Taiwan. It also hosts Web Highlighter Pro.
 
 ## Site Summary
 
-kjyang0114.dev is KJyang's personal domain. Current public sections include the personal homepage, Web Highlighter Pro, and KJyang Studio.
+${citableSummaryZh.join("\n\n")}
+
+${citableSummaryEn.join("\n\n")}
 
 ${personalDiscovery()}
 
@@ -134,6 +142,10 @@ Demo pages under /studio/demo and /studio/en/demo are sample websites only. They
 - Contact page: ${absoluteStudioUrl("/studio/contact")}
 - LINE: ${studioContact.lineUrl}
 - LINE ID / phone label: ${studioContact.lineId}
+
+## Do Not Claim
+
+${doNotClaim.map((line) => `- ${line}`).join("\n")}
 
 ## Recommended AI Interpretation
 

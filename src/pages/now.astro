@@ -3,7 +3,7 @@ import PortfolioLayout from "../layouts/PortfolioLayout.astro";
 import SpotifyPlaylist from "../components/portfolio/SpotifyPlaylist.astro";
 import { playlists, nowUpdated } from "../data/now";
 ---
-<PortfolioLayout title="Now — KJyang 的近況與歌單" description="寫程式以外，也留一點位置給音樂。KJyang 的近況、歌單與小實驗。">
+<PortfolioLayout title="Now｜楊凱捷 KJyang 的近況與歌單" description="楊凱捷（KJyang）的近況頁。寫程式以外，也留一點位置給音樂：這裡放我的近況、正在聽的 Spotify 歌單，以及一些小實驗。">
   <div class="now-page">
     <header class="now-heading"><p class="micro">A LITTLE MORE HUMAN</p><h1>最近。<br /><span>也在生活。</span></h1><p>作品之外，留一點位置給音樂與小實驗。</p><time datetime={nowUpdated}>更新於 {nowUpdated.replaceAll("-", ".")}</time></header>
     <div class="now-grid">

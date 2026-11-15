@@ -1,4 +1,5 @@
 ---
+import { studioPageMeta } from "@data/seo";
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 import { absoluteStudioUrl, founderPerson } from "@data/seo";
@@ -47,7 +48,7 @@ const schema = [
   }
 ];
 ---
-<SiteShell title="作品｜Weilspa 預約系統、粉絲資訊站與產業設計範例 — KJyang Studio" description="我做過的 3 個真實作品：Weilspa（雙門市美容 SPA）的預約與排班系統、自己經營的粉絲資訊站與網頁遊戲、這個自動部署的網站。另外有 4 個虛構品牌的設計範例。" canonicalPath="/studio/work" schema={schema}>
+<SiteShell title={studioPageMeta["/studio/work"].title} description={studioPageMeta["/studio/work"].description} canonicalPath="/studio/work" schema={schema} breadcrumbs={[["KJyang Studio", "/studio"], ["作品", "/studio/work"]]}>
   <main class="studio-index s-case">
     <StudioNav />
     <header class="s-wrap s-case-hero">

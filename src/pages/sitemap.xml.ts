@@ -1,52 +1,31 @@
 import { projects } from "../data/projects";
-import { absoluteStudioUrl, indexableStudioRoutes } from "@data/seo";
+import { lastmodFor } from "../data/lastmod.mjs";
+
+// 個人網站的網址。Studio 在 /studio/sitemap.xml，Web Highlighter Pro 在
+// /web-highlighter-pro/sitemap.xml，三個都列在 robots.txt，每個網址只出現一次。
+const personalSitemapPaths = [
+  "/",
+  "/about",
+  "/resume",
+  "/en/resume",
+  "/now",
+  "/play",
+  "/projects",
+  "/ai",
+  "/contact",
+  ...projects.map((project) => `/projects/${project.slug}`),
+];
 
 export function GET() {
-  const existingRoutes = [
-    {
-      loc: "https://kjyang0114.dev/",
-      changefreq: "weekly",
-      priority: "0.8",
-    },
-    {
-      loc: "https://kjyang0114.dev/web-highlighter-pro/",
-      changefreq: "weekly",
-      priority: "1.0",
-    },
-    {
-      loc: "https://kjyang0114.dev/web-highlighter-pro/terms",
-      changefreq: "monthly",
-      priority: "0.4",
-    },
-  ];
-  const studioRoutes = indexableStudioRoutes.map((route) => ({
-    loc: absoluteStudioUrl(route.path),
-    changefreq: route.changefreq,
-    priority: route.priority,
-  }));
-  const personalRoutes = [
-    "/about",
-    "/resume",
-    "/en/resume",
-    "/now",
-    "/play",
-    "/projects",
-    "/ai",
-    "/contact",
-    ...projects.map((project) => `/projects/${project.slug}`),
-  ].map((path) => ({
-    loc: absoluteStudioUrl(path),
-    changefreq: "monthly",
-    priority: "0.7",
-  }));
-  const urls = [...existingRoutes, ...personalRoutes, ...studioRoutes]
-    .map(
-      (route) => `  <url>
-    <loc>${route.loc}</loc>
-    <changefreq>${route.changefreq}</changefreq>
-    <priority>${route.priority}</priority>
-  </url>`,
-    )
+  const urls = personalSitemapPaths
+    .map((path) => {
+      const lastmod = lastmodFor(path);
+      return `  <url>
+    <loc>https://kjyang0114.dev${path}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ""}
+    <changefreq>${path === "/" ? "weekly" : "monthly"}</changefreq>
+    <priority>${path === "/" ? "0.8" : "0.7"}</priority>
+  </url>`;
+    })
     .join("\n");
 
   return new Response(

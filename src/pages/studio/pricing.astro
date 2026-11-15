@@ -1,15 +1,21 @@
 ---
+import { studioPageMeta } from "@data/seo";
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 import { maintenancePlans, studioContact, studioFacts, studioPlans } from "@data/studio";
+import { buildStudioServiceSchema } from "@data/seo";
 ---
-<SiteShell title="網站製作價格｜一頁式 NT$18,000 起、包含什麼一次看清楚 — KJyang Studio" description="一頁式網站 NT$18,000 - 28,000、多頁網站 NT$35,000 - 58,000、預約系統另外報價。逐項列出包含、不包含、幾週完成、你要準備什麼，以及維護月費。" canonicalPath="/studio/pricing">
+<SiteShell title={studioPageMeta["/studio/pricing"].title} description={studioPageMeta["/studio/pricing"].description} canonicalPath="/studio/pricing" schema={[buildStudioServiceSchema("/studio/pricing")]} breadcrumbs={[["KJyang Studio", "/studio"], ["價格", "/studio/pricing"]]}>
   <main class="studio-index s-case">
     <StudioNav />
     <header class="s-wrap s-case-hero">
       <p class="s-eyebrow">價格</p>
       <h1>網站做下去多少錢、包含什麼</h1>
       <p class="s-lead">下面是區間。實際金額看頁數、照片和文字準備好了沒、要不要預約功能。我會在報價單上逐項寫清楚，你同意了才開始。</p>
+      <ul class="s-hero-facts">
+        {studioPlans.map((plan) => <li><b>{plan.price}</b>{plan.nameZh}・{plan.weeks.startsWith("依") ? plan.weeks : `大約 ${plan.weeks}`}</li>)}
+        <li><b>{maintenancePlans[0][1].replace(" / month", "")} 起／月</b>維護月費，可以不買</li>
+      </ul>
     </header>
     {studioPlans.map((plan) => (
       <section class="s-wrap s-section" aria-label={plan.nameZh}>

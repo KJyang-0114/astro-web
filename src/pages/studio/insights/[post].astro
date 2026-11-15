@@ -3,6 +3,8 @@ import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 import { buildInsightSchemas, getInsightPost, insightPosts } from "@data/insights";
 import { studioContact, studioFacts } from "@data/studio";
+import { realCases } from "@data/cases";
+import { servicePages } from "@data/trust";
 
 export function getStaticPaths() {
   return insightPosts.map((post) => ({
@@ -16,8 +18,20 @@ const paragraphs = (body: string) => body.split(/\n\n+/);
 const isList = (text: string) => /^(?:\d+\.|-) /m.test(text) && text.split("\n").every((line) => /^(?:\d+\.|-) /.test(line));
 const listItems = (text: string) => text.split("\n").map((line) => line.replace(/^(?:\d+\.|-) /, ""));
 const ordered = (text: string) => /^\d+\. /.test(text);
+// 相關頁面的連結文字直接用目標頁的名稱。
+const labelFor = (path: string) => {
+  if (path === "/studio/pricing") return "價格：每個方案包含什麼、維護月費";
+  const service = servicePages.find((s) => path === `/studio/services/${s.slug}`);
+  if (service) return `服務：${service.title}`;
+  const real = realCases.find((c) => path === `/studio/work/${c.slug}`);
+  if (real) return `真實作品：${real.name}`;
+  const insight = insightPosts.find((p) => path === `/studio/insights/${p.slug}`);
+  if (insight) return insight.title;
+  throw new Error(`Unknown related path: ${path}`);
+};
+const related = post.related.map((path) => ({ path, label: labelFor(path) }));
 ---
-<SiteShell title={`${post.title} — KJyang Studio`} description={post.description} canonicalPath={`/studio/insights/${post.slug}`} schema={buildInsightSchemas(post)}>
+<SiteShell title={`${post.title} — KJyang Studio`} description={post.description} canonicalPath={`/studio/insights/${post.slug}`} schema={buildInsightSchemas(post)} ogType="article" article={{ published: post.date, modified: post.updated ?? post.date, section: post.category }}>
   <main class="studio-index s-case">
     <StudioNav />
     <article>
@@ -45,6 +59,8 @@ const ordered = (text: string) => /^\d+\. /.test(text);
         <aside class="s-side">
           <h2>重點</h2>
           <ul>{post.takeaways.map((item) => <li>{item}</li>)}</ul>
+          <h2>相關頁面</h2>
+          <ul class="s-side-links">{related.map((item) => <li><a href={item.path}>{item.label}</a></li>)}</ul>
           <h2>其他文章</h2>
           <ul class="s-side-links">{others.map((item) => <li><a href={`/studio/insights/${item.slug}`}>{item.title}</a></li>)}</ul>
         </aside>

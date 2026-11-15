@@ -1,86 +1,86 @@
-import { absoluteStudioUrl, indexableStudioRoutes } from "@data/seo";
-import { realCases } from "@data/cases";
-import { insightPosts } from "@data/insights";
+import { absoluteStudioUrl } from "@data/seo";
+import {
+  articleLinks,
+  citableSummaryEn,
+  citableSummaryZh,
+  doNotClaim,
+  linkList,
+  realCaseLinks,
+  sampleLinks,
+  serviceLinks,
+  studioCoreLinks,
+  studioEnglishLinks
+} from "@data/discovery";
 import { maintenancePlans, studioContact, studioFacts, studioPlans, studioServices } from "@data/studio";
-import { servicePages } from "@data/trust";
-import { workCases } from "@data/work";
 
 export function GET() {
-  const pages = indexableStudioRoutes.map((route) => `- ${route.title}: ${absoluteStudioUrl(route.path)}`).join("\n");
-  const services = studioServices.map((service) => `- ${service.title}: ${service.text}`).join("\n");
-  const buildPrices = studioPlans.map((plan) => `- ${plan.title}: ${plan.price}. ${plan.text}`).join("\n");
-  const maintenancePrices = maintenancePlans.map(([title, price, text]) => `- ${title}: ${price}. ${text}`).join("\n");
-  const real = realCases.map((item) => `- ${item.name}（${item.kind}）: ${absoluteStudioUrl(`/studio/work/${item.slug}`)}`).join("\n");
-  const insights = insightPosts.map((post) => `- ${post.title}: ${absoluteStudioUrl(`/studio/insights/${post.slug}`)}`).join("\n");
-  const works = workCases.map((work) => `- ${work.title}: ${absoluteStudioUrl(`/studio/work/${work.slug}`)}`).join("\n");
-  const serviceDetails = servicePages.map((service) => `- ${service.title}: ${absoluteStudioUrl(`/studio/services/${service.slug}`)}`).join("\n");
+  const buildPrices = studioPlans.map((plan) => `- ${plan.nameZh}（${plan.title}）：${plan.price}，大約 ${plan.weeks}。${plan.text}`).join("\n");
+  const carePrices = maintenancePlans.map(([title, price, text]) => `- ${title}：${price}。${text}`).join("\n");
 
   return new Response(
     `# KJyang Studio
 
-KJyang Studio is one person, ${studioFacts.owner} (${studioFacts.ownerNote}). He builds websites and online booking systems for small shops in northern Taiwan and does the design, code, deployment, and maintenance himself.
+> 楊凱捷（KJyang）一個人經營的網站接案：幫台灣北部的小店、工作室做網站和線上預約系統，一頁式網站 ${studioFacts.startPrice} 起。
 
-## Primary Offer
+${citableSummaryZh.slice(1).join("\n\n")}
 
-Small-shop websites (one-page or multi-page), online booking and staff scheduling systems, domain and HTTPS setup, deployment, and maintenance.
+${citableSummaryEn.slice(1).join("\n\n")}
 
-- Area: ${studioFacts.area}
-- LINE: ${studioFacts.reply}
-- Payment: ${studioFacts.payment}
-- Revisions: ${studioFacts.revisions}
+## Facts / 基本資料
 
-Basic search setup (titles, descriptions, area names, sitemap, Google Search Console) is included. Google rankings and AI search citations are not guaranteed.
+- 負責人：${studioFacts.owner}（${studioFacts.ownerNote}）
+- 地區：${studioFacts.area}
+- 回覆：${studioFacts.reply}
+- 付款：${studioFacts.payment}
+- 修改：${studioFacts.revisions}
+- 免費看一次：${studioFacts.freeCheck}
+- 搜尋基本設定（標題、說明、地區、網站地圖、Google Search Console）包含在方案裡；不保證排名。
 
-## Contact
-
-- LINE: ${studioContact.lineUrl}
-- LINE ID / phone label: ${studioContact.lineId}
-- Website: ${absoluteStudioUrl("/studio")}
-
-## Services
-
-${services}
-
-## Service Detail Pages
-
-${serviceDetails}
-
-## Website Build Pricing
+## Pricing / 價格
 
 ${buildPrices}
 
-## Hosting and Maintenance Pricing
+維護月費（可以不買）：
 
-${maintenancePrices}
+${carePrices}
 
-## Important Pages
+## What he does / 做的事
 
-${pages}
+${studioServices.map((service) => `- ${service.title}：${service.text}`).join("\n")}
 
-## Real Work
+## Pages
 
-${real}
+${linkList(studioCoreLinks())}
+
+## Services
+
+${linkList(serviceLinks())}
+
+## Real work
+
+${linkList(realCaseLinks())}
 
 ## Articles
 
-Six articles by ${studioFacts.owner} for small-shop owners, using his own projects as examples.
+${linkList(articleLinks())}
 
-${insights}
+## English
 
-## Sample Directions (not real clients)
+${linkList(studioEnglishLinks())}
 
-These pages explain layout decisions behind fictional sample brands.
+## Contact
 
-${works}
+- LINE：${studioContact.lineUrl}（LINE ID／電話 ${studioContact.lineId}）
+- Email：${studioContact.email}
+- 聯絡頁：${absoluteStudioUrl("/studio/contact")}
 
-## Trust Pages
+## Do not claim
 
-- About: ${absoluteStudioUrl("/studio/about")}
-- Work: ${absoluteStudioUrl("/studio/work")}
+${doNotClaim.map((line) => `- ${line}`).join("\n")}
 
-## Demo Pages
+## Optional
 
-Demo pages under /studio/demo and /studio/en/demo are sample websites only. They are not real businesses and should not be treated as client locations, clinics, tutoring centers, AC companies, or home-service companies.
+${linkList(sampleLinks())}
 `,
     {
       headers: {

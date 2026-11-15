@@ -1,7 +1,8 @@
 ---
+import { studioPageMeta } from "@data/seo";
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
-import { absoluteStudioUrl, founderPerson } from "@data/seo";
+import { absoluteStudioUrl, studioOrganizationId } from "@data/seo";
 import { studioContact, studioFacts, studioServices } from "@data/studio";
 import { servicePages } from "@data/trust";
 
@@ -12,7 +13,8 @@ const schema = [
     name: "小店網站與預約系統製作",
     description: "楊凱捷一人接案：網站設計、前端製作、網域與主機設定、線上預約與後台、上線後維護。一頁式網站 NT$18,000 起。",
     url: absoluteStudioUrl("/studio/services"),
-    provider: founderPerson,
+    "@id": `${absoluteStudioUrl("/studio/services")}#service`,
+    provider: { "@id": studioOrganizationId },
     areaServed: studioFacts.areaServed,
     serviceType: studioServices.map((s) => s.title),
     hasOfferCatalog: {
@@ -31,7 +33,7 @@ const schema = [
   }
 ];
 ---
-<SiteShell title="服務項目｜小店網站製作、改版、維護、預約系統 — KJyang Studio" description="我幫小店做網站、改舊網站、處理上線和主機，也做過線上預約和排班後台。設計和程式都是我自己來，一頁式 NT$18,000 起，約 2 到 3 週。" canonicalPath="/studio/services" schema={schema}>
+<SiteShell title={studioPageMeta["/studio/services"].title} description={studioPageMeta["/studio/services"].description} canonicalPath="/studio/services" schema={schema} breadcrumbs={[["KJyang Studio", "/studio"], ["服務", "/studio/services"]]}>
   <main class="studio-index s-case">
     <StudioNav />
     <header class="s-wrap s-case-hero">

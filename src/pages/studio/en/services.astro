@@ -1,18 +1,15 @@
 ---
+import { studioPageMeta } from "@data/seo";
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 ---
 
 <SiteShell
-  title="Services | KJyang Studio"
-  description="Kai-Jie Yang designs, codes, launches and maintains websites and booking systems for small businesses in Taiwan. Based in northern Taiwan, works online."
+  title={studioPageMeta["/studio/en/services"].title}
+  description={studioPageMeta["/studio/en/services"].description}
   canonicalPath="/studio/en/services"
   lang="en"
-  alternates={[
-    { hrefLang: "zh-Hant", href: "/studio/services" },
-    { hrefLang: "en", href: "/studio/en/services" },
-    { hrefLang: "x-default", href: "/studio/en/services" }
-  ]}
+  breadcrumbs={[["KJyang Studio", "/studio/en"], ["Services", "/studio/en/services"]]}
 >
   <main class="studio-en-v2 en-subpage">
     <StudioNav />

@@ -42,32 +42,37 @@ Use this file when an agent needs a concise, factual summary of KJyang Studio.
 
 ## Identity
 
-KJyang Studio is a website studio at ${absoluteStudioUrl("/studio")}.
+KJyang Studio (${absoluteStudioUrl("/studio")}) is one person, Kai-Jie Yang (楊凱捷, KJyang), a high-school senior in New Taipei, Taiwan. He builds websites and online booking systems for small businesses. In-person meetings are possible in northern Taiwan (Taipei, New Taipei, Taoyuan); other areas work online.
 
 ## Primary Work
 
-- Website design
-- Frontend code implementation
-- Responsive layout
-- Deployment support
-- Hosting setup
-- SSL, backups, monitoring, and maintenance
-- Basic SEO/GEO foundations
+- Small-business websites (one-page or multi-page), designed and coded by hand
+- Online booking requests, staff scheduling and admin pages
+- Domain, DNS, HTTPS setup and deployment (the domain is registered in the client's name)
+- Maintenance after launch
+- Basic search setup: titles, descriptions, sitemap, Google Search Console
 
 ## SEO/GEO Boundary
 
-KJyang Studio can add structured content, metadata, schema, sitemap, FAQ, llms.txt, and AI-readable summaries. KJyang Studio does not guarantee Google ranking, AI citations, or inquiry volume.
+Basic search setup is included. Google ranking, AI citations, and inquiry volume are not guaranteed.
 
 ## Pricing Ranges
 
 ${studioPlans.map((plan) => `- ${plan.title}: ${plan.price}`).join("\n")}
 ${maintenancePlans.map(([title, price]) => `- ${title}: ${price}`).join("\n")}
 
+## Real Work
+
+- Weilspa booking and staff scheduling system: ${absoluteStudioUrl("/studio/work/spa-booking-system")}
+- SYNK ATELIER fan information site and web game: ${absoluteStudioUrl("/studio/work/synk-atelier")}
+- This website: ${absoluteStudioUrl("/studio/work/kjyang-website")}
+
 ## Contact
 
 - Contact page: ${absoluteStudioUrl("/studio/contact")}
 - LINE: ${studioContact.lineUrl}
 - LINE ID / phone label: ${studioContact.lineId}
+- Email: ${studioContact.email}
 `,
   "kjyang-studio-contact-routing": `# KJyang Studio Contact Routing
 

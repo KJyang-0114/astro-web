@@ -3,6 +3,7 @@ import "@styles/studio-global.css";
 import "@styles/studio-atelier.css";
 import "@styles/studio-v3.css";
 import StudioFooter from "./studio/StudioFooter.astro";
+import { breadcrumbSchema, studioAlternatesFor, studioOgImage } from "@data/seo";
 
 type Props = {
   title: string;
@@ -15,6 +16,10 @@ type Props = {
     hrefLang: string;
     href: string;
   }>;
+  // 麵包屑：[名稱, 路徑]，第一項通常是 Studio 首頁。會輸出 BreadcrumbList。
+  breadcrumbs?: Array<[string, string]>;
+  ogType?: "website" | "article";
+  article?: { published: string; modified: string; section?: string };
 };
 
 const {
@@ -24,44 +29,61 @@ const {
   schema = [],
   noindex = false,
   lang = "zh-Hant",
-  alternates = []
+  alternates,
+  breadcrumbs,
+  ogType = "website",
+  article
 } = Astro.props;
-const canonicalUrl = new URL(canonicalPath, "https://kjyang0114.dev").toString();
-const ogImageUrl = new URL("/brand/kjyang-cover.svg", "https://kjyang0114.dev").toString();
-const alternateUrls = alternates.map((alternate) => ({
+const english = lang === "en";
+const canonicalUrl = new URL(canonicalPath.replace(/\/$/, "") || "/", "https://kjyang0114.dev").toString();
+const ogImage = english ? studioOgImage.en : studioOgImage.zh;
+const alternateUrls = (alternates ?? (noindex ? [] : studioAlternatesFor(canonicalPath))).map((alternate) => ({
   hrefLang: alternate.hrefLang,
   href: new URL(alternate.href, "https://kjyang0114.dev").toString()
 }));
+const allSchema = breadcrumbs && breadcrumbs.length > 1 ? [...schema, breadcrumbSchema(breadcrumbs)] : schema;
 ---
 
 <!doctype html>
 <html lang={lang}>
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="/brand/kjyang-mark.svg?v=3" type="image/svg+xml" />
-    <meta name="color-scheme" content="light" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" href="/brand/kjyang-mark.svg?v=3" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/brand/kjyang-mark-512.png" />
+    <meta name="color-scheme" content="light" />
+    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large"} />
     <link rel="canonical" href={canonicalUrl} />
     {alternateUrls.map((alternate) => <link rel="alternate" hreflang={alternate.hrefLang} href={alternate.href} />)}
     <meta property="og:site_name" content="KJyang Studio" />
+    <meta property="og:locale" content={english ? "en_US" : "zh_TW"} />
+    {alternateUrls.some((a) => a.hrefLang === (english ? "zh-Hant" : "en")) && <meta property="og:locale:alternate" content={english ? "zh_TW" : "en_US"} />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image" content={ogImage.url} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content={String(studioOgImage.width)} />
+    <meta property="og:image:height" content={String(studioOgImage.height)} />
+    <meta property="og:image:alt" content={ogImage.alt} />
+    {article && <meta property="article:published_time" content={article.published} />}
+    {article && <meta property="article:modified_time" content={article.modified} />}
+    {article && <meta property="article:author" content="https://kjyang0114.dev/about" />}
+    {article?.section && <meta property="article:section" content={article.section} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImageUrl} />
-    {schema.map((entry) => <script type="application/ld+json" set:html={JSON.stringify(entry)} />)}
+    <meta name="twitter:image" content={ogImage.url} />
+    <meta name="twitter:image:alt" content={ogImage.alt} />
+    {allSchema.map((entry) => <script type="application/ld+json" set:html={JSON.stringify(entry).replace(/</g, "\\u003c")} />)}
   </head>
   <body class="studio-surface">
-    <a class="studio-skip" href="#studio-content">{lang === "en" ? "Skip to content" : "跳到內容"}</a>
+    <a class="studio-skip" href="#studio-content">{english ? "Skip to content" : "跳到內容"}</a>
     <div id="studio-content" tabindex="-1"><slot /></div>
-    <StudioFooter english={lang === "en"} />
+    <StudioFooter english={english} />
     <script>
       import "../scripts/motion";
     </script>

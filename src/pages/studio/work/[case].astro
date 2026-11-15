@@ -27,20 +27,12 @@ const schema = [
     genre: "設計範例（虛構品牌）",
     about: work.industry,
     creator: founderPerson,
+    image: absoluteStudioUrl(demo.heroImage),
     workExample: absoluteStudioUrl(work.demoUrl)
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "KJyang Studio", item: absoluteStudioUrl("/studio") },
-      { "@type": "ListItem", position: 2, name: "作品", item: absoluteStudioUrl("/studio/work") },
-      { "@type": "ListItem", position: 3, name: work.title, item: absoluteStudioUrl(`/studio/work/${work.slug}`) }
-    ]
   }
 ];
 ---
-<SiteShell title={`${work.brand}｜${work.industry}網站設計範例（虛構品牌） — KJyang Studio`} description={work.description} canonicalPath={`/studio/work/${work.slug}`} schema={schema}>
+<SiteShell title={`${work.brand}｜${work.industry}網站範例・虛構品牌｜KJyang Studio`} description={work.description} canonicalPath={`/studio/work/${work.slug}`} schema={schema} breadcrumbs={[["KJyang Studio", "/studio"], ["作品", "/studio/work"], [work.title, `/studio/work/${work.slug}`]]}>
   <main class="studio-index s-case">
     <StudioNav />
     <header class="s-wrap s-case-hero">

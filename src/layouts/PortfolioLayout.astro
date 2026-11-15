@@ -10,8 +10,11 @@ interface Props {
   noindex?: boolean;
   lang?: "zh-Hant" | "en";
   resumeLanguages?: boolean;
+  ogType?: "website" | "profile" | "article";
 }
-const { title, description, jsonLd, noindex = false, lang = "zh-Hant", resumeLanguages = false } = Astro.props;
+const { title, description, jsonLd, noindex = false, lang = "zh-Hant", resumeLanguages = false, ogType = "website" } = Astro.props;
+const ogImage = "https://kjyang0114.dev/og-portfolio.png";
+const ogImageAlt = "楊凱捷 KJyang：Human, then Code. AI、Web 與自動化作品。";
 const canonical = new URL(Astro.url.pathname.replace(/\/$/, "") || "/", "https://kjyang0114.dev").href;
 ---
 
@@ -23,12 +26,12 @@ const canonical = new URL(Astro.url.pathname.replace(/\/$/, "") || "/", "https:/
       content="width=device-width,initial-scale=1"
     /><meta name="color-scheme" content="light dark" /><title>
       {title}
-    </title><meta name="description" content={description} /><link
+    </title><meta name="description" content={description} />{!noindex && <link
       rel="canonical"
       href={canonical}
-    /><link rel="icon" href="/favicon-portfolio.svg" type="image/svg+xml" /><meta
+    />}<link rel="icon" href="/favicon-portfolio.svg" type="image/svg+xml" /><meta
       property="og:type"
-      content="website"
+      content={ogType}
     /><meta property="og:locale" content={lang === "en" ? "en_US" : "zh_TW"} /><meta
       property="og:site_name"
       content="KJyang"
@@ -37,14 +40,20 @@ const canonical = new URL(Astro.url.pathname.replace(/\/$/, "") || "/", "https:/
       content={description}
     /><meta property="og:url" content={canonical} /><meta
       property="og:image"
-      content="https://kjyang0114.dev/og-portfolio.png"
-    />{<meta name="robots" content={noindex ? "noindex,follow" : "index,follow,max-image-preview:large"} />}<meta
+      content={ogImage}
+    /><meta property="og:image:type" content="image/png" />{<meta name="robots" content={noindex ? "noindex,follow" : "index,follow,max-image-preview:large"} />}<meta
       property="og:image:width"
       content="1200"
     /><meta property="og:image:height" content="630" /><meta
       property="og:image:alt"
-      content="KJyang — Human, then Code. AI, Web, Automation."
-    /><meta name="twitter:card" content="summary_large_image" />{
+      content={ogImageAlt}
+    /><meta name="twitter:card" content="summary_large_image" /><meta
+      name="twitter:title"
+      content={title}
+    /><meta name="twitter:description" content={description} /><meta
+      name="twitter:image"
+      content={ogImage}
+    /><meta name="twitter:image:alt" content={ogImageAlt} />{
       jsonLd && (
         <script
           type="application/ld+json"

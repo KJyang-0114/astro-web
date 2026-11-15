@@ -20,6 +20,10 @@ export type InsightPost = {
     question: string;
     answer: string;
   }>;
+  // 跟這篇有關的服務、價格、作品頁（站內路徑）。顯示在文章側欄。
+  related: string[];
+  // 內容有實質修改時填，沒填就等於 date。
+  updated?: string;
 };
 
 const studioOrigin = "https://kjyang0114.dev";
@@ -31,6 +35,7 @@ function absoluteStudioUrl(path: string) {
 export const insightPosts: InsightPost[] = [
   {
     slug: "why-website-prices-are-different",
+    related: ["/studio/pricing", "/studio/insights/one-page-vs-five-page-website", "/studio/services/local-business-website"],
     date: "2026-11-16",
     category: "價格",
     title: "小店網站多少錢？我的報價怎麼算、錢花在哪",
@@ -93,6 +98,7 @@ export const insightPosts: InsightPost[] = [
   },
   {
     slug: "do-i-need-a-website-with-ig-and-google-maps",
+    related: ["/studio/services/local-business-website", "/studio/insights/small-business-hero-section-checklist", "/studio/pricing"],
     date: "2026-11-16",
     category: "要不要做",
     title: "只有 IG 和 Google 地圖，還需要做網站嗎？",
@@ -145,6 +151,7 @@ export const insightPosts: InsightPost[] = [
   },
   {
     slug: "line-booking-vs-booking-system",
+    related: ["/studio/work/spa-booking-system", "/studio/pricing"],
     date: "2026-11-16",
     category: "預約",
     title: "用 LINE 約時間，跟網站預約系統差在哪？",
@@ -211,6 +218,7 @@ export const insightPosts: InsightPost[] = [
   },
   {
     slug: "small-business-hero-section-checklist",
+    related: ["/studio/work/synk-atelier", "/studio/services/website-redesign", "/studio/services/local-business-website"],
     date: "2026-11-16",
     category: "手機版",
     title: "手機打開的第一個畫面，和 LINE 按鈕要放什麼",
@@ -273,6 +281,7 @@ export const insightPosts: InsightPost[] = [
   },
   {
     slug: "website-care-after-launch",
+    related: ["/studio/services/website-maintenance", "/studio/services/deployment-hosting", "/studio/work/kjyang-website"],
     date: "2026-11-16",
     category: "上線之後",
     title: "網站做完之後：網域、主機、維護要注意什麼",
@@ -329,6 +338,7 @@ export const insightPosts: InsightPost[] = [
   },
   {
     slug: "one-page-vs-five-page-website",
+    related: ["/studio/pricing", "/studio/insights/why-website-prices-are-different"],
     date: "2026-11-16",
     category: "規劃",
     title: "一頁式還是多頁網站？看你有幾項服務",
@@ -398,25 +408,34 @@ export function buildInsightSchemas(post: InsightPost) {
   return [
     {
       "@context": "https://schema.org",
-      "@type": "Article",
+      "@type": "BlogPosting",
+      "@id": `${url}#article`,
       headline: post.title,
       description: post.description,
       url,
-      image: absoluteStudioUrl("/brand/kjyang-cover.svg"),
+      image: {
+        "@type": "ImageObject",
+        url: absoluteStudioUrl("/brand/kjyang-studio-og.png"),
+        width: 1200,
+        height: 630
+      },
       author,
       publisher: {
-        "@type": "Organization",
+        "@type": "ProfessionalService",
         "@id": `${absoluteStudioUrl("/studio")}#organization`,
         name: "KJyang Studio",
         logo: {
           "@type": "ImageObject",
-          url: absoluteStudioUrl("/brand/kjyang-mark.svg")
+          url: absoluteStudioUrl("/brand/kjyang-mark-512.png"),
+          width: 512,
+          height: 512
         }
       },
-      mainEntityOfPage: url,
+      mainEntityOfPage: { "@type": "WebPage", "@id": url },
+      articleSection: post.category,
       inLanguage: "zh-Hant",
       datePublished: post.date,
-      dateModified: post.date
+      dateModified: post.updated ?? post.date
     },
     {
       "@context": "https://schema.org",

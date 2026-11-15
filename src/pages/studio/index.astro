@@ -1,4 +1,5 @@
 ---
+import { studioPageMeta } from "@data/seo";
 import SiteShell from "@components/SiteShell.astro";
 import StudioNav from "@components/StudioNav.astro";
 import BookingMock from "@components/studio/BookingMock.astro";
@@ -7,7 +8,7 @@ import { studioContact, studioFacts, studioPlans, studioProcess } from "@data/st
 import { studioBeliefs } from "@data/trust";
 import { realCases } from "@data/cases";
 ---
-<SiteShell title="小店網站與預約系統製作｜北部・一頁式 NT$18,000 起 — KJyang Studio" description="楊凱捷一人接案，幫北部小店、工作室、美容 SPA 做網站和線上預約系統。設計、程式、上線、之後的修改都自己處理。一頁式 NT$18,000 起，約 2 到 3 週上線。" canonicalPath="/studio" schema={buildStudioSchemas()} alternates={[{hrefLang:"zh-Hant",href:"/studio"},{hrefLang:"en",href:"/studio/en"},{hrefLang:"x-default",href:"/studio"}]}>
+<SiteShell title={studioPageMeta["/studio"].title} description={studioPageMeta["/studio"].description} canonicalPath="/studio" schema={buildStudioSchemas()}>
 <StudioNav />
 <main class="studio-index s-home">
   <section class="s-hero" aria-labelledby="hero-title">

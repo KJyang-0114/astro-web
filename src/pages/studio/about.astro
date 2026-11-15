@@ -1,7 +1,8 @@
 ---
+import { studioPageMeta } from "@data/seo";
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
-import { absoluteStudioUrl, founderPerson } from "@data/seo";
+import { absoluteStudioUrl, founderPerson, studioOrganizationId } from "@data/seo";
 import { fitChecks, studioBeliefs } from "@data/trust";
 import { studioContact, studioFacts } from "@data/studio";
 import { realCases } from "@data/cases";
@@ -12,10 +13,11 @@ const schema = [{
   name: "關於楊凱捷與 KJyang Studio",
   url: absoluteStudioUrl("/studio/about"),
   inLanguage: "zh-Hant",
-  mainEntity: founderPerson
+  mainEntity: founderPerson,
+  about: { "@id": studioOrganizationId }
 }];
 ---
-<SiteShell title="關於我｜楊凱捷，一人接案做小店網站 — KJyang Studio" description="我是楊凱捷，鶯歌工商資訊科高三，一人接案幫北部小店做網站和預約系統。說明我做過什麼、能做什麼、不能做什麼。" canonicalPath="/studio/about" schema={schema}>
+<SiteShell title={studioPageMeta["/studio/about"].title} description={studioPageMeta["/studio/about"].description} canonicalPath="/studio/about" schema={schema} breadcrumbs={[["KJyang Studio", "/studio"], ["關於我", "/studio/about"]]}>
   <main class="studio-index s-case">
     <StudioNav />
     <header class="s-wrap s-case-hero">

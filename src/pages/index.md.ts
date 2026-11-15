@@ -1,4 +1,6 @@
 import { absoluteStudioUrl } from "@data/seo";
+import { citableSummaryZh, linkList, realCaseLinks } from "@data/discovery";
+import { projects } from "../data/projects";
 
 export function GET() {
   return new Response(
@@ -8,32 +10,39 @@ title: kjyang0114.dev
 
 # kjyang0114.dev
 
-KJyang personal site, Web Highlighter Pro product pages, and KJyang Studio website services.
+${citableSummaryZh.join("\n\n")}
 
-## Personal site
+## Personal site / 個人網站
 
-- [Now](https://kjyang0114.dev/now): Personal updates and selected playlists.
-- [A small pause](https://kjyang0114.dev/play): Interactive geometric linework with motion controls.
+- [首頁](https://kjyang0114.dev/): 楊凱捷 / KJyang 的個人網站。
+- [關於](https://kjyang0114.dev/about): 學習方式、開發方式與經歷。
+- [作品](https://kjyang0114.dev/projects): ${projects.length} 個專案，每個都寫了做法、限制與目前狀態。
+- [履歷](https://kjyang0114.dev/resume): 軟體工程履歷（[English](https://kjyang0114.dev/en/resume)）。
+- [AI 筆記](https://kjyang0114.dev/ai): AI 的基礎概念、能做什麼、限制與常見迷思。
+- [Now](https://kjyang0114.dev/now): 近況與歌單。
+- [歇一下](https://kjyang0114.dev/play): 可以拖曳的幾何線稿。
+- [聯絡](https://kjyang0114.dev/contact): Discord、GitHub、Instagram。
 
-- [Resume](https://kjyang0114.dev/resume): Software engineering experience, skills, availability, and contact details.
+## Projects / 作品
 
-- [About KJyang](https://kjyang0114.dev/about): Learning, development approach, and personal background.
-- [Projects](https://kjyang0114.dev/projects): Eight projects with scope, implementation notes, and source code.
-- [AI notes](https://kjyang0114.dev/ai): Introductory concepts, capabilities, limitations, and responsible use.
-- [Contact](https://kjyang0114.dev/contact): GitHub, Discord, and Instagram.
+${projects.map((project) => `- [${project.title}](https://kjyang0114.dev/projects/${project.slug}): ${project.lead}（${project.status}）`).join("\n")}
 
-## Main Sections
+## KJyang Studio
 
-- [KJyang Studio](${absoluteStudioUrl("/studio")}): Website design, frontend coding, deployment, hosting setup, maintenance, and basic SEO/GEO foundations.
+- [KJyang Studio](${absoluteStudioUrl("/studio")}): 小店網站與預約系統製作，一頁式 NT$18,000 起。
+- [價格](${absoluteStudioUrl("/studio/pricing")})
+- [作品](${absoluteStudioUrl("/studio/work")})
+
+${linkList(realCaseLinks())}
+
+## Machine-readable
+
+- [llms.txt](https://kjyang0114.dev/llms.txt)
+- [llms-full.txt](https://kjyang0114.dev/llms-full.txt)
+- [Studio llms.txt](https://kjyang0114.dev/studio/llms.txt)
 - [Web Highlighter Pro](https://kjyang0114.dev/web-highlighter-pro/): Local-first Chrome extension for webpage highlighting, notes, search, and export.
-- [AI-readable summary](https://kjyang0114.dev/llms.txt): Short machine-readable summary.
-- [Full AI-readable summary](https://kjyang0114.dev/llms-full.txt): Detailed machine-readable summary.
-
-## Agent Discovery
-
 - [API catalog](https://kjyang0114.dev/.well-known/api-catalog)
 - [Agent skills](https://kjyang0114.dev/.well-known/agent-skills/index.json)
-- [Auth metadata](https://kjyang0114.dev/auth.md)
 `,
     {
       headers: {

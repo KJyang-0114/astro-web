@@ -4,7 +4,7 @@ import { projects } from "./projects";
 // biographical material out of machine-readable discovery endpoints.
 export function personalDiscovery() {
   const projectLinks = projects.map(project =>
-    `- [${project.title}](https://kjyang0114.dev/projects/${project.slug}): ${project.lead} 狀態：${project.status}。原始碼：${project.github}`,
+    `- [${project.title}](https://kjyang0114.dev/projects/${project.slug}): ${project.lead} 狀態：${project.status}。${project.github ? `原始碼：${project.github}` : ""}${project.demo?.startsWith("http") ? ` 網站：${project.demo}` : ""}${project.caseStudy ? ` 完整案例：https://kjyang0114.dev${project.caseStudy}` : ""}`,
   ).join("\n");
   return `## Personal website / 個人網站
 
@@ -13,7 +13,10 @@ export function personalDiscovery() {
 - [首頁](https://kjyang0114.dev/): 楊凱捷 / KJyang 的個人網站。
 - [關於](https://kjyang0114.dev/about): 個人介紹與學習經歷。
 - [作品](https://kjyang0114.dev/projects): 公開專案的用途、實作、目前狀態與原始碼。
+- [履歷](https://kjyang0114.dev/resume): 軟體工程履歷（英文版：https://kjyang0114.dev/en/resume）。
 - [AI 筆記](https://kjyang0114.dev/ai): AI 入門與開發筆記。
+- [Now](https://kjyang0114.dev/now): 近況與歌單。
+- [聯絡](https://kjyang0114.dev/contact): Discord、GitHub、Instagram；網站製作需求請走 KJyang Studio。
 - [GitHub](https://github.com/KJyang-0114): 公開 repository 與 contribution。
 
 ### Personal projects / 個人專案

@@ -11,8 +11,13 @@ export interface Project {
   flow: string[];
   build: string[];
   limits: string[];
-  github: string;
+  // 沒有公開原始碼的專案不填。
+  github?: string;
   demo?: string;
+  // KJyang Studio 裡對應的完整案例頁
+  caseStudy?: string;
+  // 只用在搜尋結果的說明；沒填就用 description。
+  metaDescription?: string;
   image: string | null;
 }
 export const projects: Project[] = [
@@ -110,6 +115,60 @@ export const projects: Project[] = [
     limits: ["Studio 示範網站屬於設計 Demo，不代表客戶實績。"],
     github: "https://github.com/KJyang-0114/astro-web",
     demo: "/studio",
+    caseStudy: "/studio/work/kjyang-website",
+    metaDescription:
+      "楊凱捷（KJyang）的個人網站與接案頁 KJyang Studio：用 Astro 和 TypeScript 寫，Docker 部署在 Mac mini，推到 GitHub 後自動上線。放作品、履歷、AI 筆記，以及小店網站服務的價格與流程。",
+    image: null,
+  },
+  {
+    title: "SYNK ATELIER",
+    searchTitle: "SYNK ATELIER｜aespa 粉絲資訊站與網頁卡牌遊戲",
+    slug: "synk-atelier",
+    description:
+      "自己做、自己經營的 aespa 粉絲資訊站：專輯與歌曲、應援練習、演唱會準備、行程月曆。後來加了網頁卡牌遊戲 /game，有帳號、排行榜和後台數據報表。",
+    tags: ["React", "Vite", "Node.js", "SQLite", "PWA"],
+    category: "Web",
+    tech: "React",
+    status: "上線中",
+    lead: "把散在各處的資訊整理在一起，再用遊戲給大家每天回來的理由。",
+    flow: ["內容進後台待審", "核准後公開", "離線也能看", "網頁遊戲 /game", "每日數據報表"],
+    build: [
+      "所有內容先進後台的待審區，核准了才公開；每一筆修改都有紀錄，可以還原。",
+      "用過一次之後可以離線看，演唱會現場網路差也打得開必帶清單。",
+      "遊戲分數由伺服器計算，後台有每天的人數、留存和每一關的通過率，個資只留代碼。",
+      "公開前用 6 種手機尺寸逐頁截圖檢查，找到並修掉 10 個問題。",
+    ],
+    limits: [
+      "粉絲自己做的資訊站，不是官方網站。",
+      "流量不大：上線後一天大約 8 到 20 個人，新訪客幾乎都從 Threads 來。",
+    ],
+    demo: "https://synk-atelier.kjyang0114.dev",
+    caseStudy: "/studio/work/synk-atelier",
+    image: null,
+  },
+  {
+    title: "Weilspa 預約與排班系統",
+    searchTitle: "Weilspa 預約與排班系統｜Next.js 與 PostgreSQL",
+    slug: "weilspa",
+    description:
+      "Weilspa 有兩間門市、兩位美容師兼老闆，熟客原本都在 LINE 問時段，預約記在手機行事曆。我做了讓客人自己看時段、送出申請，店家確認後才成立的預約系統，加上給老闆用的手機後台。",
+    tags: ["Next.js", "PostgreSQL", "LINE 登入", "PWA", "Docker"],
+    category: "Web",
+    tech: "Next.js",
+    status: "系統完成，前台尚未公開",
+    lead: "讓熟客自己看時段送出申請，老闆少回幾則 LINE。",
+    flow: ["選門市、療程、美容師", "看可申請的時段", "送出申請", "店家確認", "老闆手機後台"],
+    build: [
+      "預約做成申請制：客人送出的是申請，店家確認後才算數，這是老闆自己要求的。",
+      "兩位老闆用加到手機主畫面的後台處理申請，每天早上 8 點收到一則摘要。",
+      "寫了匯入工具把舊行事曆搬進來；沒有結束時間的預約先抓 90 分鐘，標成待確認讓老闆核對。",
+      "83 個自動測試檔，100 多次 commit。",
+    ],
+    limits: [
+      "前台還沒公開：療程價目還沒定案，網址目前顯示「網站整理中」。",
+      "頁面上不放真實的療程、價格與顧客資料。",
+    ],
+    caseStudy: "/studio/work/spa-booking-system",
     image: null,
   },
   {

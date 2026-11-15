@@ -1,9 +1,10 @@
 ---
+import { studioPageMeta } from "@data/seo";
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 import { studioContact, studioFacts, studioProcess } from "@data/studio";
 ---
-<SiteShell title="網站製作流程｜從傳 LINE 到上線要幾天 — KJyang Studio" description="找我做網站會經過 5 步：免費看一次、報價、設計、製作測試、上線交接。每一步大約幾天、你要給我什麼、我會給你什麼。" canonicalPath="/studio/process">
+<SiteShell title={studioPageMeta["/studio/process"].title} description={studioPageMeta["/studio/process"].description} canonicalPath="/studio/process" breadcrumbs={[["KJyang Studio", "/studio"], ["流程", "/studio/process"]]}>
   <main class="studio-index s-case">
     <StudioNav />
     <header class="s-wrap s-case-hero">

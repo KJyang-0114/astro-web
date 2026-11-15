@@ -14,6 +14,11 @@ export type RealCase = {
   facts: Array<[string, string]>;
   sections: Array<{ title: string; body: string[] }>;
   lessons: string[];
+  // 搜尋結果用的標題（不含「— KJyang Studio」）與說明，頁面上不顯示。沒寫就用 name／summary。
+  seoTitle?: string;
+  seoDescription?: string;
+  // 個人網站 /projects 裡對應的作品頁
+  projectSlug?: string;
 };
 
 const spaName = SPA_NAMED ? "Weilspa" : "北部雙門市美容 SPA";
@@ -21,6 +26,8 @@ const spaName = SPA_NAMED ? "Weilspa" : "北部雙門市美容 SPA";
 export const realCases: RealCase[] = [
   {
     slug: "spa-booking-system",
+    seoTitle: "Weilspa 美容 SPA 預約與排班系統｜真實作品",
+    projectSlug: "weilspa",
     name: SPA_NAMED ? "Weilspa 預約與排班系統" : "雙門市美容 SPA 預約與排班系統",
     kind: "官網＋線上預約＋員工排班後台",
     status: "系統完成，前台等療程價目確定後公開",
@@ -65,6 +72,7 @@ export const realCases: RealCase[] = [
   },
   {
     slug: "synk-atelier",
+    projectSlug: "synk-atelier",
     name: "SYNK ATELIER 粉絲資訊站與網頁遊戲",
     kind: "內容網站＋後台＋網頁遊戲（個人作品）",
     status: "上線中，遊戲於 2026 年 11 月公開",
@@ -116,6 +124,9 @@ export const realCases: RealCase[] = [
   },
   {
     slug: "kjyang-website",
+    seoTitle: "這個網站本身：Astro、Docker 自架與自動部署",
+    seoDescription: "你現在看的網站是我自己設計、自己寫、自己架主機的：用 Astro 寫，放在一台 Mac mini 上用 Docker 跑。推到 GitHub 後幾分鐘內自動上線，上線前會自動檢查連結和文字。",
+    projectSlug: "website",
     name: "這個網站本身",
     kind: "個人網站＋接案頁＋自動部署",
     status: "上線中",

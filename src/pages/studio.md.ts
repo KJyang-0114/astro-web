@@ -1,7 +1,6 @@
 import { absoluteStudioUrl } from "@data/seo";
-import { studioContact, studioFacts, studioPlans, maintenancePlans, studioServices } from "@data/studio";
-import { realCases } from "@data/cases";
-import { insightPosts } from "@data/insights";
+import { articleLinks, citableSummaryZh, doNotClaim, linkList, realCaseLinks, serviceLinks } from "@data/discovery";
+import { maintenancePlans, studioContact, studioFacts, studioPlans } from "@data/studio";
 
 export function GET() {
   return new Response(
@@ -11,42 +10,38 @@ title: KJyang Studio
 
 # KJyang Studio
 
-KJyang Studio is one person, ${studioFacts.owner} (${studioFacts.ownerNote}). He builds websites and online booking systems for small shops in northern Taiwan and does the design, code, deployment, and maintenance himself.
+${citableSummaryZh.slice(1).join("\n\n")}
 
-- Area: ${studioFacts.area}
-- LINE: ${studioFacts.reply}
+## 價格
 
-## Services
+${studioPlans.map((plan) => `- ${plan.nameZh}：${plan.price}，大約 ${plan.weeks}。${plan.text}`).join("\n")}
+${maintenancePlans.map(([title, price, text]) => `- 維護月費 ${title}：${price}。${text}`).join("\n")}
 
-${studioServices.map((service) => `- ${service.title}: ${service.text}`).join("\n")}
+- 付款：${studioFacts.payment}
+- 修改：${studioFacts.revisions}
 
-## Pricing Ranges
+## 服務
 
-${studioPlans.map((plan) => `- ${plan.title}: ${plan.price}. ${plan.text}`).join("\n")}
-${maintenancePlans.map(([title, price, text]) => `- ${title}: ${price}. ${text}`).join("\n")}
+${linkList(serviceLinks())}
 
-- Payment: ${studioFacts.payment}
-- Revisions: ${studioFacts.revisions}
+## 真實作品
 
-## Real Work
+${linkList(realCaseLinks())}
 
-${realCases.map((item) => `- [${item.name}](${absoluteStudioUrl(`/studio/work/${item.slug}`)}): ${item.kind}. ${item.status}.`).join("\n")}
+## 文章
 
-## Articles
+${linkList(articleLinks())}
 
-${insightPosts.map((post) => `- [${post.title}](${absoluteStudioUrl(`/studio/insights/${post.slug}`)})`).join("\n")}
+## 不要這樣描述
 
-## Scope
+${doNotClaim.map((line) => `- ${line}`).join("\n")}
 
-Design, frontend code, booking and admin features, domain and HTTPS setup, deployment, hosting, backups, and maintenance. Basic search setup (titles, descriptions, area names, sitemap, Google Search Console) is included.
+## 聯絡
 
-Google ranking, AI citation, and inquiry volume are not guaranteed.
-
-## Contact
-
-- Contact page: ${absoluteStudioUrl("/studio/contact")}
-- LINE: ${studioContact.lineUrl}
-- LINE ID / phone label: ${studioContact.lineId}
+- 聯絡頁：${absoluteStudioUrl("/studio/contact")}
+- LINE：${studioContact.lineUrl}
+- LINE ID／電話：${studioContact.lineId}
+- Email：${studioContact.email}
 `,
     {
       headers: {

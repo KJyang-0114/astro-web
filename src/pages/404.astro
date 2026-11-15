@@ -5,7 +5,7 @@ import PortfolioLayout from "../layouts/PortfolioLayout.astro";
 <PortfolioLayout
   noindex
   title="404 — 頁面不存在 | KJyang"
-  description="這個頁面不存在，從首頁或作品集繼續探索 KJyang 的網站。"
+  description="這個頁面不存在。可以回到楊凱捷（KJyang）的首頁、作品集，或 KJyang Studio 的小店網站服務。"
   ><section class="page-heading error-page">
     <span class="micro">PAGE NOT FOUND</span><h1>404<span>↗</span></h1><h2>
       這個連結沒有抵達。
@@ -16,5 +16,18 @@ import PortfolioLayout from "../layouts/PortfolioLayout.astro";
         class="text-link"
         href="/projects">探索作品</a>
     </div>
+    <h2 class="not-found-heading">可能在找這些</h2>
+    <ul class="not-found-links">
+      <li><a class="text-link" href="/about">關於楊凱捷</a></li>
+      <li><a class="text-link" href="/resume">履歷</a>・<a class="text-link" href="/en/resume">Resume (English)</a></li>
+      <li><a class="text-link" href="/ai">AI 入門筆記</a></li>
+      <li><a class="text-link" href="/studio">KJyang Studio：小店網站與預約系統</a></li>
+      <li><a class="text-link" href="/studio/pricing">網站製作價格</a>・<a class="text-link" href="/studio/work">作品</a>・<a class="text-link" href="/studio/insights">文章</a></li>
+      <li><a class="text-link" href="/studio/contact">用 LINE 聯絡（網站製作）</a>・<a class="text-link" href="/contact">其他聯絡方式</a></li>
+    </ul>
   </section></PortfolioLayout
 >
+<style>
+  .not-found-heading { margin-top: 56px; }
+  .not-found-links { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 10px; }
+</style>

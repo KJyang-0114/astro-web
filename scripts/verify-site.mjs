@@ -12,6 +12,9 @@ const slugs = [
   "element-remover",
   "character",
   "nyx",
+  // 2026-11-16 加入：Studio 的兩個真實作品（cases.ts）也放進個人作品集。
+  "synk-atelier",
+  "weilspa",
 ];
 const routes = [
   "/",
@@ -97,7 +100,7 @@ assert.ok(
     home.includes("Builds with Logic & Magic."),
 );
 const projects = readFileSync(fileFor("/projects"), "utf8");
-assert.equal((projects.match(/class="work-row"/g) || []).length, 8);
+assert.equal((projects.match(/class="work-row"/g) || []).length, slugs.length);
 for (const name of [
   "Online Clipboard",
   "Element Remover Pro",
@@ -128,7 +131,7 @@ assert.ok(
   "draft previews excluded from release",
 );
 console.log(
-  `PASS: ${routes.length} personal routes, internal links/assets, metadata, content coverage, 8 project pages, sitemap, and no public drafts.`,
+  `PASS: ${routes.length} personal routes, internal links/assets, metadata, content coverage, ${slugs.length} project pages, sitemap, and no public drafts.`,
 );
 
 const resume = readFileSync(fileFor("/resume"), "utf8");

@@ -1,7 +1,7 @@
 ---
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
-import { absoluteStudioUrl, founderPerson } from "@data/seo";
+import { absoluteStudioUrl, studioOrganizationId } from "@data/seo";
 import { maintenancePlans, studioContact, studioFacts } from "@data/studio";
 import { getServicePage, servicePages } from "@data/trust";
 
@@ -20,29 +20,32 @@ const priceText =
       ? "要看你的程式是什麼、想放在哪裡，所以我會先看過檔案再報價。網域和主機帳號都開在你名下。"
       : `一頁式網站 ${studioFacts.startPrice} 起，大約 ${studioFacts.onePageWeeks}；多頁網站大約 ${studioFacts.multiPageWeeks}。付款是${studioFacts.payment}。`;
 const others = servicePages.filter((s) => s.slug !== service.slug);
+const pageUrl = absoluteStudioUrl(`/studio/services/${service.slug}`);
+// 有公開價格的服務才寫 Offer；部署上線要先看過檔案才報價，不寫價格。
+const startPrice = Number(studioFacts.startPrice.replace(/\D/g, ""));
+const careFromNumber = Number(careFrom.replace(/\D/g, ""));
+const offer =
+  service.slug === "local-business-website" || service.slug === "website-redesign"
+    ? { "@type": "Offer", url: absoluteStudioUrl("/studio/pricing"), priceCurrency: "TWD", priceSpecification: { "@type": "PriceSpecification", priceCurrency: "TWD", minPrice: startPrice } }
+    : service.slug === "website-maintenance"
+      ? { "@type": "Offer", url: absoluteStudioUrl("/studio/pricing"), priceCurrency: "TWD", priceSpecification: { "@type": "UnitPriceSpecification", priceCurrency: "TWD", price: careFromNumber, unitCode: "MON", unitText: "月" } }
+      : undefined;
 const schema = [
   {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": `${pageUrl}#service`,
     name: service.title,
-    description: service.description,
-    url: absoluteStudioUrl(`/studio/services/${service.slug}`),
-    provider: founderPerson,
+    description: service.metaDescription,
+    url: pageUrl,
+    provider: { "@id": studioOrganizationId },
     areaServed: studioFacts.areaServed,
-    inLanguage: "zh-Hant"
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "KJyang Studio", item: absoluteStudioUrl("/studio") },
-      { "@type": "ListItem", position: 2, name: "服務", item: absoluteStudioUrl("/studio/services") },
-      { "@type": "ListItem", position: 3, name: service.title, item: absoluteStudioUrl(`/studio/services/${service.slug}`) }
-    ]
+    availableLanguage: ["zh-Hant", "en"],
+    ...(offer ? { offers: offer } : {})
   }
 ];
 ---
-<SiteShell title={`${service.title}｜北部小店・一人接案 — KJyang Studio`} description={service.description} canonicalPath={`/studio/services/${service.slug}`} schema={schema}>
+<SiteShell title={`${service.title}｜北部小店・一人接案 — KJyang Studio`} description={service.metaDescription} canonicalPath={`/studio/services/${service.slug}`} schema={schema} breadcrumbs={[["KJyang Studio", "/studio"], ["服務", "/studio/services"], [service.title, `/studio/services/${service.slug}`]]}>
   <main class="studio-index s-case">
     <StudioNav />
     <header class="s-wrap s-case-hero">

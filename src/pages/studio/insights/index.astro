@@ -2,10 +2,10 @@
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 import { insightPosts } from "@data/insights";
-import { absoluteStudioUrl, founderPerson } from "@data/seo";
+import { absoluteStudioUrl, founderPerson, studioPageMeta } from "@data/seo";
 import { studioContact, studioFacts } from "@data/studio";
 
-const description = "小店網站多少錢、要不要做網站、LINE 預約和預約系統差在哪、手機第一屏放什麼、上線之後怎麼維護。楊凱捷用自己做過的案子寫的 6 篇文章。";
+const description = studioPageMeta["/studio/insights"].description;
 const schema = [
   {
     "@context": "https://schema.org",
@@ -27,7 +27,7 @@ const schema = [
   }
 ];
 ---
-<SiteShell title="文章｜小店網站的價格、預約、手機版與維護 — KJyang Studio" description={description} canonicalPath="/studio/insights" schema={schema}>
+<SiteShell title={studioPageMeta["/studio/insights"].title} description={description} canonicalPath="/studio/insights" schema={schema} breadcrumbs={[["KJyang Studio", "/studio"], ["文章", "/studio/insights"]]}>
   <main class="studio-index s-case">
     <StudioNav />
     <header class="s-wrap s-case-hero">

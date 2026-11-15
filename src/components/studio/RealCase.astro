@@ -9,29 +9,30 @@ import { studioContact } from "@data/studio";
 const { slug } = Astro.props;
 const item = getRealCase(slug);
 const others = realCases.filter((c) => c.slug !== slug);
+const pageUrl = absoluteStudioUrl(`/studio/work/${item.slug}`);
+const projectUrl = item.projectSlug ? `/projects/${item.projectSlug}` : undefined;
 const schema = [
   {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
+    "@id": `${pageUrl}#work`,
     name: item.name,
     description: item.summary,
-    url: absoluteStudioUrl(`/studio/work/${item.slug}`),
+    url: pageUrl,
+    mainEntityOfPage: pageUrl,
     inLanguage: "zh-Hant",
-    creator: founderPerson,
-    ...(item.url ? { workExample: item.url } : {})
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "KJyang Studio", item: absoluteStudioUrl("/studio") },
-      { "@type": "ListItem", position: 2, name: "作品", item: absoluteStudioUrl("/studio/work") },
-      { "@type": "ListItem", position: 3, name: item.name, item: absoluteStudioUrl(`/studio/work/${item.slug}`) }
-    ]
+    genre: item.kind,
+    creativeWorkStatus: item.status,
+    keywords: item.stack.join(", "),
+    author: founderPerson,
+    creator: { "@id": founderPerson["@id"] },
+    ...(item.url || projectUrl
+      ? { sameAs: [item.url, projectUrl && absoluteStudioUrl(projectUrl)].filter(Boolean) }
+      : {})
   }
 ];
 ---
-<SiteShell title={`${item.name}｜真實作品 — KJyang Studio`} description={item.summary.slice(0, 120)} canonicalPath={`/studio/work/${item.slug}`} schema={schema}>
+<SiteShell title={item.seoTitle ? `${item.seoTitle} — KJyang Studio` : `${item.name}｜真實作品 — KJyang Studio`} description={item.seoDescription ?? item.summary.slice(0, 120)} canonicalPath={`/studio/work/${item.slug}`} schema={schema} breadcrumbs={[["KJyang Studio", "/studio"], ["作品", "/studio/work"], [item.name, `/studio/work/${item.slug}`]]}>
   <main class="studio-index s-case">
     <StudioNav />
     <header class="s-wrap s-case-hero">
@@ -40,7 +41,7 @@ const schema = [
       <h1>{item.name}</h1>
       <p class="s-lead">{item.summary}</p>
       <p class="s-status"><b>目前狀態</b>{item.status}</p>
-      <p class="s-links">{item.url && <a class="s-link" href={item.url} rel="noopener" target="_blank">打開網站 ↗</a>}{item.links?.map(([label, href]) => <a class="s-link" href={href} rel="noopener" target="_blank">{label} ↗</a>)}</p>
+      <p class="s-links">{item.url && <a class="s-link" href={item.url} rel="noopener" target="_blank">打開網站 ↗</a>}{item.links?.map(([label, href]) => <a class="s-link" href={href} rel="noopener" target="_blank">{label} ↗</a>)}{projectUrl && <a class="s-link" href={projectUrl}>個人網站上的作品頁</a>}</p>
       <dl class="s-facts">{item.facts.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
     </header>
     {item.slug === "spa-booking-system" && (

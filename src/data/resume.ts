@@ -32,8 +32,8 @@ const skills = [
 ];
 export const resumeCopy: Record<ResumeLanguage, Copy> = {
   "zh-Hant": {
-    title: "KJyang — Software Engineer | 履歷",
-    description: "KJyang 的軟體工程履歷：正式完全遠端任職經驗，教育科技與內部 Web 應用的全端開發、Backend 與 AI 整合。Taiwan UTC+8，尋找遠端合作，工時與合作形式可討論。",
+    title: "楊凱捷 KJyang 履歷｜Software Engineer",
+    description: "楊凱捷（KJyang）的軟體工程履歷：正式完全遠端任職經驗，教育科技與內部 Web 應用的全端開發、Backend 與 AI 整合。Taiwan UTC+8，尋找遠端合作，工時與合作形式可討論。",
     intro: "具備正式完全遠端任職經驗的軟體開發者。曾於雲書苑教育科技有限公司參與教育、學習與內部 Web 應用的全端開發，涵蓋前端介面、後端功能與 AI 服務整合；另持續開發開源工具與個人專案。",
     open: "以遠端為必要條件；工時、協作時段與合作形式可討論。",
     available: "開放合作", print: "列印／另存 PDF ↓", noScript: "可使用瀏覽器的列印功能，列印或另存 PDF。",
@@ -59,8 +59,8 @@ export const resumeCopy: Record<ResumeLanguage, Copy> = {
     education: "鶯歌工商 — 資訊科", educationNote: "目前在學，預計 2027 年畢業。持續投入軟體工程、個人專案與開源參與。",
   },
   en: {
-    title: "KJyang — Software Engineer | Resume",
-    description: "Software engineer with fully remote employment experience in education technology, full-stack web applications, backend development, and AI integration. Based in Taiwan, UTC+8. Open to remote opportunities with hours and engagement terms to be discussed.",
+    title: "KJyang (楊凱捷) — Software Engineer Resume",
+    description: "Resume of KJyang (楊凱捷), software engineer in Taiwan (UTC+8) with fully remote edtech experience in full-stack web, backend and AI integration.",
     intro: "Software developer with fully remote employment experience. Worked on education, learning, and internal web applications at 雲書苑教育科技有限公司, spanning frontend interfaces, backend functionality, and AI service integration. Also builds open-source tools and personal projects.",
     open: "Remote work required. Hours, collaboration windows, and engagement terms are open for discussion.",
     available: "Open to opportunities", print: "Print / Save PDF ↓", noScript: "Use your browser’s Print command to print this resume or save it as a PDF.",

@@ -33,7 +33,17 @@ echo "=== Docker Error Log $(timestamp) ===" > "$ERROR_LOG"
 
 log "開始Docker重構流程..."
 
-# 停止並移除現有容器
+# 重新構建鏡像
+log "開始重新構建Docker鏡像..."
+if docker build --no-cache -t kjyang-wbs-astro . >> "$LOG_FILE" 2>> "$ERROR_LOG"; then
+    log "Docker鏡像構建成功"
+else
+    log_error "Docker鏡像構建失敗"
+    exit 1
+fi
+
+# 鏡像建好之後才停掉舊容器：建置期間（約 1 到 2 分鐘）舊網站繼續服務，
+# 建置失敗時舊容器也還在，網站不會掉。
 log "停止並移除現有容器..."
 if docker stop kjyang-wbs-astro-container >/dev/null 2>&1; then
     log "成功停止容器"
@@ -45,15 +55,6 @@ if docker rm -f kjyang-wbs-astro-container >/dev/null 2>&1; then
     log "成功移除容器"
 else
     log "容器不存在或已移除"
-fi
-
-# 重新構建鏡像
-log "開始重新構建Docker鏡像..."
-if docker build --no-cache -t kjyang-wbs-astro . >> "$LOG_FILE" 2>> "$ERROR_LOG"; then
-    log "Docker鏡像構建成功"
-else
-    log_error "Docker鏡像構建失敗"
-    exit 1
 fi
 
 # 釋放3000埠，避免容器啟動時發生port衝突

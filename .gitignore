@@ -23,6 +23,7 @@
 !/vite.config.js
 !/README.md
 !/rebuild-docker.sh
+!/docs/
 
 # --- Ignore generated/editor files inside whitelisted trees ---
 **/.DS_Store

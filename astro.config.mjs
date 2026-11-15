@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { lastmodFor, nonIndexablePatterns } from './src/data/lastmod.mjs';
 
 // 舊網址轉到新頁面。sitemap 不列這些網址。
 const redirects = {
@@ -59,7 +60,7 @@ export default defineConfig({
       filter: (page) => {
         const path = new URL(page).pathname;
         if (redirectPaths.has(path.replace(/\/$/, ''))) return false;
-        return !/^\/studio\/(?:en\/)?demo(?:\/|$)/.test(path)
+        return !nonIndexablePatterns.some((pattern) => pattern.test(path))
           && !/\.(?:txt|xml|json|md)$/.test(path)
           && !path.startsWith('/.well-known/');
       },
@@ -69,6 +70,8 @@ export default defineConfig({
           url.pathname = url.pathname.replace(/\/$/, '') || '/';
         }
         item.url = url.href;
+        const lastmod = lastmodFor(url.pathname);
+        if (lastmod) item.lastmod = lastmod;
         return item;
       },
     }),

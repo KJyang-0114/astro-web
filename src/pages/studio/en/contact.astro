@@ -1,10 +1,11 @@
 ---
+import { studioPageMeta } from "@data/seo";
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 import { studioContact } from "@data/studio";
 ---
 
-<SiteShell title="Contact | KJyang Studio" description="Contact Kai-Jie Yang on LINE or by email about a website or booking system for your small business. LINE is checked daily from 10:00 to 22:00." canonicalPath="/studio/en/contact" lang="en">
+<SiteShell title={studioPageMeta["/studio/en/contact"].title} description={studioPageMeta["/studio/en/contact"].description} canonicalPath="/studio/en/contact" lang="en" breadcrumbs={[["KJyang Studio", "/studio/en"], ["Contact", "/studio/en/contact"]]}>
   <main class="studio-en-v2 en-subpage">
     <StudioNav />
     <section class="en-v2-hero en-page-hero">
@@ -19,7 +20,7 @@ import { studioContact } from "@data/studio";
           </div>
         </div>
         <div class="line-contact-card studio-real-contact">
-          <div class="line-qr"><img src={studioContact.lineQr} alt="LINE QR code for Kai-Jie Yang" /></div>
+          <div class="line-qr"><img src={studioContact.lineQr} alt="LINE QR code for Kai-Jie Yang" width="900" height="900" loading="lazy" /></div>
           <div><b>LINE ID</b><strong>{studioContact.lineId}</strong><p>LINE is the fastest way to reach me. Send links or screenshots.</p></div>
         </div>
       </div>

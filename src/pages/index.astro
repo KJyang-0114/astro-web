@@ -3,6 +3,7 @@ import PortfolioLayout from "../layouts/PortfolioLayout.astro";
 import WireArt from "../components/portfolio/WireArt.astro";
 import ExhibitScenes from "../components/portfolio/ExhibitScenes.astro";
 import { person } from "../data/person";
+import { projects } from "../data/projects";
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [person, {
@@ -65,7 +66,7 @@ const jsonLd = {
       </p><small>互動示意 · 專案細節與原始碼見作品頁</small>
     </div>
   </section><a class="next-page" href="/projects"
-    ><span>探索所有作品 <small>08 / SELECTED WORK</small></span><b>↗</b></a
+    ><span>探索所有作品 <small>{String(projects.length).padStart(2, "0")} / SELECTED WORK</small></span><b>↗</b></a
   ><section class="home-method">
     <span class="micro">BUILD · VERIFY · DELIVER</span><h2>
       讓工具加速。<br />讓驗證把關。

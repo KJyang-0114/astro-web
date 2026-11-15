@@ -1,4 +1,5 @@
 ---
+import { studioPageMeta } from "@data/seo";
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 import { studioFacts } from "@data/studio";
@@ -24,15 +25,10 @@ const launchChecks = ["Real phones", "LINE in-app browser", "Contact buttons", "
 ---
 
 <SiteShell
-  title="KJyang Studio | Websites and Booking Systems for Small Businesses in Taiwan"
-  description="Kai-Jie Yang, a high-school senior in New Taipei, Taiwan, designs, codes, launches and maintains websites and booking systems for small businesses. Based in northern Taiwan, works online. One-page sites from NT$18,000."
+  title={studioPageMeta["/studio/en"].title}
+  description={studioPageMeta["/studio/en"].description}
   canonicalPath="/studio/en"
   lang="en"
-  alternates={[
-    { hrefLang: "zh-Hant", href: "/studio" },
-    { hrefLang: "en", href: "/studio/en" },
-    { hrefLang: "x-default", href: "/studio/en" }
-  ]}
 >
   <main class="en-premium">
     <StudioNav />

@@ -1,14 +1,16 @@
 import { absoluteStudioUrl, indexableStudioRoutes } from "@data/seo";
+import { lastmodFor } from "@data/lastmod.mjs";
 
 export function GET() {
   const urls = indexableStudioRoutes
-    .map(
-      (route) => `  <url>
-    <loc>${absoluteStudioUrl(route.path)}</loc>
+    .map((route) => {
+      const lastmod = lastmodFor(route.path);
+      return `  <url>
+    <loc>${absoluteStudioUrl(route.path)}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ""}
     <changefreq>${route.changefreq}</changefreq>
     <priority>${route.priority}</priority>
-  </url>`
-    )
+  </url>`;
+    })
     .join("\n");
 
   return new Response(`<?xml version="1.0" encoding="UTF-8"?>

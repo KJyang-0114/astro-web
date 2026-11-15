@@ -1,10 +1,21 @@
 ---
+import { studioPageMeta } from "@data/seo";
 import StudioNav from "@components/StudioNav.astro";
 import SiteShell from "@components/SiteShell.astro";
 import { studioContact, studioFacts } from "@data/studio";
+import { absoluteStudioUrl, studioOrganizationId } from "@data/seo";
+
+const schema = [{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: "聯絡楊凱捷（KJyang Studio）",
+  url: absoluteStudioUrl("/studio/contact"),
+  inLanguage: "zh-Hant",
+  about: { "@id": studioOrganizationId }
+}];
 ---
 
-<SiteShell title="聯絡我｜LINE 傳店名，免費看一次 — KJyang Studio" description="用 LINE、電話或 Email 找楊凱捷。傳店名、現在的網站或 IG，我免費看一次，回你 3 個可以馬上改的地方。" canonicalPath="/studio/contact">
+<SiteShell title={studioPageMeta["/studio/contact"].title} description={studioPageMeta["/studio/contact"].description} canonicalPath="/studio/contact" schema={schema} breadcrumbs={[["KJyang Studio", "/studio"], ["聯絡", "/studio/contact"]]}>
   <main class="studio-index">
     <StudioNav />
     <section class="studio-contact-page">
@@ -17,7 +28,7 @@ import { studioContact, studioFacts } from "@data/studio";
           <p>{studioFacts.reply}。{studioFacts.area}。</p>
           <aside class="line-contact-card studio-real-contact">
             <div class="line-qr" aria-label="KJyang Studio LINE QR code">
-              <img src={studioContact.lineQr} alt="KJyang Studio LINE QR code" loading="lazy" />
+              <img src={studioContact.lineQr} alt="KJyang Studio LINE QR code" width="900" height="900" loading="lazy" />
             </div>
             <div>
               <b>LINE / PHONE</b>
