@@ -33,6 +33,9 @@ echo "=== Docker Error Log $(timestamp) ===" > "$ERROR_LOG"
 
 log "開始Docker重構流程..."
 
+# 先把目前的鏡像標成 previous，新容器起不來時可以退回去
+docker tag kjyang-wbs-astro:latest kjyang-wbs-astro:previous >/dev/null 2>&1 || true
+
 # 重新構建鏡像
 log "開始重新構建Docker鏡像..."
 if docker build --no-cache -t kjyang-wbs-astro . >> "$LOG_FILE" 2>> "$ERROR_LOG"; then
@@ -119,7 +122,7 @@ RUN_STATUS=1
 for attempt in 1 2 3; do
     stop_legacy_preview
     docker rm -f kjyang-wbs-astro-container >/dev/null 2>&1 || true
-    RUN_OUTPUT=$(docker run -d -p 3000:3000 --name kjyang-wbs-astro-container kjyang-wbs-astro 2>&1)
+    RUN_OUTPUT=$(docker run -d --restart unless-stopped -p 3000:3000 --name kjyang-wbs-astro-container kjyang-wbs-astro 2>&1)
     RUN_STATUS=$?
     printf '%s\n' "$RUN_OUTPUT" >> "$LOG_FILE"
     if [ "$RUN_STATUS" -eq 0 ]; then
@@ -150,6 +153,31 @@ else
     log_error "容器未正常運行"
     exit 1
 fi
+
+# 確認新容器真的在回應（/healthz 也是 Mac mini 看門狗在檢查的網址）
+log "等待 /healthz 回應..."
+HEALTH_OK=0
+for _ in $(seq 1 30); do
+    if [ "$(curl -s -o /dev/null -m 3 -w '%{http_code}' http://127.0.0.1:3000/healthz)" = "200" ] \
+       && [ "$(curl -s -o /dev/null -m 3 -w '%{http_code}' http://127.0.0.1:3000/)" = "200" ]; then
+        HEALTH_OK=1
+        break
+    fi
+    sleep 1
+done
+
+if [ "$HEALTH_OK" -ne 1 ]; then
+    log_error "新容器 30 秒內沒有通過健康檢查"
+    docker logs --tail 30 kjyang-wbs-astro-container >> "$ERROR_LOG" 2>&1
+    if docker image inspect kjyang-wbs-astro:previous >/dev/null 2>&1; then
+        log "退回上一版鏡像..."
+        docker rm -f kjyang-wbs-astro-container >/dev/null 2>&1 || true
+        docker run -d --restart unless-stopped -p 3000:3000 --name kjyang-wbs-astro-container kjyang-wbs-astro:previous >> "$LOG_FILE" 2>> "$ERROR_LOG" \
+            && log "已退回上一版" || log_error "退回上一版也失敗"
+    fi
+    exit 1
+fi
+log "健康檢查通過"
 
 log "Docker重構完成!"
 
