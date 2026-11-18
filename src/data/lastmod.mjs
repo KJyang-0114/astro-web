@@ -24,6 +24,7 @@ const exact = {
   "/studio/insights/why-website-prices-are-different": "2026-11-18",
   "/studio/insights/do-i-need-a-website-with-ig-and-google-maps": "2026-11-18",
   "/studio/insights/small-business-hero-section-checklist": "2026-11-18",
+  "/studio/insights/website-care-after-launch": "2026-11-18",
 };
 
 const prefixes = [

@@ -147,7 +147,7 @@ export const insightPosts: InsightPost[] = [
       },
       {
         question: "做了網站之後，IG 還要經營嗎？",
-        answer: "要。網站不會自己有人來，IG、Google 地圖、LINE 都是客人走進來的入口。我自己的粉絲資訊站，新訪客幾乎都是從 Threads 點進來的。"
+        answer: "要。網站不會自己有人來，IG、Google 地圖、LINE 都是客人走進來的入口。我的粉絲資訊站 SYNK ATELIER 在 2026 年 10 月發了一則 Threads 介紹貼文，沒有下廣告，累積 1.6 萬多次瀏覽，網站本身沒改什麼。"
       }
     ]
   },
@@ -286,6 +286,7 @@ export const insightPosts: InsightPost[] = [
     slug: "website-care-after-launch",
     related: ["/studio/services/website-maintenance", "/studio/services/deployment-hosting", "/studio/work/kjyang-website"],
     date: "2026-11-16",
+    updated: "2026-11-18",
     category: "上線之後",
     title: "網站做完之後：網域、主機、維護要注意什麼",
     description:
@@ -316,7 +317,7 @@ export const insightPosts: InsightPost[] = [
       {
         title: "上線之後會發生的事",
         body:
-          "我自己經營網站之後才發現，上線之後的事比上線前多。常見的有：\n\n1. 價格調了、療程換了、過年公休，要改網站。\n2. HTTPS 憑證到期，瀏覽器會跳出「不安全」的警告，客人看到就關掉了。\n3. 主機或網路出狀況，網站打不開。\n4. 想知道到底有沒有人在看，從哪裡來，按了哪個按鈕。\n\n第 4 點我自己很有感。我的粉絲資訊站有裝流量統計，才知道新訪客幾乎都是從 Threads 來的，所以要宣傳就去 Threads。沒有數據，只能用猜的。"
+          "我自己經營網站之後才發現，上線之後的事比上線前多。常見的有：\n\n1. 價格調了、療程換了、過年公休，要改網站。\n2. HTTPS 憑證到期，瀏覽器會跳出「不安全」的警告，客人看到就關掉了。\n3. 主機或網路出狀況，網站打不開。\n4. 想知道到底有沒有人在看，從哪裡來，按了哪個按鈕。\n\n第 4 點我自己很有感。我的粉絲資訊站有裝流量統計，才看得到有沒有人在看、從哪裡來、按了哪個按鈕。沒有數據，只能用猜的。"
       },
       {
         title: "維護月費要不要買",
