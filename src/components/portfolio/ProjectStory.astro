@@ -8,7 +8,11 @@ const intro = sections.find((s) => s.place === "intro");
 const main = sections.filter((s) => !s.place);
 const aside = sections.filter((s) => s.place === "aside");
 const outro = sections.find((s) => s.place === "outro");
-const label = [project.category, project.genre, project.status].filter(Boolean).join(" / ");
+const gallery = project.gallery;
+// 有截圖區時，主欄在 gallery.after 那一段之後切成兩塊，截圖區橫跨整頁寬度夾在中間。
+const cut = gallery ? main.findIndex((s) => s.titleEn === gallery.after) + 1 : 0;
+const groups = cut > 0 && cut < main.length ? [main.slice(0, cut), main.slice(cut)] : [main];
+const label =[project.category, project.genre, project.status].filter(Boolean).join(" / ");
 ---
 
 <article class="project-page project-long">
@@ -27,20 +31,40 @@ const label = [project.category, project.genre, project.status].filter(Boolean).
       {project.ctas?.map((cta, i) => <a class={i === 0 ? "button-primary" : "text-link"} href={cta.href}>{cta.label} ↗</a>)}
     </div>
   </header>
-  <div class="project-story">
-    <div class="project-long-main">
-      {main.map((s) => (
-        <section>
-          <h2>{s.title} <span class="project-en" lang="en">/ {s.titleEn}</span></h2>
-          {s.blocks.map((b) =>
-            "p" in b ? <p>{b.p}</p>
-            : "list" in b ? <>{b.heading && <h3>{b.heading}</h3>}<ul>{b.list.map((t) => <li>{t}</li>)}</ul></>
-            : "notes" in b ? <ul class="project-notes">{b.notes.map(([t, text]) => <li><strong>{t}</strong>：{text}</li>)}</ul>
-            : <div class="project-decision"><h3>{b.decision.title}</h3><dl>{b.decision.steps.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl></div>
-          )}
-        </section>
-      ))}
-    </div>
+  <div class={gallery ? "project-story project-story-gallery" : "project-story"}>
+    {groups.map((group, gi) => (
+      <>
+        <div class={gi === 0 ? "project-long-main" : "project-long-main project-long-rest"}>
+          {group.map((s) => (
+            <section>
+              <h2>{s.title} <span class="project-en" lang="en">/ {s.titleEn}</span></h2>
+              {s.blocks.map((b) =>
+                "p" in b ? <p>{b.p}</p>
+                : "list" in b ? <>{b.heading && <h3>{b.heading}</h3>}<ul>{b.list.map((t) => <li>{t}</li>)}</ul></>
+                : "notes" in b ? <ul class="project-notes">{b.notes.map(([t, text]) => <li><strong>{t}</strong>：{text}</li>)}</ul>
+                : <div class="project-decision"><h3>{b.decision.title}</h3><dl>{b.decision.steps.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl></div>
+              )}
+            </section>
+          ))}
+        </div>
+        {gallery && gi === 0 && (
+          <section class="project-gallery" aria-labelledby="project-gallery-title">
+            <h2 id="project-gallery-title">{gallery.title} <span class="project-en" lang="en">/ {gallery.titleEn}</span></h2>
+            {gallery.note && <p>{gallery.note}</p>}
+            <ul class="project-gallery-list">
+              {gallery.items.map((item) => (
+                <li>
+                  <figure>
+                    <img src={item.src} alt={item.alt} width={item.width} height={item.height} loading="lazy" decoding="async" />
+                    <figcaption>{item.caption}</figcaption>
+                  </figure>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </>
+    ))}
     <aside>
       <span class="micro">CURRENT STATE</span>
       {aside.map((s) => (

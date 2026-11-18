@@ -967,7 +967,98 @@ summary::-webkit-details-marker {
   line-height: 1.9;
   max-width: 760px;
 }
+/* 截圖區：主欄切成兩塊，截圖區橫跨整頁寬度夾在中間；CURRENT STATE 仍在右上。
+   手機直式截圖排成格狀；窄螢幕改成可橫向滑動的一列 */
+.project-story-gallery {
+  row-gap: 64px;
+}
+.project-story-gallery > .project-long-main {
+  grid-column: 1;
+  grid-row: 1;
+}
+.project-story-gallery > aside {
+  grid-column: 2;
+  grid-row: 1;
+}
+.project-story-gallery > .project-gallery {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  min-width: 0;
+}
+.project-story-gallery > .project-long-rest {
+  grid-column: 1;
+  grid-row: 3;
+}
+.project-gallery h2 {
+  margin-top: 0;
+}
+.project-gallery > p {
+  color: var(--muted);
+  line-height: 1.9;
+  margin: 0;
+}
+.project-gallery-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 26px 16px;
+  margin: 22px 0 0;
+  padding: 0;
+}
+.project-story .project-gallery-list {
+  padding: 0;
+}
+.project-story .project-gallery-list li {
+  margin: 0;
+  color: inherit;
+  line-height: inherit;
+}
+.project-gallery figure {
+  margin: 0;
+}
+.project-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 780 / 1688;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel);
+}
+.project-gallery figcaption {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+@media (max-width: 1100px) {
+  .project-gallery-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
 @media (max-width: 760px) {
+  .project-story-gallery {
+    row-gap: 40px;
+  }
+  .project-story-gallery > .project-long-main,
+  .project-story-gallery > aside,
+  .project-story-gallery > .project-gallery,
+  .project-story-gallery > .project-long-rest {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .project-story .project-gallery-list {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    padding: 0 0 12px;
+  }
+  .project-gallery-list li {
+    flex: 0 0 58%;
+    scroll-snap-align: start;
+  }
   .project-intro .project-intro-lead {
     font-size: 17px;
   }

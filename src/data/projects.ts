@@ -25,6 +25,8 @@ export interface Project {
   // 標題區的按鈕，依序排列，第一顆是主要按鈕。有填就取代 github／caseStudy／demo 自動產生的按鈕。
   ctas?: { label: string; href: string }[];
   sections?: ProjectSection[];
+  // 選填的截圖區（目前只有 synk-atelier）：接在 titleEn 等於 after 的主欄區塊後面。
+  gallery?: ProjectGallery;
   // 取代模板自動產生的 CreativeWork；author 由模板補上全站的 #person。
   schema?: Record<string, unknown>[];
   // llms.txt 個人專案清單用的標題與說明；沒填就用 title／lead／status。
@@ -37,6 +39,14 @@ export type ProjectBlock =
   | { notes: Array<[string, string]> }
   // 一個決定：標題＋問題／選項／取捨／結果
   | { decision: { title: string; steps: Array<[string, string]> } };
+export interface ProjectGallery {
+  after: string;
+  title: string;
+  titleEn: string;
+  note?: string;
+  // src 是 public/ 底下的路徑；width / height 是圖檔的實際像素。
+  items: Array<{ src: string; alt: string; caption: string; width: number; height: number }>;
+}
 export interface ProjectSection {
   title: string;
   titleEn: string;
@@ -179,6 +189,70 @@ export const projects: Project[] = [
       { label: "玩 KWANGYA 探索", href: "https://synk-atelier.kjyang0114.dev/game" },
       { label: "完整案例", href: "/studio/work/synk-atelier" },
     ],
+    gallery: {
+      after: "What I built",
+      title: "畫面",
+      titleEn: "Screens",
+      note: "手機直式畫面，2026 年 11 月拍攝；遊戲畫面用的是測試帳號。",
+      items: [
+        {
+          src: "/projects/synk-atelier/site-home.webp",
+          alt: "SYNK ATELIER 資訊站的手機首頁：上方是網站名稱與搜尋，中間是作品精選的專輯封面，最下面是首頁、行程、一起玩、歌曲、我的導覽列。",
+          caption: "資訊站首頁：一打開就是作品精選。",
+          width: 780,
+          height: 1688,
+        },
+        {
+          src: "/projects/synk-atelier/site-calendar.webp",
+          alt: "行程頁的手機畫面：標題下寫著行程一律以台灣時間顯示，下面是依日期排列的行程卡片，每張有日期、星期與開始時間。",
+          caption: "行程：時間一律換成台灣時間。",
+          width: 780,
+          height: 1688,
+        },
+        {
+          src: "/projects/synk-atelier/game-lobby.webp",
+          alt: "遊戲《KWANGYA 探索》的大廳：上方是資源與目前區域，右側是抽卡、隊伍、卡片、任務、圖鑑入口，中間是隊伍的四張卡，下方是地圖、困難模式、進化試煉與深淵塔。",
+          caption: "遊戲大廳：隊伍、活動和挑戰入口都在這一頁。",
+          width: 780,
+          height: 1688,
+        },
+        {
+          src: "/projects/synk-atelier/game-battle.webp",
+          alt: "戰鬥畫面：上方是區域魔王和血條，中間是四張出戰的卡，下方 6×5 的珠盤上，一條粉紅色的線正連起六顆同色的珠。",
+          caption: "轉珠戰鬥：拖曳連起同色珠，連到誰的顏色就由那張卡出手。",
+          width: 780,
+          height: 1688,
+        },
+        {
+          src: "/projects/synk-atelier/game-zone-map.webp",
+          alt: "區域地圖：第 6 區的 10 個關卡節點用虛線串起來，第 10 關是魔王，下方是關卡說明、星星條件與出發按鈕。",
+          caption: "區域地圖：一張專輯一個區域，一區 10 關。",
+          width: 780,
+          height: 1688,
+        },
+        {
+          src: "/projects/synk-atelier/game-card-pull.webp",
+          alt: "抽卡結果：剛翻開一張標著 NEW 的 NINGNING 卡，下方是收下、再抽一次與去卡片看三個按鈕。",
+          caption: "抽卡：撕開卡包，翻開卡面。",
+          width: 780,
+          height: 1688,
+        },
+        {
+          src: "/projects/synk-atelier/game-card-growth.webp",
+          alt: "卡片詳細頁：戰力、等級、星級三格，下面是升級按鈕、重置等級連結、進化試煉的進度條和升星。",
+          caption: "卡片養成：升級、升星、進化試煉；升錯了可以重置。",
+          width: 780,
+          height: 1688,
+        },
+        {
+          src: "/projects/synk-atelier/game-anniversary.webp",
+          alt: "出道 6 週年活動頁：最上方是一張四人合照的橫版週年紀念卡，下面是活動期間每天登入領抽卡券的六天進度。",
+          caption: "6 週年活動：四人合照做成 7:5 橫版卡，不切到人。",
+          width: 780,
+          height: 1688,
+        },
+      ],
+    },
     sections: [
       {
         title: "一句話",
