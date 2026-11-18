@@ -1,0 +1,7 @@
+---
+// 英文頁裡夾著的中文專有名詞（遊戲名、模式名）標上 lang="zh-Hant"；mark 沒開就原樣輸出文字。
+interface Props { text: string; mark?: boolean }
+const { text, mark = false } = Astro.props;
+const parts = mark ? text.split(/(KWANGYA 探索|訊號異常)/) : [text];
+---
+{parts.map((part, i) => (i % 2 ? <span lang="zh-Hant">{part}</span> : part))}

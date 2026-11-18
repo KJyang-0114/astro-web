@@ -31,6 +31,18 @@ export interface Project {
   schema?: Record<string, unknown>[];
   // llms.txt 個人專案清單用的標題與說明；沒填就用 title／lead／status。
   discovery?: { title: string; text: string };
+  // 選填的英文作品頁 /en/projects/<slug>（目前只有 synk-atelier）。不另外加一筆 projects，免得出現在 /projects 和 llms 清單。
+  en?: ProjectEnglish;
+}
+// 英文頁的 sections 只用 titleEn 當標題（不顯示中英雙標題）；gallery.after 一樣對 titleEn。
+export interface ProjectEnglish {
+  searchTitle: string;
+  metaDescription: string;
+  label: string;
+  tags: string[];
+  ctas: { label: string; href: string }[];
+  sections: ProjectSection[];
+  gallery: ProjectGallery;
 }
 export type ProjectBlock =
   | { p: string }
@@ -425,6 +437,146 @@ export const projects: Project[] = [
     discovery: {
       title: "SYNK ATELIER｜一個人做的 aespa 粉絲站與網頁卡牌遊戲",
       text: "楊凱捷自己做、自己經營的非官方 aespa 粉絲資訊站，與網頁卡牌遊戲《KWANGYA 探索》（轉珠戰鬥、卡片收集、深淵塔、限時活動，2026-11 公開、持續更新）。寫了伺服器驗證戰鬥與規則版本化、反作弊怎麼避免誤判、玩家回饋怎麼變成更新，以及他怎麼和 AI 代理分工開發。",
+    },
+    en: {
+      searchTitle: "SYNK ATELIER — fan site and web card game by KJyang",
+      metaDescription:
+        "An unofficial aespa fan site and web card game built and run solo by Kai-Jie Yang (KJyang): server-verified battles, versioned rules, a daily feedback loop and AI-agent-assisted development.",
+      label: "Web / Game",
+      tags: ["React", "TypeScript", "Node.js", "SQLite", "Firebase Auth", "PWA", "self-hosted"],
+      ctas: [
+        { label: "Open the site", href: "https://synk-atelier.kjyang0114.dev" },
+        { label: "Play KWANGYA 探索", href: "https://synk-atelier.kjyang0114.dev/game" },
+        { label: "Full case study (in Chinese)", href: "/studio/work/synk-atelier" },
+      ],
+      gallery: {
+        after: "What I built",
+        title: "Screens",
+        titleEn: "Screens",
+        note: "Portrait phone screens, captured in November 2026; the game screens use a test account.",
+        items: [
+          {
+            src: "/projects/synk-atelier/site-home.webp",
+            alt: "The SYNK ATELIER fan site's home page on a phone: the site name and search at the top, featured album covers in the middle, and a bottom navigation bar with Home, Schedule, Play, Songs and Me.",
+            caption: "Site home: featured releases as soon as it opens.",
+            width: 780,
+            height: 1688,
+          },
+          {
+            src: "/projects/synk-atelier/site-calendar.webp",
+            alt: "The schedule page on a phone: a note under the title says all times are shown in Taiwan time, followed by event cards listed by date, each with the date, weekday and start time.",
+            caption: "Schedule: every time converted to Taiwan time.",
+            width: 780,
+            height: 1688,
+          },
+          {
+            src: "/projects/synk-atelier/game-lobby.webp",
+            alt: "The lobby of the game KWANGYA 探索: resources and the current zone at the top, entries for card pulls, team, cards, missions and collection on the right, the team's four cards in the middle, and the map, hard mode, evolution trial and tower below.",
+            caption: "Game lobby: team, events and challenges all on one screen.",
+            width: 780,
+            height: 1688,
+          },
+          {
+            src: "/projects/synk-atelier/game-battle.webp",
+            alt: "A battle screen: the zone boss and its health bar at the top, four battle cards in the middle, and below them a bead board where a pink line is linking beads of the same colour.",
+            caption: "Match-and-link battle: drag to link same-colour beads; the card whose colour you link attacks.",
+            width: 780,
+            height: 1688,
+          },
+          {
+            src: "/projects/synk-atelier/game-zone-map.webp",
+            alt: "A zone map: the zone's stage nodes joined by a dotted line, with the boss on the last stage, and the stage details, star conditions and a start button below.",
+            caption: "Zone map: one album per zone.",
+            width: 780,
+            height: 1688,
+          },
+          {
+            src: "/projects/synk-atelier/game-card-pull.webp",
+            alt: "A card pull result: a NINGNING card marked NEW has just been revealed, with buttons below to keep it, pull again or go to cards.",
+            caption: "Card pull: tear open the pack, reveal the card.",
+            width: 780,
+            height: 1688,
+          },
+          {
+            src: "/projects/synk-atelier/game-card-growth.webp",
+            alt: "A card detail page: power, level and star rank in three boxes, with a level-up button, a reset-level link, an evolution trial progress bar and star-up below.",
+            caption: "Card growth: level up, star up, evolution trial; a wrong upgrade can be reset.",
+            width: 780,
+            height: 1688,
+          },
+          {
+            src: "/projects/synk-atelier/game-anniversary.webp",
+            alt: "The 6th-anniversary event page: a landscape anniversary card with a group photo of all four members at the top, and below it the day-by-day progress for claiming a card-pull ticket by logging in during the event.",
+            caption: "6th-anniversary event: the four-member group photo as a 7:5 landscape card, so no one is cropped.",
+            width: 780,
+            height: 1688,
+          },
+        ],
+      },
+      sections: [
+        {
+          title: "SYNK ATELIER",
+          titleEn: "",
+          place: "intro",
+          blocks: [
+            { p: "A fan site and a web card game, built and run by one person." },
+            { p: "Unofficial fan project for aespa." },
+          ],
+        },
+        {
+          title: "Where it started",
+          titleEn: "Where it started",
+          blocks: [
+            { p: "aespa news was scattered across apps and time zones. I wanted one place that opens fast, needs no login, and still works offline at a concert. A news site is something you visit when you need it, so I added a game to give people a reason to come back every day." },
+          ],
+        },
+        {
+          title: "What I built",
+          titleEn: "What I built",
+          blocks: [
+            {
+              notes: [
+                ["The site", "albums, cheer practice, concert prep and a calendar in Taiwan time. Every entry goes through review before it is public, and every edit can be rolled back. In October 2026 I deleted the first frontend and rebuilt it from scratch."],
+                ["The game, KWANGYA 探索 (KWANGYA)", "a match-and-link puzzle battle, card collecting with levels, evolution and a card reset, story zones that open on a server clock, hard mode, a weekly tower, and a 6th-anniversary event with a landscape card and a limited pool. A new mode, 訊號異常, is coming soon. Card photos follow one rule: a crop never cuts a person, which is why the four-member anniversary card is a 7:5 landscape card. No payments, no ads."],
+              ],
+            },
+          ],
+        },
+        {
+          title: "How I decide",
+          titleEn: "How I decide",
+          blocks: [
+            {
+              notes: [
+                ["One stage got too hard", "After a zone-wide tune, stage 3-10's win rate fell from about half to 15%. I gave that stage its own counter-factor. Rules are versioned: old battles still verify under old rules. I replayed 36 recorded battles and 400 live battles on the new engine, and the results matched."],
+                ["Anti-cheat that doesn't punish dedication", "Flags only mark accounts, never punish them. After launch the flags mostly hit heavy players, so I re-tuned on real play to catch only what looks like real cheating, and added a bulk \"false positive\" action. A month of bot play before launch produced zero flags."],
+                ["Saves lost in in-app browsers", "Opening the game from the Threads in-app browser and moving to Safari lost the trial save. URL tokens didn't survive and automatic matching failed behind iCloud Private Relay. I added a short one-time continue code rather than loosen matching. I would rather miss a match than hand a save to the wrong person."],
+              ],
+            },
+          ],
+        },
+        {
+          title: "Feedback loop",
+          titleEn: "Feedback loop",
+          blocks: [
+            { p: "Every report from the in-game feedback button gets read; what I can reproduce, I fix. Examples: a back-button trap after tower battles, a solo card whose photo actually showed two other members (12 multi-person solo cards removed and replaced), and a \"no moves left\" report that led to an earlier hint and a smarter reshuffle." },
+          ],
+        },
+        {
+          title: "Working with AI agents",
+          titleEn: "Working with AI agents",
+          blocks: [
+            { p: "I act as product owner. A main agent plans, writes briefs and reviews; sub-agents implement (three at most at a time); a stronger model drafts big plans and another reviews them. Every decision is written back to the planning doc. Testing runs on a read-only copy of production data, never demo data, and non-urgent updates ship in one batch overnight so players aren't interrupted." },
+          ],
+        },
+        {
+          title: "Contact",
+          titleEn: "Contact",
+          place: "outro",
+          blocks: [],
+          cta: { label: "Building a community or fan product? Let's talk.", href: "/contact" },
+        },
+      ],
     },
   },
   {

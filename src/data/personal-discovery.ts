@@ -1,10 +1,14 @@
-import { projects } from "./projects";
+import { projects, type Project } from "./projects";
 
 // This index mirrors public pages. Keep application documents and private
 // biographical material out of machine-readable discovery endpoints.
+// 有英文作品頁的，照履歷那行的寫法在句尾補「（英文版：…）」。
+const withEnglish = (text: string, project: Project) =>
+  project.en ? `${text.replace(/。$/, "")}（英文版：https://kjyang0114.dev/en/projects/${project.slug}）。` : text;
+
 export function personalDiscovery() {
   const projectLinks = projects.map(project =>
-    `- [${project.discovery?.title ?? project.title}](https://kjyang0114.dev/projects/${project.slug}): ${project.discovery ? project.discovery.text : `${project.lead} 狀態：${project.status}。`}${project.github ? `原始碼：${project.github}` : ""}${project.demo?.startsWith("http") ? ` 網站：${project.demo}` : ""}${project.caseStudy ? ` 完整案例：https://kjyang0114.dev${project.caseStudy}` : ""}`,
+    `- [${project.discovery?.title ?? project.title}](https://kjyang0114.dev/projects/${project.slug}): ${withEnglish(project.discovery ? project.discovery.text : `${project.lead} 狀態：${project.status}。`, project)}${project.github ? `原始碼：${project.github}` : ""}${project.demo?.startsWith("http") ? ` 網站：${project.demo}` : ""}${project.caseStudy ? ` 完整案例：https://kjyang0114.dev${project.caseStudy}` : ""}`,
   ).join("\n");
   return `## Personal website / 個人網站
 

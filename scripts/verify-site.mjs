@@ -27,6 +27,8 @@ const routes = [
   "/ai",
   "/contact",
   ...slugs.map((s) => `/projects/${s}`),
+  // 2026-11-19 加入：SYNK ATELIER 英文作品頁。
+  "/en/projects/synk-atelier",
 ];
 const fileFor = (path) =>
   path === "/" ? join(root, "index.html") : join(root, path, "index.html");
@@ -50,7 +52,7 @@ for (const route of routes) {
     1,
     `${route}: single main`,
   );
-  assert.match(html, route === "/en/resume" ? /<html[^>]*lang="en"/ : /<html[^>]*lang="zh-Hant"/, `${route}: language`);
+  assert.match(html, route.startsWith("/en/") ? /<html[^>]*lang="en"/ : /<html[^>]*lang="zh-Hant"/, `${route}: language`);
   assert.match(
     html,
     /name="description" content="[^"]+"/,
@@ -193,3 +195,21 @@ for (const text of ["Oct 2025", "Early 2026", "NDA", "Currently enrolled", "Remo
   assert.ok(englishResume.includes(text), `English resume retains ${text}`);
 assert.ok(sitemap.includes("/en/resume"));
 console.log("PASS: bilingual resume content, canonical URLs, language links, and confidentiality exclusions.");
+
+// 英文作品頁：lang、canonical、標題、和中文頁互相的 hreflang、語言切換連結、網站地圖。
+const synkZh = readFileSync(fileFor("/projects/synk-atelier"), "utf8");
+const synkEn = readFileSync(fileFor("/en/projects/synk-atelier"), "utf8");
+assert.match(synkEn, /<html[^>]*lang="en"/);
+assert.ok(synkEn.includes('rel="canonical" href="https://kjyang0114.dev/en/projects/synk-atelier"'));
+assert.equal(synkEn.match(/<title>(.*?)<\/title>/s)?.[1].trim(), "SYNK ATELIER — fan site and web card game by KJyang");
+for (const html of [synkZh, synkEn]) {
+  assert.ok(html.includes('<link rel="alternate" hreflang="zh-Hant" href="https://kjyang0114.dev/projects/synk-atelier">'));
+  assert.ok(html.includes('<link rel="alternate" hreflang="en" href="https://kjyang0114.dev/en/projects/synk-atelier">'));
+  assert.ok(html.includes('<link rel="alternate" hreflang="x-default" href="https://kjyang0114.dev/projects/synk-atelier">'));
+}
+assert.ok(synkZh.includes('class="project-lang-link" href="/en/projects/synk-atelier"'));
+assert.ok(synkEn.includes('class="project-lang-link" href="/projects/synk-atelier"'));
+assert.ok(!synkEn.includes("<aside"), "English project page has no empty aside");
+assert.doesNotMatch(synkEn.replace(/unofficial/gi, ""), /official/i);
+assert.ok(sitemap.includes("<loc>https://kjyang0114.dev/en/projects/synk-atelier</loc>"));
+console.log("PASS: English SYNK ATELIER page language, canonical, title, reciprocal hreflang, language links and sitemap.");

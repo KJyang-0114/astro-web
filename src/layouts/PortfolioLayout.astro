@@ -10,9 +10,18 @@ interface Props {
   noindex?: boolean;
   lang?: "zh-Hant" | "en";
   resumeLanguages?: boolean;
+  // 有中英兩版的頁面：hreflang → 完整網址，兩頁要給同一組（含 x-default）。
+  alternates?: Array<[string, string]>;
   ogType?: "website" | "profile" | "article";
 }
 const { title, description, jsonLd, noindex = false, lang = "zh-Hant", resumeLanguages = false, ogType = "website" } = Astro.props;
+const alternates = resumeLanguages
+  ? [
+      ["zh-Hant", "https://kjyang0114.dev/resume"],
+      ["en", "https://kjyang0114.dev/en/resume"],
+      ["x-default", "https://kjyang0114.dev/resume"],
+    ]
+  : Astro.props.alternates ?? [];
 const ogImage = "https://kjyang0114.dev/og-portfolio.png";
 const ogImageAlt = "楊凱捷 KJyang：Human, then Code. AI、Web 與自動化作品。";
 const canonical = new URL(Astro.url.pathname.replace(/\/$/, "") || "/", "https://kjyang0114.dev").href;
@@ -61,11 +70,7 @@ const canonical = new URL(Astro.url.pathname.replace(/\/$/, "") || "/", "https:/
         />
       )
     }
-    {resumeLanguages && <>
-      <link rel="alternate" hreflang="zh-Hant" href="https://kjyang0114.dev/resume" />
-      <link rel="alternate" hreflang="en" href="https://kjyang0114.dev/en/resume" />
-      <link rel="alternate" hreflang="x-default" href="https://kjyang0114.dev/resume" />
-    </>}
+    {alternates.map(([hreflang, href]) => <link rel="alternate" hreflang={hreflang} href={href} />)}
     <slot name="head" />
     </head
   ><body class="portfolio" id="top"

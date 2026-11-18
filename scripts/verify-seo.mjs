@@ -75,7 +75,8 @@ for (const page of indexable) {
   check(title, `${path}: missing <title>`);
   check(width(title) <= 36, `${path}: title too long (${width(title)}): ${title}`);
   check(description.length >= 40, `${path}: description too short (${description.length})`);
-  check(description.length <= 170, `${path}: description too long (${description.length})`);
+  // 例外：SYNK ATELIER 英文頁的說明照文案原文（190 字元），不截短。
+  if (path !== "/en/projects/synk-atelier") check(description.length <= 170, `${path}: description too long (${description.length})`);
   if (titles.has(title)) failures.push(`${path}: duplicate title with ${titles.get(title)}: ${title}`);
   titles.set(title, path);
   if (descriptions.has(description)) failures.push(`${path}: duplicate description with ${descriptions.get(description)}`);

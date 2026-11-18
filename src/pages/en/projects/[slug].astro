@@ -1,0 +1,48 @@
+---
+// 英文作品頁：只產生有 project.en 的作品（目前是 synk-atelier）。
+// JSON-LD 只放這一頁的 WebPage 和麵包屑；作品本身（#work、#app）由中文頁描述，這裡用 @id 指過去。
+import PortfolioLayout from "../../../layouts/PortfolioLayout.astro";
+import ProjectStory from "../../../components/portfolio/ProjectStory.astro";
+import { projects } from "../../../data/projects";
+import { person } from "../../../data/person";
+export function getStaticPaths() {
+  return projects
+    .filter((project) => project.en && project.sections)
+    .map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+const { project } = Astro.props;
+const en = project.en!;
+const zhUrl = `https://kjyang0114.dev/projects/${project.slug}`;
+const canonical = `https://kjyang0114.dev/en/projects/${project.slug}`;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": `${canonical}#webpage`,
+      url: canonical,
+      name: en.searchTitle,
+      description: en.metaDescription,
+      inLanguage: "en",
+      about: { "@id": `${zhUrl}#work` },
+      author: { "@id": person["@id"] },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://kjyang0114.dev/" },
+        { "@type": "ListItem", position: 2, name: "Projects", item: "https://kjyang0114.dev/projects" },
+        { "@type": "ListItem", position: 3, name: project.title, item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<PortfolioLayout
+  title={en.searchTitle}
+  description={en.metaDescription}
+  jsonLd={jsonLd}
+  lang="en"
+  alternates={[["zh-Hant", zhUrl], ["en", canonical], ["x-default", zhUrl]]}
+><ProjectStory project={project} lang="en" /></PortfolioLayout>

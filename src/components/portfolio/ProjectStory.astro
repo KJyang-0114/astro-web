@@ -1,47 +1,60 @@
 ---
 // 長版作品頁：只給有 sections 的作品用（目前是 synk-atelier）。其他作品仍用 [slug].astro 的原版型。
+// lang="en" 用在 /en/projects/<slug>：內容換成 project.en，標題只顯示英文。
 import type { Project } from "../../data/projects";
-interface Props { project: Project }
-const { project } = Astro.props;
-const sections = project.sections ?? [];
+import ZhTerms from "./ZhTerms.astro";
+interface Props { project: Project; lang?: "zh-Hant" | "en" }
+const { project, lang = "zh-Hant" } = Astro.props;
+const en = lang === "en" && project.en ? project.en : undefined;
+const sections = (en ? en.sections : project.sections) ?? [];
 const intro = sections.find((s) => s.place === "intro");
 const main = sections.filter((s) => !s.place);
 const aside = sections.filter((s) => s.place === "aside");
 const outro = sections.find((s) => s.place === "outro");
-const gallery = project.gallery;
+const gallery = en ? en.gallery : project.gallery;
+const tags = en ? en.tags : project.tags;
+const ctas = en ? en.ctas : project.ctas;
 // 有截圖區時，主欄在 gallery.after 那一段之後切成兩塊，截圖區橫跨整頁寬度夾在中間。
 const cut = gallery ? main.findIndex((s) => s.titleEn === gallery.after) + 1 : 0;
 const groups = cut > 0 && cut < main.length ? [main.slice(0, cut), main.slice(cut)] : [main];
-const label =[project.category, project.genre, project.status].filter(Boolean).join(" / ");
+const label = en ? en.label : [project.category, project.genre, project.status].filter(Boolean).join(" / ");
+// 有英文版的作品，中英兩頁互相放一個語言切換連結。
+const switchTo = en
+  ? { href: `/projects/${project.slug}`, label: "中文", lang: "zh-Hant" }
+  : project.en ? { href: `/en/projects/${project.slug}`, label: "English", lang: "en" } : undefined;
+const storyClass = [gallery ? "project-story project-story-gallery" : "project-story", aside.length ? "" : "project-story-solo"].filter(Boolean).join(" ");
 ---
 
 <article class="project-page project-long">
-  <nav class="project-breadcrumbs" aria-label="所在位置"><a href="/">首頁</a><span aria-hidden="true">/</span><a href="/projects">作品</a><span aria-hidden="true">/</span><span aria-current="page">{project.title}</span></nav>
+  {en
+    ? <nav class="project-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/projects">Projects</a><span aria-hidden="true">/</span><span aria-current="page">{project.title}</span></nav>
+    : <nav class="project-breadcrumbs" aria-label="所在位置"><a href="/">首頁</a><span aria-hidden="true">/</span><a href="/projects">作品</a><span aria-hidden="true">/</span><span aria-current="page">{project.title}</span></nav>}
+  {switchTo && <a class="project-lang-link" href={switchTo.href} hreflang={switchTo.lang} lang={switchTo.lang}>{switchTo.label}</a>}
   <header class="project-header">
     <span class="micro">{label}</span>
     <h1>{project.title}</h1>
     {intro && (
       <div class="project-intro">
-        <span class="micro">{intro.title} / <span lang="en">{intro.titleEn}</span></span>
-        {intro.blocks.map((b, i) => "p" in b && <p class={i === 0 ? "project-intro-lead" : undefined}>{b.p}</p>)}
+        {!en && <span class="micro">{intro.title} / <span lang="en">{intro.titleEn}</span></span>}
+        {intro.blocks.map((b, i) => "p" in b && <p class={i === 0 ? "project-intro-lead" : undefined}><ZhTerms text={b.p} mark={!!en} /></p>)}
       </div>
     )}
-    <div class="project-tags">{project.tags.map((tag) => <span>{tag}</span>)}</div>
+    <div class="project-tags">{tags.map((tag) => <span>{tag}</span>)}</div>
     <div class="hero-actions">
-      {project.ctas?.map((cta, i) => <a class={i === 0 ? "button-primary" : "text-link"} href={cta.href}>{cta.label} ↗</a>)}
+      {ctas?.map((cta, i) => <a class={i === 0 ? "button-primary" : "text-link"} href={cta.href}>{en ? <span><ZhTerms text={cta.label} mark /> ↗</span> : <>{cta.label} ↗</>}</a>)}
     </div>
   </header>
-  <div class={gallery ? "project-story project-story-gallery" : "project-story"}>
+  <div class={storyClass}>
     {groups.map((group, gi) => (
       <>
         <div class={gi === 0 ? "project-long-main" : "project-long-main project-long-rest"}>
           {group.map((s) => (
             <section>
-              <h2>{s.title} <span class="project-en" lang="en">/ {s.titleEn}</span></h2>
+              {en ? <h2>{s.titleEn}</h2> : <h2>{s.title} <span class="project-en" lang="en">/ {s.titleEn}</span></h2>}
               {s.blocks.map((b) =>
-                "p" in b ? <p>{b.p}</p>
-                : "list" in b ? <>{b.heading && <h3>{b.heading}</h3>}<ul>{b.list.map((t) => <li>{t}</li>)}</ul></>
-                : "notes" in b ? <ul class="project-notes">{b.notes.map(([t, text]) => <li><strong>{t}</strong>：{text}</li>)}</ul>
+                "p" in b ? <p><ZhTerms text={b.p} mark={!!en} /></p>
+                : "list" in b ? <>{b.heading && <h3>{b.heading}</h3>}<ul>{b.list.map((t) => <li><ZhTerms text={t} mark={!!en} /></li>)}</ul></>
+                : "notes" in b ? <ul class="project-notes">{b.notes.map(([t, text]) => <li><strong><ZhTerms text={t} mark={!!en} /></strong>{en ? ": " : "："}<ZhTerms text={text} mark={!!en} /></li>)}</ul>
                 : <div class="project-decision"><h3>{b.decision.title}</h3><dl>{b.decision.steps.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl></div>
               )}
             </section>
@@ -49,7 +62,9 @@ const label =[project.category, project.genre, project.status].filter(Boolean).j
         </div>
         {gallery && gi === 0 && (
           <section class="project-gallery" aria-labelledby="project-gallery-title">
-            <h2 id="project-gallery-title">{gallery.title} <span class="project-en" lang="en">/ {gallery.titleEn}</span></h2>
+            {en
+              ? <h2 id="project-gallery-title">{gallery.titleEn}</h2>
+              : <h2 id="project-gallery-title">{gallery.title} <span class="project-en" lang="en">/ {gallery.titleEn}</span></h2>}
             {gallery.note && <p>{gallery.note}</p>}
             <ul class="project-gallery-list">
               {gallery.items.map((item) => (
@@ -65,22 +80,23 @@ const label =[project.category, project.genre, project.status].filter(Boolean).j
         )}
       </>
     ))}
-    <aside>
-      <span class="micro">CURRENT STATE</span>
-      {aside.map((s) => (
-        <>
-          <h2>{s.title} <span class="project-en" lang="en">/ {s.titleEn}</span></h2>
-          {s.blocks.map((b) => ("p" in b ? <p>{b.p}</p> : "list" in b ? <ul>{b.list.map((t) => <li>{t}</li>)}</ul> : null))}
-        </>
-      ))}
-    </aside>
+    {aside.length > 0 && (
+      <aside>
+        <span class="micro">CURRENT STATE</span>
+        {aside.map((s) => (
+          <>
+            <h2>{s.title} <span class="project-en" lang="en">/ {s.titleEn}</span></h2>
+            {s.blocks.map((b) => ("p" in b ? <p>{b.p}</p> : "list" in b ? <ul>{b.list.map((t) => <li>{t}</li>)}</ul> : null))}
+          </>
+        ))}
+      </aside>
+    )}
   </div>
   {outro && (
     <section class="project-outro">
-      <h2>{outro.title} <span class="project-en" lang="en">/ {outro.titleEn}</span></h2>
-      {outro.blocks.map((b) => "p" in b && <p>{b.p}</p>)}
+      {en ? <h2>{outro.titleEn}</h2> : <h2>{outro.title} <span class="project-en" lang="en">/ {outro.titleEn}</span></h2>}
+      {outro.blocks.map((b) => "p" in b && <p><ZhTerms text={b.p} mark={!!en} /></p>)}
       {outro.cta && <a class="next-page" href={outro.cta.href}><span>{outro.cta.label}</span><b>↗</b></a>}
     </section>
   )}
 </article>
-

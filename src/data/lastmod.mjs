@@ -4,7 +4,8 @@
 // 這個檔案是純 JS，astro.config.mjs 也會讀。
 
 /** 2026-11-16：Studio 全面改寫（ad4babf），以及這次 SEO 整理新增的作品頁內容。
- *  2026-11-18：SYNK ATELIER 作品頁與案例頁改寫，以及有提到它的 Studio 頁面和文章。 */
+ *  2026-11-18：SYNK ATELIER 作品頁與案例頁改寫，以及有提到它的 Studio 頁面和文章。
+ *  2026-11-19：SYNK ATELIER 英文作品頁，中文作品頁加上 hreflang 與語言切換連結。 */
 const exact = {
   "/": "2026-11-16",
   "/about": "2026-09-14",
@@ -13,7 +14,8 @@ const exact = {
   "/now": "2026-09-11",
   "/play": "2026-09-11",
   "/projects": "2026-11-18",
-  "/projects/synk-atelier": "2026-11-18",
+  "/projects/synk-atelier": "2026-11-19",
+  "/en/projects/synk-atelier": "2026-11-19",
   "/projects/weilspa": "2026-11-16",
   "/resume": "2026-09-14",
   "/en/resume": "2026-09-14",

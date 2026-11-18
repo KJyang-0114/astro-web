@@ -5,6 +5,7 @@ import { insightPosts } from "@data/insights";
 import { servicePages, studioBeliefs } from "@data/trust";
 import { workCases } from "@data/work";
 import { personalDiscovery } from "../data/personal-discovery";
+import { projects } from "../data/projects";
 import { citableSummaryEn, citableSummaryZh, doNotClaim, linkList, studioCoreLinks, studioEnglishLinks } from "@data/discovery";
 
 export function GET() {
@@ -34,7 +35,7 @@ export function GET() {
       "",
       `${item.kind}. Status: ${item.status}.${item.url ? ` Live URL: ${item.url}` : ""}`,
       ...(item.links?.length ? ["", ...item.links.map(([label, href]) => `- ${label}: ${href}`)] : []),
-      ...(item.projectSlug ? ["", `Personal project page: https://kjyang0114.dev/projects/${item.projectSlug}`] : []),
+      ...(item.projectSlug ? ["", `Personal project page: https://kjyang0114.dev/projects/${item.projectSlug}${projects.some((project) => project.slug === item.projectSlug && project.en) ? ` (English version: https://kjyang0114.dev/en/projects/${item.projectSlug})` : ""}`] : []),
       "",
       item.summary,
       "",

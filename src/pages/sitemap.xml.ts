@@ -14,6 +14,7 @@ const personalSitemapPaths = [
   "/ai",
   "/contact",
   ...projects.map((project) => `/projects/${project.slug}`),
+  ...projects.filter((project) => project.en).map((project) => `/en/projects/${project.slug}`),
 ];
 
 export function GET() {
