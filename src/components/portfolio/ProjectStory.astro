@@ -1,0 +1,62 @@
+---
+// 長版作品頁：只給有 sections 的作品用（目前是 synk-atelier）。其他作品仍用 [slug].astro 的原版型。
+import type { Project } from "../../data/projects";
+interface Props { project: Project }
+const { project } = Astro.props;
+const sections = project.sections ?? [];
+const intro = sections.find((s) => s.place === "intro");
+const main = sections.filter((s) => !s.place);
+const aside = sections.filter((s) => s.place === "aside");
+const outro = sections.find((s) => s.place === "outro");
+const label = [project.category, project.genre, project.status].filter(Boolean).join(" / ");
+---
+
+<article class="project-page project-long">
+  <nav class="project-breadcrumbs" aria-label="所在位置"><a href="/">首頁</a><span aria-hidden="true">/</span><a href="/projects">作品</a><span aria-hidden="true">/</span><span aria-current="page">{project.title}</span></nav>
+  <header class="project-header">
+    <span class="micro">{label}</span>
+    <h1>{project.title}</h1>
+    {intro && (
+      <div class="project-intro">
+        <span class="micro">{intro.title} / <span lang="en">{intro.titleEn}</span></span>
+        {intro.blocks.map((b, i) => "p" in b && <p class={i === 0 ? "project-intro-lead" : undefined}>{b.p}</p>)}
+      </div>
+    )}
+    <div class="project-tags">{project.tags.map((tag) => <span>{tag}</span>)}</div>
+    <div class="hero-actions">
+      {project.ctas?.map((cta, i) => <a class={i === 0 ? "button-primary" : "text-link"} href={cta.href}>{cta.label} ↗</a>)}
+    </div>
+  </header>
+  <div class="project-story">
+    <div class="project-long-main">
+      {main.map((s) => (
+        <section>
+          <h2>{s.title} <span class="project-en" lang="en">/ {s.titleEn}</span></h2>
+          {s.blocks.map((b) =>
+            "p" in b ? <p>{b.p}</p>
+            : "list" in b ? <>{b.heading && <h3>{b.heading}</h3>}<ul>{b.list.map((t) => <li>{t}</li>)}</ul></>
+            : "notes" in b ? <ul class="project-notes">{b.notes.map(([t, text]) => <li><strong>{t}</strong>：{text}</li>)}</ul>
+            : <div class="project-decision"><h3>{b.decision.title}</h3><dl>{b.decision.steps.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl></div>
+          )}
+        </section>
+      ))}
+    </div>
+    <aside>
+      <span class="micro">CURRENT STATE</span>
+      {aside.map((s) => (
+        <>
+          <h2>{s.title} <span class="project-en" lang="en">/ {s.titleEn}</span></h2>
+          {s.blocks.map((b) => ("p" in b ? <p>{b.p}</p> : "list" in b ? <ul>{b.list.map((t) => <li>{t}</li>)}</ul> : null))}
+        </>
+      ))}
+    </aside>
+  </div>
+  {outro && (
+    <section class="project-outro">
+      <h2>{outro.title} <span class="project-en" lang="en">/ {outro.titleEn}</span></h2>
+      {outro.blocks.map((b) => "p" in b && <p>{b.p}</p>)}
+      {outro.cta && <a class="next-page" href={outro.cta.href}><span>{outro.cta.label}</span><b>↗</b></a>}
+    </section>
+  )}
+</article>
+

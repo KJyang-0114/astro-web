@@ -37,6 +37,7 @@ export const insightPosts: InsightPost[] = [
     slug: "why-website-prices-are-different",
     related: ["/studio/pricing", "/studio/insights/one-page-vs-five-page-website", "/studio/services/local-business-website"],
     date: "2026-11-16",
+    updated: "2026-11-18",
     category: "價格",
     title: "小店網站多少錢？我的報價怎麼算、錢花在哪",
     description:
@@ -63,7 +64,7 @@ export const insightPosts: InsightPost[] = [
       {
         title: "錢實際花在哪裡",
         body:
-          "很多人以為做網站的時間都花在設計畫面。以我自己的經驗，花最多時間的是在手機上測。\n\n我自己經營的粉絲資訊站 SYNK ATELIER，遊戲公開前同學跟我說手機很難用。我把每個畫面用 6 種螢幕尺寸截圖檢查，包括 375×553，大約是 iPhone SE 在 LINE、Threads 內建瀏覽器裡看得到的高度。結果找到 10 個問題，最嚴重的是新手教學的按鈕被擠到畫面外，根本按不到。\n\n所以我現在每個網站都會在 iPhone、Android 和 LINE 內建瀏覽器實際點過一次。另外還有接網域、設 HTTPS、把網址送到 Google Search Console，這些客人看不到，但沒做網站就不算真的上線。"
+          "很多人以為做網站的時間都花在設計畫面。以我自己的經驗，花最多時間的是在手機上測。\n\n我自己經營的粉絲資訊站 SYNK ATELIER，遊戲公開前同學跟我說手機很難用。我把每個畫面放到 Chromium 6 種、WebKit 3 種尺寸截圖檢查，包括 375×553，大約是 iPhone SE 在 LINE、Threads 內建瀏覽器裡看得到的高度。結果列出 24 項，修掉 18 項，最嚴重的是新手教學的按鈕被擠到畫面外，根本按不到。\n\n所以我現在每個網站都會在 iPhone、Android 和 LINE 內建瀏覽器實際點過一次。另外還有接網域、設 HTTPS、把網址送到 Google Search Console，這些客人看不到，但沒做網站就不算真的上線。"
       },
       {
         title: "拿到別家報價時，可以問這幾件事",
@@ -100,6 +101,7 @@ export const insightPosts: InsightPost[] = [
     slug: "do-i-need-a-website-with-ig-and-google-maps",
     related: ["/studio/services/local-business-website", "/studio/insights/small-business-hero-section-checklist", "/studio/pricing"],
     date: "2026-11-16",
+    updated: "2026-11-18",
     category: "要不要做",
     title: "只有 IG 和 Google 地圖，還需要做網站嗎？",
     description:
@@ -130,7 +132,7 @@ export const insightPosts: InsightPost[] = [
       {
         title: "網站做好，不代表會有人來",
         body:
-          "這件事我是自己經營網站才真的懂。我做了一個 aespa 的粉絲資訊站 SYNK ATELIER，還沒特別宣傳的時候，一天大概 8 到 20 個人，回訪的比新來的多，新來的幾乎都是從 Threads 點進來。\n\n2026 年 10 月我在 Threads 發了一則介紹貼文，沒有下廣告，後來累積 1.6 萬多次瀏覽、1,400 多個讚。那段時間網站沒改什麼，差在多了一則有人看到的貼文。\n\n換成小店也一樣。網站做好之後，IG 簡介、Google 商家、LINE 選單都要放上連結，客人才會從那些地方走過來。所以做了網站，IG 還是要繼續經營。"
+          "這件事我是自己經營網站才真的懂。我做了一個 aespa 的粉絲資訊站 SYNK ATELIER，2026 年 10 月在 Threads 發了一則介紹貼文，沒有下廣告，後來累積 1.6 萬多次瀏覽、1,400 多個讚。那段時間網站沒改什麼，差在多了一則有人看到的貼文。\n\n換成小店也一樣。網站做好之後，IG 簡介、Google 商家、LINE 選單都要放上連結，客人才會從那些地方走過來。所以做了網站，IG 還是要繼續經營。"
       },
       {
         title: "還不想做網站，可以先做這些",
@@ -220,6 +222,7 @@ export const insightPosts: InsightPost[] = [
     slug: "small-business-hero-section-checklist",
     related: ["/studio/work/synk-atelier", "/studio/services/website-redesign", "/studio/services/local-business-website"],
     date: "2026-11-16",
+    updated: "2026-11-18",
     category: "手機版",
     title: "手機打開的第一個畫面，和 LINE 按鈕要放什麼",
     description:
@@ -251,7 +254,7 @@ export const insightPosts: InsightPost[] = [
       {
         title: "我自己踩過的坑",
         body:
-          "我的粉絲資訊站 SYNK ATELIER 有一個網頁遊戲。公開前我請同學試玩，他說手機很難用，最後回家改用電腦玩。\n\n我把每個畫面用 6 種尺寸截圖，一張一張看，包括 360×640 和 375×553。總共找到 10 個問題，最嚴重的是新手教學的按鈕被擠到畫面外，按不到，整個流程直接卡住。\n\n從那之後，重要的按鈕我不會只放在頁面最下面，也一定會用小尺寸實際截圖看過。"
+          "我的粉絲資訊站 SYNK ATELIER 有一個網頁遊戲。公開前我請同學試玩，他說手機很難用，最後回家改用電腦玩。\n\n我把每個畫面放到 Chromium 6 種、WebKit 3 種尺寸截圖，一張一張看，包括 360×640 和 375×553。總共列出 24 項，修掉 18 項，最嚴重的是新手教學的按鈕被擠到畫面外，按不到，整個流程直接卡住。\n\n從那之後，重要的按鈕我不會只放在頁面最下面，也一定會用小尺寸實際截圖看過。"
       },
       {
         title: "地區要寫在字裡",

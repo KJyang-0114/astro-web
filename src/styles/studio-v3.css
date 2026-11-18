@@ -77,6 +77,12 @@
 .s-case-body{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:56px;padding:44px 0 64px;border-top:1px solid var(--line)}
 .s-case-body section{margin-bottom:36px}
 .s-case-body section p{color:var(--muted);line-height:2;font-size:16px;margin:14px 0 0}
+/* 案例頁的編號小項（cases.ts sections[].items） */
+.s-case-items{margin:18px 0 0;padding-left:1.4em;color:var(--muted)}
+.s-case-items li{margin:0 0 20px;padding-left:4px}
+.s-case-items li::marker{color:var(--accent);font-weight:600}
+.s-case-items h3{margin:0;font-size:17px;line-height:1.6;font-weight:600;color:var(--ink)}
+.s-case-body section .s-case-items p{margin:4px 0 0}
 .s-side ul{padding-left:18px;color:var(--muted);line-height:1.9;margin:14px 0 30px}
 .s-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.s-tags span{border:1px solid var(--line);padding:4px 10px;font-size:13px;color:var(--ink)}
 .s-more{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:0 0 70px}

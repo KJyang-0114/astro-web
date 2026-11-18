@@ -872,6 +872,116 @@ summary::-webkit-details-marker {
   color: var(--muted);
   font-size: 12px;
 }
+/* 長版作品頁（ProjectStory.astro，目前只有 synk-atelier） */
+.project-long .project-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.project-long .project-breadcrumbs a:hover {
+  color: var(--accent);
+}
+.project-intro {
+  max-width: 760px;
+  margin: 0 0 8px;
+}
+.project-intro .micro {
+  display: block;
+  margin-bottom: 12px;
+}
+.project-intro p {
+  color: var(--muted);
+  line-height: 1.9;
+  margin: 0 0 14px;
+}
+.project-intro .project-intro-lead {
+  font-size: 20px;
+  color: inherit;
+  line-height: 1.7;
+}
+.project-en {
+  color: var(--muted);
+  font-size: 0.62em;
+  font-weight: 400;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+.project-long-main {
+  min-width: 0;
+}
+.project-long-main > section + section {
+  margin-top: 56px;
+}
+.project-long-main p {
+  color: var(--muted);
+  line-height: 1.9;
+  margin: 0 0 14px;
+}
+.project-long-main h3 {
+  font-size: 17px;
+  margin: 26px 0 8px;
+}
+.project-notes strong {
+  color: var(--ink);
+}
+.project-decision {
+  border-top: 1px solid var(--line);
+  padding-top: 4px;
+  margin-top: 26px;
+}
+.project-decision dl {
+  margin: 0;
+}
+.project-decision dl > div {
+  display: grid;
+  grid-template-columns: 3.5em minmax(0, 1fr);
+  gap: 0 14px;
+  padding: 8px 0;
+}
+.project-decision dt {
+  font: 12px/1.9 monospace;
+  color: var(--accent);
+  padding-top: 2px;
+}
+.project-decision dd {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.9;
+}
+.project-story aside .project-en {
+  display: inline-block;
+}
+.project-outro {
+  border-top: 1px solid var(--line);
+  padding: 45px 0 0;
+}
+.project-outro h2 {
+  font-size: 24px;
+  margin: 0 0 17px;
+}
+.project-outro p {
+  color: var(--muted);
+  line-height: 1.9;
+  max-width: 760px;
+}
+@media (max-width: 760px) {
+  .project-intro .project-intro-lead {
+    font-size: 17px;
+  }
+  .project-long-main > section + section {
+    margin-top: 40px;
+  }
+  .project-decision dl > div {
+    grid-template-columns: 1fr;
+    padding: 6px 0;
+  }
+  .project-outro {
+    padding-top: 30px;
+  }
+}
 .work-detail img {
   height: auto;
   aspect-ratio: auto;

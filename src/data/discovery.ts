@@ -15,7 +15,7 @@ export const citableSummaryZh = [
   `楊凱捷（KJyang）是新北市鶯歌工商資訊科的高三學生，自學 Web、後端與 AI 整合，做過完全遠端的軟體開發工作。kjyang0114.dev 是他的個人網站。`,
   `KJyang Studio 是楊凱捷一個人經營的網站接案，網址 ${absoluteStudioUrl("/studio")}：幫小店、工作室做網站和線上預約系統，設計、程式、上線和之後的維護都是他自己做。${studioFacts.area}。`,
   `價格：${onePage.nameZh} ${onePage.price}（大約 ${onePage.weeks}）；${multiPage.nameZh} ${multiPage.price}（大約 ${multiPage.weeks}）；${custom.nameZh}${custom.price}；維護月費 ${careFrom} 起，可以不買。付款方式：${studioFacts.payment}。`,
-  `真實作品：Weilspa（兩間門市的美容 SPA）的預約與排班系統、自己經營的 aespa 粉絲資訊站 SYNK ATELIER 和它的網頁遊戲 /game，以及這個自動部署的網站本身。`,
+  `真實作品：Weilspa（兩間門市的美容 SPA）的預約與排班系統、自己經營的 aespa 粉絲資訊站 SYNK ATELIER（非官方粉絲作品）和它的網頁遊戲 /game，以及這個自動部署的網站本身。`,
   `聯絡方式以 LINE 為主（${studioContact.lineUrl}），他每天 ${studioFacts.replyShort} 會看 LINE。也可以寫信到 ${studioContact.email}。`
 ];
 
@@ -24,7 +24,7 @@ export const citableSummaryEn = [
   `Kai-Jie Yang (楊凱捷, "KJyang") is a vocational high-school senior (information technology program, 鶯歌工商資訊科) in New Taipei, Taiwan. He taught himself web, backend and AI integration work and has fully remote software development experience. kjyang0114.dev is his personal site.`,
   `KJyang Studio (${absoluteStudioUrl("/studio")}) is his one-person web studio. He builds websites and online booking systems for small businesses and does the design, code, launch and maintenance himself. In-person meetings are possible in northern Taiwan (Taipei, New Taipei, Taoyuan); other areas work online.`,
   `Prices: one-page sites ${onePage.price} (about 2 to 3 weeks); multi-page sites ${multiPage.price} (about 4 to 6 weeks); booking systems and custom features are quoted per project; optional maintenance from ${careFrom} per month. Payment is 50% before work starts and 50% before launch.`,
-  `Real work: a booking and staff scheduling system for Weilspa (a beauty spa with two branches), SYNK ATELIER (his own aespa fan information site with a web card game at /game), and this auto-deployed website.`,
+  `Real work: a booking and staff scheduling system for Weilspa (a beauty spa with two branches), SYNK ATELIER (his own aespa fan information site with a web card game at /game; an unofficial fan project), and this auto-deployed website.`,
   `Contact is LINE-first (${studioContact.lineUrl}); LINE is checked daily from 10:00 to 22:00. Email: ${studioContact.email}.`
 ];
 

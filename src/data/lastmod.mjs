@@ -3,7 +3,8 @@
 // 只改 <head>、頁尾連結這類不算內容修改。改了某頁的內容就要更新這裡。
 // 這個檔案是純 JS，astro.config.mjs 也會讀。
 
-/** 2026-11-16：Studio 全面改寫（ad4babf），以及這次 SEO 整理新增的作品頁內容。 */
+/** 2026-11-16：Studio 全面改寫（ad4babf），以及這次 SEO 整理新增的作品頁內容。
+ *  2026-11-18：SYNK ATELIER 作品頁與案例頁改寫，以及有提到它的 Studio 頁面和文章。 */
 const exact = {
   "/": "2026-11-16",
   "/about": "2026-09-14",
@@ -11,11 +12,18 @@ const exact = {
   "/contact": "2026-09-07",
   "/now": "2026-09-11",
   "/play": "2026-09-11",
-  "/projects": "2026-11-16",
-  "/projects/synk-atelier": "2026-11-16",
+  "/projects": "2026-11-18",
+  "/projects/synk-atelier": "2026-11-18",
   "/projects/weilspa": "2026-11-16",
   "/resume": "2026-09-14",
   "/en/resume": "2026-09-14",
+  "/studio": "2026-11-18",
+  "/studio/about": "2026-11-18",
+  "/studio/work": "2026-11-18",
+  "/studio/work/synk-atelier": "2026-11-18",
+  "/studio/insights/why-website-prices-are-different": "2026-11-18",
+  "/studio/insights/do-i-need-a-website-with-ig-and-google-maps": "2026-11-18",
+  "/studio/insights/small-business-hero-section-checklist": "2026-11-18",
 };
 
 const prefixes = [

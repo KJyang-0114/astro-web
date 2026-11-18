@@ -40,7 +40,13 @@ export function GET() {
       "",
       ...item.facts.map(([key, value]) => `- ${key}: ${value}`),
       "",
-      ...item.sections.flatMap((section) => [`#### ${section.title}`, "", ...section.body, ""]),
+      ...item.sections.flatMap((section) => [
+        `#### ${section.title}`,
+        "",
+        ...section.body,
+        ...(section.items ?? []).map(([title, text], i) => `${i + 1}. ${title}：${text}`),
+        ""
+      ]),
       "Lessons:",
       ...item.lessons.map((lesson) => `- ${lesson}`)
     ].join("\n"))

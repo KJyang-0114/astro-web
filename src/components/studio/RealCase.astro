@@ -55,7 +55,7 @@ const schema = [
         {item.sections.map((s) => (
           <section>
             <h2>{s.title}</h2>
-            {s.body.map((p) => <p>{p}</p>)}
+            {s.body.map((p) => <p>{p}</p>)}{s.items && <ol class="s-case-items">{s.items.map(([t, text]) => <li><h3>{t}</h3><p>{text}</p></li>)}</ol>}
           </section>
         ))}
       </div>
@@ -67,8 +67,8 @@ const schema = [
       </aside>
     </div>
     <section class="s-wrap s-cta-band">
-      <h2>你的店也有類似的麻煩？</h2>
-      <p>傳店名或 IG 給我，我先免費看一次，回你 3 個可以馬上改的地方。</p>
+      <h2>{item.cta?.title ?? "你的店也有類似的麻煩？"}</h2>
+      <p>{item.cta?.text ?? "傳店名或 IG 給我，我先免費看一次，回你 3 個可以馬上改的地方。"}</p>
       <div class="s-actions">
         <a class="s-btn s-btn-primary" href={studioContact.lineUrl} data-cta={`case-${item.slug}-line`}>LINE 傳給我</a>
         <a class="s-btn" href="/studio/pricing">看價格</a>

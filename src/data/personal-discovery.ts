@@ -4,7 +4,7 @@ import { projects } from "./projects";
 // biographical material out of machine-readable discovery endpoints.
 export function personalDiscovery() {
   const projectLinks = projects.map(project =>
-    `- [${project.title}](https://kjyang0114.dev/projects/${project.slug}): ${project.lead} 狀態：${project.status}。${project.github ? `原始碼：${project.github}` : ""}${project.demo?.startsWith("http") ? ` 網站：${project.demo}` : ""}${project.caseStudy ? ` 完整案例：https://kjyang0114.dev${project.caseStudy}` : ""}`,
+    `- [${project.discovery?.title ?? project.title}](https://kjyang0114.dev/projects/${project.slug}): ${project.discovery ? project.discovery.text : `${project.lead} 狀態：${project.status}。`}${project.github ? `原始碼：${project.github}` : ""}${project.demo?.startsWith("http") ? ` 網站：${project.demo}` : ""}${project.caseStudy ? ` 完整案例：https://kjyang0114.dev${project.caseStudy}` : ""}`,
   ).join("\n");
   return `## Personal website / 個人網站
 

@@ -3,6 +3,7 @@ import PortfolioLayout from "../../layouts/PortfolioLayout.astro";
 import { projects } from "../../data/projects";
 import { projectFlows } from "../../data/project-flows";
 import ProjectFlow from "../../components/portfolio/ProjectFlow.astro";
+import ProjectStory from "../../components/portfolio/ProjectStory.astro";
 import { person } from "../../data/person";
 export function getStaticPaths() {
   return projects.map((project) => ({
@@ -43,7 +44,8 @@ const work = project.github
     };
 const jsonLd = {
   "@context": "https://schema.org",
-  "@graph": [work, {
+  // 作品自己提供的 schema（例如 synk-atelier）取代上面自動產生的 CreativeWork，不重複描述同一件作品。
+  "@graph": [...(project.schema ? project.schema.map((node) => ({ ...node, author })) : [work]), {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "首頁", item: "https://kjyang0114.dev/" },
@@ -58,7 +60,7 @@ const jsonLd = {
   title={`${project.searchTitle} — KJyang`}
   description={project.metaDescription ?? project.description}
   jsonLd={jsonLd}
-  ><article class="project-page">
+  >{project.sections ? <ProjectStory project={project} /> : <article class="project-page">
     <nav class="project-breadcrumbs" aria-label="所在位置"><a href="/">首頁</a><span aria-hidden="true">/</span><a href="/projects">作品</a><span aria-hidden="true">/</span><span aria-current="page">{project.title}</span></nav>
     <header class="project-header">
       <span class="micro">{project.category} / {project.status}</span><h1>
@@ -127,7 +129,7 @@ const jsonLd = {
       )
     }<a class="next-page" href="/contact"
       ><span>有相關想法，來聊聊。</span><b>↗</b></a>
-</article></PortfolioLayout
+</article>}</PortfolioLayout
 >
 <style>
   .project-breadcrumbs { display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; color: var(--muted); margin-bottom: 24px; }

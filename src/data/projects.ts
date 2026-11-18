@@ -19,6 +19,31 @@ export interface Project {
   // 只用在搜尋結果的說明；沒填就用 description。
   metaDescription?: string;
   image: string | null;
+  // 以下是選填的「長版作品頁」欄位：有 sections 才會用新版區塊渲染（目前只有 synk-atelier）。
+  // 標題區 category / genre / status 之間的第二個標籤，例如「Game」。
+  genre?: string;
+  // 標題區的按鈕，依序排列，第一顆是主要按鈕。有填就取代 github／caseStudy／demo 自動產生的按鈕。
+  ctas?: { label: string; href: string }[];
+  sections?: ProjectSection[];
+  // 取代模板自動產生的 CreativeWork；author 由模板補上全站的 #person。
+  schema?: Record<string, unknown>[];
+  // llms.txt 個人專案清單用的標題與說明；沒填就用 title／lead／status。
+  discovery?: { title: string; text: string };
+}
+export type ProjectBlock =
+  | { p: string }
+  | { list: string[]; heading?: string }
+  // 粗體標題＋說明的清單
+  | { notes: Array<[string, string]> }
+  // 一個決定：標題＋問題／選項／取捨／結果
+  | { decision: { title: string; steps: Array<[string, string]> } };
+export interface ProjectSection {
+  title: string;
+  titleEn: string;
+  // intro：標題區；aside：CURRENT STATE 欄；outro：結尾聯絡；沒填：主欄
+  place?: "intro" | "aside" | "outro";
+  blocks: ProjectBlock[];
+  cta?: { label: string; href: string };
 }
 export const projects: Project[] = [
   {
@@ -122,29 +147,211 @@ export const projects: Project[] = [
   },
   {
     title: "SYNK ATELIER",
-    searchTitle: "SYNK ATELIER｜aespa 粉絲資訊站與網頁卡牌遊戲",
+    searchTitle: "SYNK ATELIER｜一個人做的 aespa 粉絲站與網頁卡牌遊戲",
     slug: "synk-atelier",
     description:
-      "自己做、自己經營的 aespa 粉絲資訊站：專輯與歌曲、應援練習、演唱會準備、行程月曆。後來加了網頁卡牌遊戲 /game，有帳號、排行榜和後台數據報表。",
-    tags: ["React", "Vite", "Node.js", "SQLite", "PWA"],
+      "SYNK ATELIER 是我一個人做、一個人經營的 aespa 粉絲資訊站（非官方），裡面有一款網頁卡牌遊戲《KWANGYA 探索》。從規劃、程式、上線到每天看回饋改版都是我自己來，我帶著幾個 AI 代理分工施工，驗收一律用正式站的真實資料。",
+    metaDescription:
+      "楊凱捷（KJyang）一個人做、持續經營的非官方 aespa 粉絲資訊站與網頁卡牌遊戲《KWANGYA 探索》：伺服器驗證戰鬥、規則版本化、玩家回饋閉環，以及和 AI 代理分工的開發方式。",
+    tags: ["React", "TypeScript", "Vite", "Node.js", "SQLite", "Firebase 登入", "PWA", "Cloudflare", "Mac mini 自架"],
     category: "Web",
+    genre: "Game",
     tech: "React",
-    status: "上線中",
-    lead: "把散在各處的資訊整理在一起，再用遊戲給大家每天回來的理由。",
-    flow: ["內容進後台待審", "核准後公開", "離線也能看", "網頁遊戲 /game", "每日數據報表"],
+    status: "上線中、持續更新",
+    lead: "一個人把一個粉絲的念頭，做成每天有人回來玩、每天都在更新的網站和遊戲。",
+    flow: ["內容進後台待審", "核准後公開", "網頁遊戲《KWANGYA 探索》", "伺服器重算每一場戰鬥", "讀回饋、修好再上線"],
     build: [
-      "所有內容先進後台的待審區，核准了才公開；每一筆修改都有紀錄，可以還原。",
-      "用過一次之後可以離線看，演唱會現場網路差也打得開必帶清單。",
-      "遊戲分數由伺服器計算，後台有每天的人數、留存和每一關的通過率，個資只留代碼。",
-      "公開前用 6 種手機尺寸逐頁截圖檢查，找到並修掉 10 個問題。",
+      "資訊站：專輯與歌曲、應援練習、演唱會準備、行程月曆，時間一律換成台灣時間。所有內容先進後台待審，我核准了才公開；每一筆修改都有紀錄，可以還原。",
+      "遊戲《KWANGYA 探索》：轉珠戰鬥、卡片收集、故事關、困難模式、每週重置的深淵塔與限時活動。每一場戰鬥都由伺服器重算，規則有版本號。",
+      "遊戲裡有回饋按鈕。我會讀每一則，能重現的就修，修完再上線。",
+      "我是產品負責人；主代理負責規劃與審核，子代理負責實作。",
     ],
     limits: [
-      "粉絲自己做的資訊站，不是官方網站。",
-      "流量不大：上線後一天大約 8 到 20 個人，新訪客幾乎都從 Threads 來。",
+      "非官方粉絲作品。",
+      "新模式「訊號異常」即將推出。",
+      "不儲值、不放廣告。",
     ],
     demo: "https://synk-atelier.kjyang0114.dev",
     caseStudy: "/studio/work/synk-atelier",
     image: null,
+    ctas: [
+      { label: "開啟網站", href: "https://synk-atelier.kjyang0114.dev" },
+      { label: "玩 KWANGYA 探索", href: "https://synk-atelier.kjyang0114.dev/game" },
+      { label: "完整案例", href: "/studio/work/synk-atelier" },
+    ],
+    sections: [
+      {
+        title: "一句話",
+        titleEn: "In one line",
+        place: "intro",
+        blocks: [
+          { p: "一個人把一個粉絲的念頭，做成每天有人回來玩、每天都在更新的網站和遊戲。" },
+          { p: "SYNK ATELIER 是我自己做、自己經營的 aespa 粉絲資訊站，非官方粉絲作品。裡面有一款網頁卡牌遊戲《KWANGYA 探索》。" },
+        ],
+      },
+      {
+        title: "從什麼問題開始",
+        titleEn: "Where it started",
+        blocks: [
+          { p: "aespa 的資訊散在 Threads、X 和各種網站，時間有韓國時間也有台灣時間。我想要一個打開就看得懂、不用登入、演唱會現場網路很差也打得開的地方。" },
+          { p: "做完之後我發現，資訊站是「有事才來」。所以我又做了一款遊戲，給大家每天回來的理由。" },
+        ],
+      },
+      {
+        title: "我做了什麼",
+        titleEn: "What I built",
+        blocks: [
+          {
+            heading: "資訊站",
+            list: [
+              "專輯與歌曲、應援練習、演唱會準備、行程月曆，時間一律換成台灣時間。",
+              "所有內容先進後台待審，我核准了才公開；每一筆修改都有紀錄，可以還原。",
+              "用過一次之後可以離線看。",
+              "2026 年 10 月，我把第一版前端整個刪掉，從零重建。舊的能跑，但改一個地方就會壞別的地方。",
+            ],
+          },
+          {
+            heading: "遊戲《KWANGYA 探索》",
+            list: [
+              "轉珠戰鬥：在 6×5 的盤面上拖曳連線，連到誰的顏色就由那張卡出手；四位成員的顏色都連過，就能放出四人一起的 SYNK。",
+              "卡片收集：抽卡、升級、升星、進化試煉；升錯了可以「重置」，退回大部分花掉的資源。",
+              "故事關：地圖就是作品年表，一張專輯一個區域，一區 10 關。區域照時間由伺服器自動開放，目前開到第 6 區。",
+              "打完的人也有事做：困難模式、每週重置的深淵塔。",
+              "活動：出道 6 週年活動、週年限定卡池，以及一張橫版週年紀念卡。照片有一條規則：裁切不能切到人。四人合照放進直式卡一定會切到兩側的人，所以我把它做成 7:5 的橫版卡；放不下橫版的小格子，改用四人頭像排成 2×2。",
+              "新模式「訊號異常」即將推出。",
+              "不儲值、不放廣告。",
+            ],
+          },
+        ],
+      },
+      {
+        title: "我怎麼做決定",
+        titleEn: "How I decide",
+        blocks: [
+          {
+            decision: {
+              title: "1. 一關突然變太難：回退，但不改寫過去",
+              steps: [
+                ["問題", "我把第 3 區整體調難一點之後，3-10 這一關的勝率從大約一半掉到 15%。"],
+                ["選項", "整區退回去；或只修這一關。"],
+                ["取捨", "整區退回會讓其他剛調好的關又變太簡單。所以只給 3-10 一個抵銷係數，讓它回到改版前。"],
+                ["結果", "每一場戰鬥都由伺服器重算，規則有版本號。新規則只用在新開始的戰鬥；舊規則下打的戰鬥照舊規則驗證。我把改版前錄下的 36 場和正式站最近 400 場舊版戰鬥拿到新引擎重播，結果完全一樣。"],
+              ],
+            },
+          },
+          {
+            decision: {
+              title: "2. 反作弊：寧可漏抓，不要冤枉",
+              steps: [
+                ["問題", "遊戲公開前我做了反作弊，但只是「記錄＋標記」，不自動處罰。公開之後，被標記的幾乎都是很認真玩的人。"],
+                ["選項", "維持嚴格門檻；或照真實玩法重新校正。"],
+                ["取捨", "「玩很多場」本身不是作弊。我改成只標可能真的作弊的情況：重播對不上、重複領獎、伺服器沒發過的資源、人做不到的速度。"],
+                ["結果", "門檻依正式站的真實紀錄重訂，後台多了「批次標記誤判」。上線前我也用 6 個模擬玩家的 bot 透過真的 API 玩了 30 天，誤判是 0。"],
+              ],
+            },
+          },
+          {
+            decision: {
+              title: "3. Threads 裡打開的人，存檔帶不出去",
+              steps: [
+                ["問題", "不少玩家是在 Threads 的內建瀏覽器裡點開遊戲。在那裡登入很難，跳到 Safari 時試玩紀錄又帶不過去，整局白玩。"],
+                ["選項", "把憑證放在網址裡；讓伺服器自動配對同一支手機；給一組接續碼。"],
+                ["取捨", "網址帶不過去（實測）；自動配對遇到 iCloud 私密轉送就對不上，而我不想放寬條件——寧可接不上，也不能接錯人。"],
+                ["結果", "三種做法都保留，各管一種情況。接續碼變成主要路線之一：4 位數、20 分鐘有效、用一次就刪。"],
+              ],
+            },
+          },
+        ],
+      },
+      {
+        title: "玩家回饋怎麼變成更新",
+        titleEn: "From feedback to update",
+        blocks: [
+          { p: "遊戲裡有回饋按鈕。我會讀每一則，能重現的就修，修完再上線。" },
+          {
+            notes: [
+              ["深淵塔打完回不去上一頁", "有玩家回報打完塔按返回沒反應，重新整理也一樣。原因是每打一場就多留一筆歷史紀錄。修好後補了一個測試，舊程式會失敗、新程式會過。"],
+              ["標錯成員的雙人照", "有玩家發現某張個人卡的照片其實是另外兩位成員。我把規則寫死：看得到兩個人以上的照片，不能當個人卡。一共撤下 12 張，持有的人換成同成員、同稀有度的卡（先在正式站複本上模擬過，確認沒有人被換成較低稀有度）。"],
+              ["盤面看起來沒得連", "有玩家回報打到一半沒有珠可以連。我把那一局在本機重播，發現其實還剩一組，只是很難看到。所以做了兩件事：盤面很緊的時候提示提早出現；重洗時保證新盤面一定有能連的組合。"],
+            ],
+          },
+          { p: "不只看回饋，也看數據。例如我發現「光能夠了，可以去升級卡片」這個提示，幾乎所有新玩家都是在還沒辦法打開卡片頁的選陣營畫面看到的，等於沒看到。修正會在下一次更新推出：提示等新存檔建好、真的能去升級時才出現。" },
+        ],
+      },
+      {
+        title: "我怎麼跟 AI 代理一起工作",
+        titleEn: "Working with AI agents",
+        blocks: [
+          { p: "我是產品負責人：決定做什麼、不做什麼，最後由我試玩、點頭。" },
+          {
+            list: [
+              "主代理負責規劃、拆任務、寫清楚的施工說明，最後審核結果。",
+              "子代理負責實作，同時最多 3 個，各自只動自己的檔案。",
+              "大方向的規劃另外交給更強的模型，計畫再請另一個模型審一次。",
+              "遊戲照片由一個專門的代理照我訂的挑選標準審核。",
+              "每個決定都寫回規劃文件，下一個代理從文件接手，不靠聊天記憶。",
+            ],
+          },
+          { p: "驗收靠真實環境，不靠假資料。本機測試用的是正式站資料庫的唯讀複本加上真的卡面照片，不用示範資料。更新不打擾正在玩的人：非緊急的更新留到凌晨一次推上去。" },
+        ],
+      },
+      {
+        title: "目前狀態",
+        titleEn: "Now",
+        place: "aside",
+        blocks: [
+          {
+            list: [
+              "資訊站：上線中。",
+              "遊戲：2026-11-14 公開，之後幾乎每天更新；目前開放 6 個區域，規劃共 16 個。",
+              "即將推出：新模式「訊號異常」。",
+            ],
+          },
+        ],
+      },
+      {
+        title: "一起做點什麼",
+        titleEn: "Let's talk",
+        place: "outro",
+        blocks: [
+          { p: "如果你在做社群、粉絲或需要「每天有人回來」的產品，想找人一起想、一起做，來找我聊聊。" },
+        ],
+        cta: { label: "聯絡我", href: "/contact" },
+      },
+    ],
+    schema: [
+      {
+        "@type": "CreativeWork",
+        "@id": "https://kjyang0114.dev/projects/synk-atelier#work",
+        name: "SYNK ATELIER",
+        url: "https://kjyang0114.dev/projects/synk-atelier",
+        description: "楊凱捷一個人做、持續經營的非官方 aespa 粉絲資訊站與網頁卡牌遊戲。",
+        inLanguage: "zh-Hant-TW",
+        dateCreated: "2026-09-30",
+        creativeWorkStatus: "Published",
+        keywords: "粉絲網站, 網頁遊戲, 轉珠, 卡牌收集, React, Node.js, SQLite, PWA",
+        hasPart: { "@id": "https://synk-atelier.kjyang0114.dev/game#app" },
+        sameAs: "https://synk-atelier.kjyang0114.dev",
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://synk-atelier.kjyang0114.dev/game#app",
+        name: "KWANGYA 探索",
+        url: "https://synk-atelier.kjyang0114.dev/game",
+        applicationCategory: "GameApplication",
+        applicationSubCategory: "Puzzle, Card collecting",
+        operatingSystem: "Web browser (iOS, Android, desktop)",
+        inLanguage: "zh-Hant-TW",
+        datePublished: "2026-11-14",
+        isAccessibleForFree: true,
+        offers: { "@type": "Offer", price: "0", priceCurrency: "TWD" },
+        description: "非官方粉絲製作的網頁卡牌遊戲：轉珠戰鬥、卡片收集與進化、故事區域、深淵塔與限時活動。不儲值、不放廣告。",
+      },
+    ],
+    discovery: {
+      title: "SYNK ATELIER｜一個人做的 aespa 粉絲站與網頁卡牌遊戲",
+      text: "楊凱捷自己做、自己經營的非官方 aespa 粉絲資訊站，與網頁卡牌遊戲《KWANGYA 探索》（轉珠戰鬥、卡片收集、深淵塔、限時活動，2026-11 公開、持續更新）。寫了伺服器驗證戰鬥與規則版本化、反作弊怎麼避免誤判、玩家回饋怎麼變成更新，以及他怎麼和 AI 代理分工開發。",
+    },
   },
   {
     title: "Weilspa 預約與排班系統",

@@ -64,7 +64,7 @@ ${maintenancePlans.map(([title, price]) => `- ${title}: ${price}`).join("\n")}
 ## Real Work
 
 - Weilspa booking and staff scheduling system: ${absoluteStudioUrl("/studio/work/spa-booking-system")}
-- SYNK ATELIER fan information site and web game: ${absoluteStudioUrl("/studio/work/synk-atelier")}
+- SYNK ATELIER fan information site and web game (unofficial fan project): ${absoluteStudioUrl("/studio/work/synk-atelier")}
 - This website: ${absoluteStudioUrl("/studio/work/kjyang-website")}
 
 ## Contact
