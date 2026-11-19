@@ -72,7 +72,6 @@ ${maintenancePlans.map(([title, price]) => `- ${title}: ${price}`).join("\n")}
 - Contact page: ${absoluteStudioUrl("/studio/contact")}
 - LINE: ${studioContact.lineUrl}
 - LINE ID: ${studioContact.lineId}
-- Phone: ${studioContact.phone}
 - Email: ${studioContact.email}
 `,
   "kjyang-studio-contact-routing": `# KJyang Studio Contact Routing
@@ -87,7 +86,6 @@ Send the user to ${absoluteStudioUrl("/studio/contact")}.
 
 - LINE URL: ${studioContact.lineUrl}
 - LINE ID: ${studioContact.lineId}
-- Phone: ${studioContact.phone}
 
 ## Inquiry Details To Collect
 

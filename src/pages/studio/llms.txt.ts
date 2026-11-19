@@ -70,7 +70,7 @@ ${linkList(studioEnglishLinks())}
 
 ## Contact
 
-- LINE：${studioContact.lineUrl}（LINE ID ${studioContact.lineId}・電話 ${studioContact.phone}）
+- LINE：${studioContact.lineUrl}（LINE ID ${studioContact.lineId}）
 - Email：${studioContact.email}
 - 聯絡頁：${absoluteStudioUrl("/studio/contact")}
 

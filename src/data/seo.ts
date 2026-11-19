@@ -134,7 +134,7 @@ export const studioPageMeta: Record<string, { title: string; description: string
   },
   "/studio/contact": {
     title: "聯絡我｜LINE 傳店名，免費看一次 — KJyang Studio",
-    description: "用 LINE、電話或 Email 找楊凱捷。傳店名、現在的網站或 IG，我免費看一次，回你 3 個可以馬上改的地方。每天 10:00 到 22:00 看 LINE，北部可約見面，其他地區線上進行。"
+    description: "用 LINE 或 Email 找楊凱捷。傳店名、現在的網站或 IG，我免費看一次，回你 3 個可以馬上改的地方。每天 10:00 到 22:00 看 LINE，北部可約見面，其他地區線上進行。"
   },
   "/studio/insights": {
     title: "文章｜小店網站的價格、預約、手機版與維護 — KJyang Studio",
@@ -307,7 +307,6 @@ export function buildStudioSchemas() {
         `楊凱捷一人經營的網站接案：幫北部小店、工作室做網站和線上預約系統，設計、程式、上線與之後的維護都自己來。一頁式網站 ${studioFacts.startPrice} 起。`,
       founder: founderPerson,
       email: studioContact.email,
-      telephone: studioContact.phoneIntl,
       priceRange: `${studioFacts.startPrice} 起`,
       currenciesAccepted: "TWD",
       address: { "@type": "PostalAddress", addressRegion: "新北市", addressCountry: "TW" },
@@ -317,7 +316,6 @@ export function buildStudioSchemas() {
         {
           "@type": "ContactPoint",
           contactType: "customer service",
-          telephone: studioContact.phoneIntl,
           email: studioContact.email,
           url: studioContact.lineUrl,
           availableLanguage: ["zh-Hant", "en"],

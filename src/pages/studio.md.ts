@@ -41,7 +41,6 @@ ${doNotClaim.map((line) => `- ${line}`).join("\n")}
 - 聯絡頁：${absoluteStudioUrl("/studio/contact")}
 - LINE：${studioContact.lineUrl}
 - LINE ID：${studioContact.lineId}
-- 電話：${studioContact.phone}
 - Email：${studioContact.email}
 `,
     {

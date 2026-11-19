@@ -33,12 +33,11 @@ const schema = [{
             <div>
               <b>LINE ID</b>
               <strong>{studioContact.lineId}</strong>
-              <p>電話：{studioContact.phone}（上課時間可能接不到，留言或傳 LINE 比較快）<br />Email：<a href={`mailto:${studioContact.email}`}>{studioContact.email}</a></p>
+              <p>Email：<a href={`mailto:${studioContact.email}`}>{studioContact.email}</a></p>
             </div>
           </aside>
           <div class="action-row">
             <a class="btn studio-index-primary" href={studioContact.lineUrl} data-cta="contact-line">LINE 聯絡</a>
-            <a class="btn studio-index-secondary" href={`tel:${studioContact.phone}`}>電話聯絡</a>
           </div>
         </div>
         <form class="contact-form" data-line-url={studioContact.lineUrl}><p>不想自己打字的話：填好按「複製需求」，再打開 LINE 貼上送出。這個表單不會自動寄出。</p>

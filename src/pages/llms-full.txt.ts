@@ -149,7 +149,6 @@ Demo pages under /studio/demo and /studio/en/demo are sample websites only. They
 - Contact page: ${absoluteStudioUrl("/studio/contact")}
 - LINE: ${studioContact.lineUrl}
 - LINE ID: ${studioContact.lineId}
-- Phone: ${studioContact.phone}
 
 ## Do Not Claim
 

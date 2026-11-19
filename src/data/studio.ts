@@ -1,8 +1,6 @@
 // 文案規範：docs/studio-writing-guide.md
 
 export const studioContact = {
-  phone: "0900000000",
-  phoneIntl: "+886-900-000-000",
   lineId: "kjyang0114",
   lineUrl: "https://line.me/ti/p/pl05m2MikN",
   lineQr: "/brand/kjyang-line-qr.jpeg",

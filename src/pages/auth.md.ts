@@ -22,7 +22,6 @@ For website project inquiries, use the public contact page or LINE.
 - Contact page: ${absoluteStudioUrl("/studio/contact")}
 - LINE: ${studioContact.lineUrl}
 - LINE ID: ${studioContact.lineId}
-- Phone: ${studioContact.phone}
 
 ## Security Boundary
 
