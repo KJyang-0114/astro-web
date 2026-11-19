@@ -1,19 +1,44 @@
 name: Deploy to Mac mini
 
+# 觸發：
+#   - push main：人工合併或直接推 main。
+#   - workflow_dispatch（ref main）：claude-gate 自動合併後由 .github/scripts/claude-gate-decide.sh 觸發。
+#     用 GITHUB_TOKEN 合併不會產生 push 事件，所以要另外 dispatch（workflow_dispatch 不受這條限制）。
+#   - workflow_dispatch 勾 dry_run（任何分支都可以）：只測 runner 連不連得到主機（ssh 與
+#     rsync --dry-run），不跑檢查、不同步、不重建。
+# 工作都在 astro-web-ci-gate 容器（不跑 repo 的程式碼）；main 的檢查在 ci-gate.yml（build 容器）。
 on:
   push:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 只測 SSH 連線與 rsync --dry-run，不部署（可在任何分支跑）
+        type: boolean
+        default: false
 
 permissions:
   contents: read
+
+# 部署與 dry-run 用同一份同步排除清單（主機上被排除的路徑不會被 --delete 刪掉）。
+# 用 set -f 展開，避免 *.log 被 shell 當成檔名萬用字元。
+env:
+  RSYNC_EXCLUDES: >-
+    --exclude=.git/
+    --exclude=.github/
+    --exclude=.astro/
+    --exclude=.docker-build-config/
+    --exclude=dist/
+    --exclude=node_modules/
+    --exclude=*.log
 
 # 沒有 workflow 層級的 concurrency：部署中途不能被新的 push 砍掉。
 # 檢查 job 的取消規則在 ci-gate.yml；部署本身排隊，見 deploy job。
 
 jobs:
   ci:
+    if: ${{ !inputs.dry_run }}
     uses: ./.github/workflows/ci-gate.yml
     permissions:
       contents: read
@@ -21,8 +46,8 @@ jobs:
   deploy:
     needs: ci
     # 擋掉從其他分支手動觸發的部署
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && !inputs.dry_run
+    runs-on: [self-hosted, astro-web-ci, astro-web-ci-gate]
     timeout-minutes: 30
     concurrency:
       group: deploy-macmini
@@ -35,10 +60,14 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
 
       - name: Configure SSH
         shell: bash
+        env:
+          MACMINI_SSH_KEY: ${{ secrets.MACMINI_SSH_KEY }}
         run: |
           test -n "$MACMINI_HOST"
           test -n "$MACMINI_USER"
@@ -46,22 +75,16 @@ jobs:
           test "$DEPLOY_PATH" != "/"
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          printf '%s\n' "${{ secrets.MACMINI_SSH_KEY }}" > ~/.ssh/macmini_deploy_key
+          printf '%s\n' "$MACMINI_SSH_KEY" > ~/.ssh/macmini_deploy_key
           chmod 600 ~/.ssh/macmini_deploy_key
-          ssh-keyscan -p "$MACMINI_PORT" "$MACMINI_HOST" >> ~/.ssh/known_hosts
+          ssh-keyscan -T 15 -p "$MACMINI_PORT" "$MACMINI_HOST" >> ~/.ssh/known_hosts
 
       - name: Sync source to Mac mini
         shell: bash
         run: |
-          rsync -az --delete \
-            --exclude ".git/" \
-            --exclude ".github/" \
-            --exclude ".astro/" \
-            --exclude ".docker-build-config/" \
-            --exclude "dist/" \
-            --exclude "node_modules/" \
-            --exclude "*.log" \
-            -e "ssh -i ~/.ssh/macmini_deploy_key -p $MACMINI_PORT" \
+          set -f
+          rsync -az --delete $RSYNC_EXCLUDES \
+            -e "ssh -i $HOME/.ssh/macmini_deploy_key -p $MACMINI_PORT -o BatchMode=yes -o ConnectTimeout=15" \
             ./ "$MACMINI_USER@$MACMINI_HOST:$DEPLOY_PATH/"
 
       # rebuild-docker.sh 的結束碼：0 成功、10 build 失敗（舊站沒動）、20 已退回上一版、30 網站可能停擺。
@@ -71,7 +94,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          ssh -i ~/.ssh/macmini_deploy_key -p "$MACMINI_PORT" "$MACMINI_USER@$MACMINI_HOST" \
+          ssh -i ~/.ssh/macmini_deploy_key -p "$MACMINI_PORT" -o BatchMode=yes -o ConnectTimeout=15 "$MACMINI_USER@$MACMINI_HOST" \
             "cd '$DEPLOY_PATH' && chmod +x ./rebuild-docker.sh && ./rebuild-docker.sh"
           code=$?
           set -e
@@ -108,14 +131,14 @@ jobs:
             --argjson priority 4 \
             '{topic: $topic, title: $title, message: $message, click: $click, priority: $priority}' \
           | curl -sS -m 10 -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' \
-              --data-binary @- https://ntfy.sh/ > /tmp/ntfy-status || true
-          echo "ntfy 回應 $(cat /tmp/ntfy-status 2>/dev/null)（$event）"
+              --data-binary @- https://ntfy.sh/ > "$RUNNER_TEMP/ntfy-status" || true
+          echo "ntfy 回應 $(cat "$RUNNER_TEMP/ntfy-status" 2>/dev/null)（$event）"
 
   notify-ci-failure:
     needs: ci
     # 只在 main 的檢查真的失敗時發；被新 push 取消（cancelled）不發
     if: always() && github.ref == 'refs/heads/main' && needs.ci.result == 'failure'
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, astro-web-ci, astro-web-ci-gate]
     timeout-minutes: 5
     steps:
       - name: Notify main check failure
@@ -136,5 +159,56 @@ jobs:
             --argjson priority 3 \
             '{topic: $topic, title: $title, message: $message, click: $click, priority: $priority}' \
           | curl -sS -m 10 -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' \
-              --data-binary @- https://ntfy.sh/ > /tmp/ntfy-status || true
-          echo "ntfy 回應 $(cat /tmp/ntfy-status 2>/dev/null)"
+              --data-binary @- https://ntfy.sh/ > "$RUNNER_TEMP/ntfy-status" || true
+          echo "ntfy 回應 $(cat "$RUNNER_TEMP/ntfy-status" 2>/dev/null)"
+
+  # 連線測試：runner 容器的防火牆擋私有網段與 Tailscale（100.64/10），MACMINI_HOST 若是那類位址就連不到。
+  # 只做 ssh-keyscan、ssh 執行 true、rsync --dry-run（不寫入主機、不跑 rebuild-docker.sh）。
+  dry-run:
+    if: github.event_name == 'workflow_dispatch' && inputs.dry_run
+    runs-on: [self-hosted, astro-web-ci, astro-web-ci-gate]
+    timeout-minutes: 10
+    concurrency:
+      group: deploy-macmini-dry-run
+      cancel-in-progress: false
+    env:
+      MACMINI_HOST: ${{ secrets.MACMINI_HOST }}
+      MACMINI_USER: ${{ secrets.MACMINI_USER }}
+      MACMINI_PORT: ${{ secrets.MACMINI_PORT || '22' }}
+      DEPLOY_PATH: ${{ secrets.MACMINI_DEPLOY_PATH }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Configure SSH
+        shell: bash
+        env:
+          MACMINI_SSH_KEY: ${{ secrets.MACMINI_SSH_KEY }}
+        run: |
+          test -n "$MACMINI_HOST"
+          test -n "$MACMINI_USER"
+          test -n "$DEPLOY_PATH"
+          test "$DEPLOY_PATH" != "/"
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$MACMINI_SSH_KEY" > ~/.ssh/macmini_deploy_key
+          chmod 600 ~/.ssh/macmini_deploy_key
+          ssh-keyscan -T 15 -p "$MACMINI_PORT" "$MACMINI_HOST" >> ~/.ssh/known_hosts
+          test -s ~/.ssh/known_hosts || { echo "::error::ssh-keyscan 沒有拿到主機金鑰（runner 防火牆擋掉，或主機／埠不對）"; exit 1; }
+
+      - name: SSH connection test
+        shell: bash
+        run: |
+          ssh -i ~/.ssh/macmini_deploy_key -p "$MACMINI_PORT" -o BatchMode=yes -o ConnectTimeout=15 "$MACMINI_USER@$MACMINI_HOST" \
+            "test -d '$DEPLOY_PATH' && test -f '$DEPLOY_PATH/rebuild-docker.sh' && echo ssh-ok"
+
+      - name: rsync --dry-run
+        shell: bash
+        run: |
+          set -f
+          rsync -az --delete --dry-run --stats $RSYNC_EXCLUDES \
+            -e "ssh -i $HOME/.ssh/macmini_deploy_key -p $MACMINI_PORT -o BatchMode=yes -o ConnectTimeout=15" \
+            ./ "$MACMINI_USER@$MACMINI_HOST:$DEPLOY_PATH/"
+          echo "dry-run 完成：主機沒有被修改。"

@@ -1,0 +1,45 @@
+name: Phone notification (ntfy)
+description: >-
+  Sends one short push to the owner's phone through ntfy.sh (copied from synk-atelier, 2026-11-20). The topic comes from the
+  NTFY_TOPIC secret, passed in as `topic`; with no topic it does nothing. The JSON body is built with
+  jq -n --arg and POSTed to https://ntfy.sh/ (Chinese titles never go in headers); the topic is read by jq
+  from the environment, never on a command line or in a URL, and the step never fails the job.
+  Used by claude-gate.yml (等你合併, 審查沒過, 部署失敗). deploy-macmini.yml sends its own notifications inline.
+  Body: line 1 a short reason (40 characters at most), line 2 the URL. No logs, diffs, env or user data.
+inputs:
+  topic:
+    description: secrets.NTFY_TOPIC
+    required: true
+  title:
+    description: 'For example "astro-web｜等你合併"'
+    required: true
+  reason:
+    description: One line, 40 characters at most (longer is cut)
+    required: true
+  url:
+    description: The PR or run to open
+    required: true
+  priority:
+    description: ntfy priority 1-5 (3 default, 4 high)
+    default: '3'
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        NTFY_TOPIC: ${{ inputs.topic }}
+        NTFY_TITLE: ${{ inputs.title }}
+        NTFY_REASON: ${{ inputs.reason }}
+        NTFY_URL: ${{ inputs.url }}
+        NTFY_PRIORITY: ${{ inputs.priority }}
+      run: |
+        if [ -z "${NTFY_TOPIC}" ]; then echo "NTFY_TOPIC is not set; no notification sent."; exit 0; fi
+        # jq may live in Homebrew on the self-hosted Mac mini runner.
+        export PATH="$PATH:/opt/homebrew/bin:/usr/local/bin"
+        reason=$(printf '%s' "$NTFY_REASON" | tr -s '[:space:]' ' ' | cut -c1-120)
+        reason=$(printf '%s' "$reason" | jq -Rr '.[0:40]')
+        # The topic is read from the environment inside jq ($ENV), so it is never on a command line.
+        code=$(jq -n --arg title "$NTFY_TITLE" --arg message "$reason"$'\n'"$NTFY_URL" --arg click "$NTFY_URL" --arg priority "$NTFY_PRIORITY" \
+            '{topic: $ENV.NTFY_TOPIC, title: $title, message: $message, click: $click, priority: (($priority | tonumber?) // 3)}' \
+          | curl -s -o /dev/null -w '%{http_code}' --max-time 10 -H 'Content-Type: application/json' --data-binary @- https://ntfy.sh/ || true)
+        echo "ntfy: HTTP ${code:-none}"
