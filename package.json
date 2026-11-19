@@ -10,7 +10,7 @@
     "astro": "astro",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "astro check --minimumFailingSeverity warning",
-    "check": "npm run lint && npm run typecheck && npm run build && npm run verify:static",
+    "check": "npm run lint && npm run typecheck && npm run build && npm run verify:static && npm run test:rebuild",
     "check:fast": "node scripts/check-fast.mjs",
     "verify:site": "npm run build && node scripts/verify-site.mjs && node scripts/verify-resume-language.mjs && node scripts/verify-discovery.mjs",
     "verify:motion": "node scripts/verify-wire-art.mjs",
@@ -18,6 +18,7 @@
     "verify:seo": "npm run build && node scripts/verify-seo.mjs",
     "verify:static": "node scripts/verify-site.mjs && node scripts/verify-resume-language.mjs && node scripts/verify-discovery.mjs && node scripts/verify-studio.mjs && node scripts/verify-seo.mjs && node scripts/verify-wire-art.mjs",
     "verify:runtime": "node scripts/verify-runtime.mjs",
+    "test:rebuild": "bash scripts/test-rebuild-docker.sh",
     "indexnow": "node scripts/indexnow.mjs",
     "og-images": "node scripts/generate-og-images.mjs"
   },

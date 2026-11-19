@@ -69,6 +69,8 @@ else if (lintable.length)
 if (needsTypes) steps.push(["型別檢查（astro check）", bin("astro"), ["check", "--minimumFailingSeverity", "warning"]]);
 if (needsBuild) steps.push(["build", bin("astro"), ["build"]]);
 for (const script of ALL_STATIC.filter((s) => verifies.has(s))) steps.push([script, "node", [script]]);
+if (changed.some((file) => file === "rebuild-docker.sh" || file === "scripts/test-rebuild-docker.sh"))
+  steps.push(["rebuild-docker.sh 假指令測試", "bash", ["scripts/test-rebuild-docker.sh"]]);
 
 console.log(`check:fast：${changed.length} 個改動的檔案${full ? "，含專案設定，跑完整範圍" : ""}。`);
 for (const [label, cmd, args] of steps) {
