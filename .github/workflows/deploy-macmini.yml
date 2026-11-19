@@ -6,13 +6,27 @@ on:
       - main
   workflow_dispatch:
 
-concurrency:
-  group: deploy-macmini
-  cancel-in-progress: true
+permissions:
+  contents: read
+
+# 沒有 workflow 層級的 concurrency：部署中途不能被新的 push 砍掉。
+# 檢查 job 的取消規則在 ci-gate.yml；部署本身排隊，見 deploy job。
 
 jobs:
+  ci:
+    uses: ./.github/workflows/ci-gate.yml
+    permissions:
+      contents: read
+
   deploy:
+    needs: ci
+    # 擋掉從其他分支手動觸發的部署
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: deploy-macmini
+      cancel-in-progress: false
     env:
       MACMINI_HOST: ${{ secrets.MACMINI_HOST }}
       MACMINI_USER: ${{ secrets.MACMINI_USER }}
@@ -22,18 +36,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
 
       - name: Configure SSH
         shell: bash
@@ -62,8 +64,77 @@ jobs:
             -e "ssh -i ~/.ssh/macmini_deploy_key -p $MACMINI_PORT" \
             ./ "$MACMINI_USER@$MACMINI_HOST:$DEPLOY_PATH/"
 
+      # rebuild-docker.sh 的結束碼：0 成功、10 build 失敗（舊站沒動）、20 已退回上一版、30 網站可能停擺。
+      # ssh 自己連不上時是 255。
       - name: Rebuild Docker container
+        id: rebuild
         shell: bash
         run: |
+          set +e
           ssh -i ~/.ssh/macmini_deploy_key -p "$MACMINI_PORT" "$MACMINI_USER@$MACMINI_HOST" \
             "cd '$DEPLOY_PATH' && chmod +x ./rebuild-docker.sh && ./rebuild-docker.sh"
+          code=$?
+          set -e
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          echo "rebuild-docker.sh 結束碼 $code"
+          exit "$code"
+
+      - name: Notify deploy failure
+        if: failure()
+        shell: bash
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          REBUILD_EXIT: ${{ steps.rebuild.outputs.exit_code }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "${NTFY_TOPIC:-}" ]; then
+            echo "沒有設定 NTFY_TOPIC，跳過通知"
+            exit 0
+          fi
+          event="部署失敗"
+          case "$REBUILD_EXIT" in
+            10) reason="新版沒建起來，舊站沒受影響。" ;;
+            20) event="已自動回滾"; reason="新版沒過健康檢查，已退回上一版。" ;;
+            30) reason="回滾也失敗，網站可能停擺，請馬上檢查。" ;;
+            "") reason="同步或連線失敗，沒有跑到重建。" ;;
+            255) reason="SSH 中斷，部署結果不明，請檢查網站。" ;;
+            *) reason="重建腳本異常結束（碼 $REBUILD_EXIT），請檢查網站。" ;;
+          esac
+          jq -n \
+            --arg topic "$NTFY_TOPIC" \
+            --arg title "astro-web｜$event" \
+            --arg message "$reason"$'\n'"$RUN_URL" \
+            --arg click "$RUN_URL" \
+            --argjson priority 4 \
+            '{topic: $topic, title: $title, message: $message, click: $click, priority: $priority}' \
+          | curl -sS -m 10 -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' \
+              --data-binary @- https://ntfy.sh/ > /tmp/ntfy-status || true
+          echo "ntfy 回應 $(cat /tmp/ntfy-status 2>/dev/null)（$event）"
+
+  notify-ci-failure:
+    needs: ci
+    # 只在 main 的檢查真的失敗時發；被新 push 取消（cancelled）不發
+    if: always() && github.ref == 'refs/heads/main' && needs.ci.result == 'failure'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Notify main check failure
+        shell: bash
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "${NTFY_TOPIC:-}" ]; then
+            echo "沒有設定 NTFY_TOPIC，跳過通知"
+            exit 0
+          fi
+          jq -n \
+            --arg topic "$NTFY_TOPIC" \
+            --arg title "astro-web｜main 檢查失敗" \
+            --arg message "main 上的 ci-gate 沒過，這次沒有部署。"$'\n'"$RUN_URL" \
+            --arg click "$RUN_URL" \
+            --argjson priority 3 \
+            '{topic: $topic, title: $title, message: $message, click: $click, priority: $priority}' \
+          | curl -sS -m 10 -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' \
+              --data-binary @- https://ntfy.sh/ > /tmp/ntfy-status || true
+          echo "ntfy 回應 $(cat /tmp/ntfy-status 2>/dev/null)"

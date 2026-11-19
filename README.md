@@ -65,16 +65,31 @@ Navigation、shell、section、card 與 footer 使用共用 components。頁面�
 
 ### 部署流程
 
-推到 `main` 後，GitHub Actions 先安裝依賴並執行 build，再檢查部署環境變數，用 rsync 把原始碼同步到主機，由主機上的 `rebuild-docker.sh` 重建 Docker container。
+開 PR 時，`.github/workflows/ci-gate.yml` 會跑 `npm run check`、`docker build` 和 `npm run verify:runtime`。PR 和其他分支不會部署。
 
-正式環境是多階段 Dockerfile：第一階段用 node 執行 `npm run build`，第二階段用 nginx 送 `dist`，不再用 `astro preview` 當正式伺服器。容器聽 3000 埠，並提供 `/healthz`。主機上的看門狗會檢查這個網址，拿掉會報警。容器用 `--restart unless-stopped` 啟動。
+推到 `main` 後，`.github/workflows/deploy-macmini.yml` 先呼叫同一份 `ci-gate`，檢查通過才部署：用 rsync 把原始碼同步到主機，再由主機上的 `rebuild-docker.sh` 重建 Docker container。檢查沒過就不部署。部署一次只跑一個，新的 push 會排在後面，不會把進行中的部署砍掉。
+
+正式環境是多階段 Dockerfile：第一階段用 node 22 執行 `npm ci` 和 `npm run build`，第二階段用 nginx 送 `dist`，不再用 `astro preview` 當正式伺服器。容器聽 3000 埠，並提供 `/healthz`。主機上的看門狗會檢查這個網址，拿掉會報警。容器用 `--restart unless-stopped` 啟動。
 
 `rebuild-docker.sh` 的順序：
 
-1. 先把目前的鏡像標成 `previous`。
+1. 把正在跑的容器實際使用的映像標成 `previous`（沒有容器時才用 `:latest`）。
 2. 先 build 新鏡像，build 失敗時舊容器還在服務。
-3. build 成功後才停掉舊容器，用新鏡像啟動。
-4. 等 `/healthz` 和首頁回 200，30 秒內沒通過就退回 `previous` 鏡像。
+3. build 成功後才停掉舊容器，用新鏡像啟動（最多試三次）。
+4. 等 `/healthz` 和首頁回 200，30 秒內沒通過、或新容器起不來，就退回 `previous` 鏡像，再做一次健康檢查。
+
+結束碼：
+
+| 碼 | 意思 |
+|---|---|
+| `0` | 部署成功 |
+| `10` | 新鏡像沒建起來，舊容器沒動 |
+| `20` | 新版不能用，已退回上一版，退回後健康檢查通過 |
+| `30` | 退回也失敗、沒有可退回的鏡像，或 3000 埠被別的程序占著；網站可能停擺 |
+
+`npm run test:rebuild` 用假的 `docker`、`curl` 跑過這幾種情況，`npm run check` 會一起跑。真的退回流程沒有在主機上演練過。
+
+`main` 的檢查失敗、部署失敗、或自動退回時，workflow 會用 ntfy 推播到手機（頻道名稱存在 repo secret `NTFY_TOPIC`，沒設就不發）。部署成功和 PR 上的檢查失敗不發。
 
 #### 部署的陷阱
 
@@ -98,6 +113,10 @@ npm run preview
 
 | 指令 | 做什麼 | 什麼時候跑 |
 |---|---|---|
+| `npm run check:fast` | 只檢查這次改到的檔案（`git diff HEAD` 加未追蹤檔）：lint、需要時型別檢查與 build、對應的驗證腳本 | 改完程式先跑這個 |
+| `npm run check` | 完整檢查：lint、`astro check`、build、六支驗證腳本、`rebuild-docker.sh` 的假指令測試。CI 跑的就是這個 | 開 PR 前 |
+| `npm run verify:runtime` | 用 Dockerfile 建映像，在本機起測試容器，打 `/healthz`、sitemap 的每個路由、轉址、404、Content-Type、快取標頭。只連 127.0.0.1，要先開 Docker | 改了 Dockerfile、nginx 設定或路由之後 |
+| `npm run test:rebuild` | 用假的 `docker`、`curl` 測 `rebuild-docker.sh` 各種情況的結束碼與指令順序，不碰真的 Docker | 改了 `rebuild-docker.sh` 之後 |
 | `npm run verify:studio` | 先 build，再檢查 `/studio` 的頁面結構、站內連結、舊網址 redirect，並依 [文案規範](docs/studio-writing-guide.md) 擋下禁用寫法 | 改了 Studio 的文字或頁面之後 |
 | `npm run verify:site` | 先 build，再檢查個人站路由、連結、資產、metadata、作品與 AI 主題完整性、sitemap，以及英文作品頁的 lang、canonical、hreflang 與語言切換連結 | 改了個人站之後、部署前 |
 | `npm run verify:seo` | 先 build，再檢查標題與說明長度、canonical、分享圖、結構化資料、sitemap、robots.txt、站內連結層數 | 改了 SEO 或頁面標題之後 |
