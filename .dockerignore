@@ -19,3 +19,6 @@ GIT_STRATEGY.md
 ONE_LINE_SETUP_PROMPT.md
 QUICK_GIT_SETUP_PROMPT.md
 UNIVERSAL_GIT_SETUP_PROMPT.md
+
+# CI runner image（Mac mini 上 build，不進網站映像）
+deploy
