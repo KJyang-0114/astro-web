@@ -40,9 +40,9 @@ async function startContainer() {
   if (docker(["build", "-t", IMAGE, "."], { stdio: "inherit" }).status !== 0) fail("docker build 失敗");
   docker(["rm", "-f", CONTAINER]); // 上次中斷留下的同名測試容器
   // 127.0.0.1::3000 讓 Docker 自己挑一個空閒的本機埠，只綁 127.0.0.1。
+  containerStarted = true; // 先標記：docker run 途中被 Ctrl-C 也會清掉容器
   const run = docker(["run", "-d", "--name", CONTAINER, "-p", "127.0.0.1::3000", IMAGE]);
   if (run.status !== 0) fail(`docker run 失敗：${run.stderr.trim()}`);
-  containerStarted = true;
   const port = docker(["port", CONTAINER, "3000/tcp"]).stdout.match(/127\.0\.0\.1:(\d+)/)?.[1];
   if (!port) fail("讀不到測試容器對應的本機埠");
   return `http://127.0.0.1:${port}`;

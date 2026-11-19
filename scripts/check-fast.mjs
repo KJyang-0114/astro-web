@@ -7,12 +7,13 @@ const bin = (name) => `node_modules/.bin/${name}`;
 const git = (args) =>
   spawnSync("git", args, { encoding: "utf8" }).stdout.split("\n").filter(Boolean);
 
+// 含刪除的檔案：刪掉一個元件也要觸發 build 和驗證。只有交給 ESLint 的清單要排除已刪除的檔案。
 const changed = [
   ...new Set([
-    ...git(["diff", "--name-only", "--diff-filter=d", "HEAD"]),
+    ...git(["diff", "--name-only", "HEAD"]),
     ...git(["ls-files", "--others", "--exclude-standard"]),
   ]),
-].filter(existsSync);
+];
 
 if (changed.length === 0) {
   console.log("check:fast：沒有改動的檔案，結束。");
@@ -40,7 +41,7 @@ const projectWide = new Set([
 const full = changed.some((file) => projectWide.has(file));
 
 const lintable = changed.filter(
-  (file) => /\.(?:m?js|cjs|ts|astro)$/.test(file) && !file.startsWith("public/"),
+  (file) => /\.(?:m?js|cjs|ts|astro)$/.test(file) && !file.startsWith("public/") && existsSync(file),
 );
 const needsTypes = full || changed.some((file) => /\.(?:ts|astro)$/.test(file));
 
