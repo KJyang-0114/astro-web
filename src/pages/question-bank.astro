@@ -34,17 +34,19 @@
     <div id="questions"></div>
   </div>
   <script>
+    type Question = { 題目: string; 選項?: unknown; 答案?: unknown[]; 詳解?: string };
+
     async function loadQuestions() {
       const res = await fetch('/output.json');
-      const data = await res.json();
+      const data: Question[] = await res.json();
       const container = document.getElementById('questions');
       data.forEach((q, idx) => {
-        const codeLike = s => typeof s === 'string' && (
+        const codeLike = (s: unknown) => typeof s === 'string' && (
           /[;{}=<>]/.test(s) && s.length < 80 ||
           /^(\s*#include|\s*int\s+\w+|\s*cout\s*<<|\s*cin\s*>>)/.test(s)
         );
-        const escape = s => s.replace(/</g, "<").replace(/>/g, ">");
-        let optionsArr = Array.isArray(q.選項) ? [...q.選項] : [];
+        const escape = (s: string) => s.replace(/</g, "<").replace(/>/g, ">");
+        const optionsArr = Array.isArray(q.選項) ? [...q.選項] : [];
         if (
           optionsArr.length > 0 &&
           q.詳解 &&
@@ -54,10 +56,10 @@
         ) {
           optionsArr.pop();
         }
-        const answerSet = new Set((q.答案 || []).map(a => (typeof a === "string" ? a.replace(/\s/g, '') : a)));
+        const answerSet = new Set((q.答案 || []).map((a) => (typeof a === "string" ? a.replace(/\s/g, '') : a)));
         const optionsHtml = optionsArr.map(opt => {
-          let isCorrect = answerSet.has((typeof opt === "string" ? opt.replace(/\s/g, '') : opt));
-          let optionClass = "option" + (isCorrect ? " correct" : "");
+          const isCorrect = answerSet.has((typeof opt === "string" ? opt.replace(/\s/g, '') : opt));
+          const optionClass = "option" + (isCorrect ? " correct" : "");
           if (typeof opt === 'string' && opt.match(/^https?:\/\/.+\.(jpg|png|gif)$/i)) {
             return `<div class="${optionClass}"><img src="${opt}" alt="選項圖片"></div>`;
           }
@@ -66,9 +68,6 @@
           }
           return `<div class="${optionClass}">${opt}</div>`;
         }).join('');
-        const answerHtml = q.答案 && q.答案.length
-          ? `<div class="answer">答案：${q.答案.map(a => `<span>${a}</span>`).join(', ')}</div>`
-          : '';
         let explanationHtml = '';
         if (q.詳解) {
           explanationHtml = codeLike(q.詳解)
@@ -79,7 +78,7 @@
         if (codeLike(q.題目)) {
           qTitle = `<pre><code>${escape(q.題目)}</code></pre>`;
         }
-        container.innerHTML += `
+        container!.innerHTML += `
           <div class="question-card">
             <div class="q-title">${idx + 1}. ${qTitle}</div>
             <div class="options">${optionsHtml}</div>

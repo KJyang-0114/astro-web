@@ -28,11 +28,6 @@ const norm = (url) => {
   const u = new URL(url, origin);
   return u.pathname === "/" ? "/" : u.pathname.replace(/\/$/, "");
 };
-const fileFor = (path) => {
-  const clean = decodeURIComponent(path);
-  const candidates = clean === "/" ? [join(dist, "index.html")] : [join(dist, clean, "index.html"), join(dist, clean)];
-  return candidates.find((candidate) => existsSync(candidate) && candidate.endsWith(".html"));
-};
 const attr = (html, re) => html.match(re)?.[1];
 const decode = (text) =>
   text
@@ -52,7 +47,12 @@ const visibleText = (html) =>
 // 標題寬度：中日韓全形字算 1，其他算 0.5。約 30 以內不會在搜尋結果被截斷。
 // 台灣時間的今天（lastmod 不能是未來的日期）
 const today = new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 10);
-const width = (text) => [...text].reduce((sum, ch) => sum + (/[\u0000-ÿ–-—]/.test(ch) ? 0.5 : 1), 0);
+// 半形：U+0000–U+00FF，加上 – 和 —。
+const isHalfWidth = (ch) => {
+  const cp = ch.codePointAt(0);
+  return cp <= 0xff || cp === 0x2013 || cp === 0x2014;
+};
+const width = (text) => [...text].reduce((sum, ch) => sum + (isHalfWidth(ch) ? 0.5 : 1), 0);
 
 const pages = walk(dist)
   .filter((file) => file.endsWith(".html"))
@@ -122,7 +122,7 @@ const walkJson = (node, visit) => {
 };
 let articleCount = 0;
 for (const page of pages.filter((p) => !p.redirect)) {
-  let graph = [];
+  let graph;
   try {
     graph = graphOf(page.html);
   } catch (error) {

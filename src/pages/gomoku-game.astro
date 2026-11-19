@@ -421,7 +421,7 @@ import Layout from '../layouts/Layout.astro';
     }
     
     // 處理單元格點擊
-    function handleCellClick(e) {
+    function handleCellClick() {
       if (!gameActive || !isPlayerTurn) return;
       
       const row = parseInt(this.dataset.row);
@@ -768,7 +768,7 @@ import Layout from '../layouts/Layout.astro';
         for (let c = 0; c < BOARD_SIZE; c++) {
           if (gameBoard[r][c] === '') {
             // 計算這個位置的分數
-            let score = evaluatePosition(r, c);
+            const score = evaluatePosition(r, c);
             
             if (score > bestScore) {
               bestScore = score;
@@ -804,7 +804,6 @@ import Layout from '../layouts/Layout.astro';
       let score = 0;
       let consecutive = 0;
       let blocked = 0;
-      let space = 0;
       
       // 向一個方向檢查
       for (let i = 1; i <= 5; i++) {
@@ -820,7 +819,6 @@ import Layout from '../layouts/Layout.astro';
         if (gameBoard[newRow][newCol] === player) {
           consecutive++;
         } else if (gameBoard[newRow][newCol] === '') {
-          space++;
           break;
         } else {
           blocked++;
@@ -842,7 +840,6 @@ import Layout from '../layouts/Layout.astro';
         if (gameBoard[newRow][newCol] === player) {
           consecutive++;
         } else if (gameBoard[newRow][newCol] === '') {
-          space++;
           break;
         } else {
           blocked++;

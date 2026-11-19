@@ -17,7 +17,7 @@ import { maintenancePlans, studioPlans } from "@data/studio";
         </div>
         <div class="en-price-stack">
           {studioPlans.map((plan, i) => <article><b>{plan.title}</b><strong>{plan.price.startsWith("NT$") ? plan.price : "Quoted per project"}</strong><p>{["One mobile-first page with services, prices, location, hours, FAQ, and LINE, phone and map buttons. About 2 to 3 weeks.", "A home page plus 4 or more pages (services, work, about, contact). About 4 to 6 weeks.", "Online booking, staff schedules, member data or an admin page. I map out your current process first, then quote time and cost."][i]}</p></article>)}
-          {maintenancePlans.slice(0, 1).map(([title, price, text]) => <article><b>{title}</b><strong>{price}</strong><p>{"Hosting, HTTPS, backups, fixing the site if it goes down, and 2 small text or photo edits per month. Optional."}</p></article>)}
+          {maintenancePlans.slice(0, 1).map(([title, price]) => <article><b>{title}</b><strong>{price}</strong><p>{"Hosting, HTTPS, backups, fixing the site if it goes down, and 2 small text or photo edits per month. Optional."}</p></article>)}
         </div>
       </div>
     </section>
