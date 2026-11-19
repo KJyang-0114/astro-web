@@ -1,0 +1,44 @@
+name: ci-gate
+
+# PR 上跑；main 上的檢查由 deploy-macmini.yml 用 workflow_call 呼叫（所以這裡不加 push: main，避免跑兩次）。
+on:
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # 放在 job 層級而不是 workflow 層級：被 deploy-macmini.yml 呼叫時，取消只會影響這個檢查 job，
+    # 不會碰到呼叫端的 deploy job。群組名稱不用 github.workflow（被呼叫時會變成呼叫端的名字）。
+    concurrency:
+      group: ci-gate-${{ github.event_name }}-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          # 與 Dockerfile 的 node:22-slim 一致
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # lint → astro check → build → verify:static → rebuild-docker.sh 假指令測試
+      - name: npm run check
+        run: npm run check
+
+      - name: docker build
+        run: docker build -t kjyang-wbs-astro:verify .
+
+      # 用上一步建好的映像起測試容器，只打 127.0.0.1
+      - name: npm run verify:runtime
+        run: npm run verify:runtime -- --no-build

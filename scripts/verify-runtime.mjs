@@ -2,6 +2,7 @@
 // 只連 127.0.0.1，不會連正式站。結束時（含失敗、Ctrl-C）一定刪掉測試容器。
 //
 //   npm run verify:runtime                         建映像 → 起容器 → 檢查 → 刪容器
+//   npm run verify:runtime -- --no-build           不 build，直接用已經建好的 kjyang-wbs-astro:verify（CI 先單獨 docker build）
 //   npm run verify:runtime -- --url=http://127.0.0.1:4321   改打一個已經在跑的本機伺服器（不用 Docker）
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
@@ -36,8 +37,13 @@ async function startContainer() {
   if (docker(["info"]).status !== 0) {
     fail("連不到 Docker daemon。請先啟動 Docker（Docker Desktop 或 colima），verify:runtime 沒有跑。");
   }
-  console.log(`▶ docker build -t ${IMAGE} .`);
-  if (docker(["build", "-t", IMAGE, "."], { stdio: "inherit" }).status !== 0) fail("docker build 失敗");
+  if (process.argv.includes("--no-build")) {
+    if (docker(["image", "inspect", IMAGE]).status !== 0) fail(`--no-build 但找不到映像 ${IMAGE}，先跑 docker build -t ${IMAGE} .`);
+    console.log(`▶ 使用已建好的 ${IMAGE}（--no-build）`);
+  } else {
+    console.log(`▶ docker build -t ${IMAGE} .`);
+    if (docker(["build", "-t", IMAGE, "."], { stdio: "inherit" }).status !== 0) fail("docker build 失敗");
+  }
   docker(["rm", "-f", CONTAINER]); // 上次中斷留下的同名測試容器
   // 127.0.0.1::3000 讓 Docker 自己挑一個空閒的本機埠，只綁 127.0.0.1。
   containerStarted = true; // 先標記：docker run 途中被 Ctrl-C 也會清掉容器

@@ -1,11 +1,12 @@
 # 第一階段：建置靜態檔
-FROM node:20-slim AS build
+# Node 版本與 .github/workflows/ci-gate.yml 的 setup-node 一致
+FROM node:22-slim AS build
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
