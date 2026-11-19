@@ -3,7 +3,7 @@
 export const studioContact = {
   phone: "0900000000",
   phoneIntl: "+886-900-000-000",
-  lineId: "0900000000",
+  lineId: "kjyang0114",
   lineUrl: "https://line.me/ti/p/pl05m2MikN",
   lineQr: "/brand/kjyang-line-qr.jpeg",
   email: "hi@kjyang0114.dev",

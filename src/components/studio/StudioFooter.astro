@@ -5,7 +5,7 @@ const links = english ? [["Services","/studio/en/services"],["Pricing","/studio/
 ---
 <footer class="atelier-footer">
 <h2>{english ? 'Websites and booking systems for small businesses in Taiwan.' : '有網站的問題，傳 LINE 問我就好。'}</h2>
-<p class="footer-contact">{english ? `LINE / phone ${studioContact.lineId}` : `LINE／電話 ${studioContact.lineId}・${studioFacts.reply}`}</p>
+<p class="footer-contact">{english ? `LINE ID ${studioContact.lineId} / phone ${studioContact.phone}` : `LINE ID ${studioContact.lineId}・電話 ${studioContact.phone}・${studioFacts.reply}`}</p>
 <a href={english ? '/studio/en/contact' : studioContact.lineUrl} data-cta="footer">{english ? 'Get in touch' : 'LINE 聯絡我'} ↗</a>
 <nav class="atelier-footer-links" aria-label="Studio footer">{links.map(([label,href])=><a href={href}>{label}</a>)}</nav>
 <div class="footer-meta"><span>© {new Date().getFullYear()} KJyang Studio・楊凱捷・{english ? 'Taiwan' : studioFacts.areaShort}</span><a href={`mailto:${studioContact.email}`}>{studioContact.email} ↗</a></div>

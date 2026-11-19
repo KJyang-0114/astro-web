@@ -46,7 +46,7 @@ const schema = [{
         <h2>我會寫進報價單的事</h2>
         <ul>{studioBeliefs.map((b) => <li><b>{b.title}</b>：{b.text}</li>)}</ul>
         <h2>怎麼找我</h2>
-        <p class="s-fine">LINE／電話 {studioContact.lineId}<br />{studioFacts.reply}<br />{studioFacts.area}</p>
+        <p class="s-fine">LINE ID {studioContact.lineId}・電話 {studioContact.phone}<br />{studioFacts.reply}<br />{studioFacts.area}</p>
         <a class="s-btn s-btn-primary" href={studioContact.lineUrl} data-cta="about-line">LINE 傳給我</a>
       </aside>
     </div>
