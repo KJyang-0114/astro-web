@@ -111,11 +111,11 @@ Navigation、shell、section、card 與 footer 使用共用 components。頁面�
 
 | runner（容器名） | 標籤 | 跑什麼 | 上限 |
 |---|---|---|---|
-| `astro-web-ci-build` | `self-hosted, astro-web-ci, astro-web-ci-build` | `ci-gate`（會跑 PR 的程式碼，不拿 secret） | 2 CPU、1 GB（含 swap）、shm 64 MB |
+| `astro-web-ci-build` | `self-hosted, astro-web-ci, astro-web-ci-build` | `ci-gate`（會跑 PR 的程式碼，不拿 secret） | 2 CPU、1.5 GB（含 swap）、shm 64 MB |
 | `astro-web-ci-gate` | `self-hosted, astro-web-ci, astro-web-ci-gate` | 部署、dry-run、通知、claude-gate 的審查與合併（不跑 repo 的程式碼） | 1 CPU、768 MB（含 swap）、shm 64 MB |
 
 規則：
-- `runs-on` 一律寫滿三個標籤。不能只寫 `self-hosted`，也不能寫 `ubuntu-latest`。檢查：`grep -n "runs-on" .github/workflows/*.yml`。
+- `runs-on` 一律寫滿三個標籤，不能只寫 self-hosted 這一個標籤，也不能改回 GitHub 代管的機器。檢查：`grep -n "runs-on" .github/workflows/*.yml` 每一行都要有 `astro-web-ci-build` 或 `astro-web-ci-gate`。
 - 容器不掛 Docker socket、不掛主機路徑，只有具名 volume `<容器名>-runner`；網路是自己的 `astro-web-ci-net`。entrypoint 擋掉主機與所有私有網段（含 Tailscale 的 100.64/10），之後以 uid 1100 的 `runner`、沒有 capability 跑。工作裡沒有 Docker、沒有 sudo。
 - 部署要從容器 SSH 到主機：`MACMINI_HOST` 若是區網或 Tailscale 位址會被防火牆擋，先用 `dry_run` 測。
 - 這是公開 repo：fork 的 PR 會帶自己的 workflow 檔，`runs-on` 與 job 的 `if` 都擋不住。防線是 repo 設定 Settings → Actions → General 的「fork PR 的 workflow 要核准」，建議設成所有外部貢獻者都要核准。
@@ -131,7 +131,7 @@ docker build -t astro-web-ci-runner:latest ~/astro-web-ci-runner-build
 建容器（`run-container.sh` 是 synk-atelier 範本的那一份，Mac mini 上在 `~/synk-ci-runner-build/`；已存在的同名容器不會被動到）：
 
 ```sh
-NAME=astro-web-ci-build CPUS=2 MEMORY=1g SHM=64m NETWORK=astro-web-ci-net IMAGE=astro-web-ci-runner:latest bash ~/synk-ci-runner-build/run-container.sh
+NAME=astro-web-ci-build CPUS=2 MEMORY=1536m SHM=64m NETWORK=astro-web-ci-net IMAGE=astro-web-ci-runner:latest bash ~/synk-ci-runner-build/run-container.sh
 NAME=astro-web-ci-gate CPUS=1 MEMORY=768m SHM=64m NETWORK=astro-web-ci-net IMAGE=astro-web-ci-runner:latest bash ~/synk-ci-runner-build/run-container.sh
 ```
 
@@ -148,7 +148,7 @@ image 更新後重建容器（volume 留著，不用重新註冊）：`docker rm
 
 拆掉：先在 GitHub 刪 runner（Settings → Actions → Runners），再 `docker rm -f astro-web-ci-build astro-web-ci-gate && docker volume rm astro-web-ci-build-runner astro-web-ci-gate-runner && docker network rm astro-web-ci-net`。
 
-量測（2026-11-20，`astro-web-ci-build` 註冊前以 runner 身分試跑，同時 synk-ci-build 也在跑工作）：`npm ci` 14 秒、`npm run check` 19 秒、`verify:runtime -- --nginx` 1 秒；記憶體取樣尖峰約 670 MB（含頁快取時頂到 1 GB 上限，回收正常、沒有 OOM），CPU 吃滿 2 核。試跑期間正式站 `/healthz` 全部 200。
+量測（2026-11-20，`astro-web-ci-build` 註冊前以 runner 身分試跑兩次，同時 synk-ci-build 也在跑工作）：`npm ci` 9–14 秒、`npm run check` 19–26 秒、`verify:runtime -- --nginx` 1 秒以內；匿名記憶體尖峰 532 MB（每 0.5 秒取樣），另有約 370 MB 頁快取，1 GB 時常頂到上限回收、沒有 OOM。註冊後 runner 本身還要約 150–300 MB，所以起始上限從 1 GB 調到 1.5 GB。CPU 吃滿 2 核。試跑期間正式站 `/healthz` 全部 200。
 
 ## 本機執行
 

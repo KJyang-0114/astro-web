@@ -24,7 +24,7 @@ kjyang0114.dev 的原始碼：Astro 靜態網站，個人作品集加上 `/studi
 - `.gitignore` 是白名單（`/*` 忽略根目錄每一項）。根目錄新增檔案或資料夾要加 `!/名稱`，否則不會進 git，也不會部署。新增檔案後用 `git status` 確認。
 - push `main` 就是正式部署：GitHub Actions 先跑 `ci-gate`（`npm ci`、`npm run check`、`verify:runtime -- --nginx`），通過後用 `rsync --delete` 同步到主機，再由 `rebuild-docker.sh` 重建容器（結束碼的意思寫在腳本開頭）。主機上沒進 repo 的檔案下次部署會被刪掉，所以不要直接改主機上的檔案。
 - PR 跑 `ci-gate` 與 `claude-gate`（Claude 審查）。審查沒問題、`ci-gate` 綠、作者是站長或 Claude App 就自動合併並觸發部署，所以開 PR 等於可能直接上線；要先自己看過的變更開成 draft。
-- CI 工作全部跑在 Mac mini 的 runner 容器（README「CI runner」）。`runs-on` 一律寫 `[self-hosted, astro-web-ci, astro-web-ci-build]`（跑 PR 程式碼）或 `[self-hosted, astro-web-ci, astro-web-ci-gate]`（部署、審查、合併，不跑 repo 程式碼），不要寫 `ubuntu-latest` 或只寫 `self-hosted`。工作裡沒有 Docker、沒有 sudo，連不到私有網段。
+- CI 工作全部跑在 Mac mini 的 runner 容器（README「CI runner」）。`runs-on` 一律寫 `[self-hosted, astro-web-ci, astro-web-ci-build]`（跑 PR 程式碼）或 `[self-hosted, astro-web-ci, astro-web-ci-gate]`（部署、審查、合併，不跑 repo 程式碼），不要改回 GitHub 代管的機器，也不要只寫 self-hosted 一個標籤。工作裡沒有 Docker、沒有 sudo，連不到私有網段。
 - 這是公開 repo。不要把電話號碼、token、推播頻道名稱寫進檔案或 commit 訊息。聯絡方式只有 LINE ID 和 Email。
 - 新增頁面要同時處理：`src/data/lastmod.mjs` 的日期、`scripts/verify-site.mjs` 或 `verify-seo.mjs` 的檢查、需要的話 sitemap 與 llms 清單（由 `src/data/discovery.ts` 等資料檔產生，不要改輸出）。
 - 舊網址轉到新網址寫在 `astro.config.mjs` 的 `redirects`，sitemap 會自動排除。
