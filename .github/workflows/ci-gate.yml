@@ -6,7 +6,7 @@ name: ci-gate
 # 不用 GitHub 代管機器：
 #   astro-web-ci-build  會跑 PR 的程式碼（npm ci、npm run check），不拿任何 secret
 #   astro-web-ci-gate   不跑 repo 的程式碼：部署、Claude 審查、合併決定、通知
-# runs-on 一律寫滿三個標籤；不要只寫 self-hosted（可能落到別的 runner）。
+# 每個工作的標籤一律寫滿三個（self-hosted、astro-web-ci、astro-web-ci-build 或 astro-web-ci-gate），少寫會落到別的 runner。
 #
 # fork 的 PR 不跑（job 的 if）。注意這擋不住 fork 自己改過的 workflow 檔，真正的防線是 repo 設定的
 # 「fork PR 的 workflow 要核准」，見 README「CI runner」。
