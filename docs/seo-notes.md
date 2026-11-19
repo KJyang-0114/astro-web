@@ -2,7 +2,7 @@
 
 這次只動「搜尋引擎和 AI 怎麼讀網站」的部分，Studio 的內文沒有改寫。新增的中文都照 `docs/studio-writing-guide.md`。
 
-改完要跑：`npm run build`，再跑 `node scripts/verify-seo.mjs`（或 `npm run verify:seo`）。
+改完要跑：`npm run build`，再跑 `node scripts/verify-seo.mjs`（或 `npm run verify:seo`）。`verify-seo.mjs` 的說明長度上限是 170 字元，只有 `/en/projects/synk-atelier` 一頁例外（說明照原文 190 字元）。
 
 ## 這次改了什麼
 
@@ -22,7 +22,7 @@
 - 個人網站的頁面標題都帶「楊凱捷 KJyang」。
 
 ### 網址、語言、索引
-- 中英文對應頁（Studio 首頁、服務、價格、聯絡）互相指向，x-default 一律指中文頁。之前英文頁的 x-default 指自己，跟中文頁對不起來。
+- 中英文對應頁（Studio 首頁、服務、價格、聯絡，以及 `/projects/synk-atelier` 和 `/en/projects/synk-atelier`）互相指向，x-default 一律指中文頁。之前英文頁的 x-default 指自己，跟中文頁對不起來。
 - 不給搜尋的頁面：設計範例（`/studio/demo`、`/studio/en/demo`）、404，以及三個沒有放連結的舊頁面 `/secret-game`、`/gomoku-game`、`/question-bank`（加了 noindex，也從網站地圖拿掉）。如果想讓這三頁被搜到，把 noindex 拿掉、從 `src/data/lastmod.mjs` 的排除清單刪掉，並在網站上放連結。
 - 舊網址轉址頁（`astro.config.mjs` 的 redirects）本來就是 noindex 加 canonical 指向新網址，沒動。
 - 404 頁加了兩邊的常用連結。
@@ -33,7 +33,7 @@
 - 價格頁、服務頁有 Service＋Offer，價格直接從 `studio.ts` 讀。
 - 文章改成 BlogPosting，有發布日、修改日、作者、PNG 圖、mainEntityOfPage。
 - 所有 Studio 子頁和作品頁都有麵包屑。FAQ 只放在頁面上看得到問答的地方。沒有評價、星等。
-- 個人作品：有公開原始碼的用 SoftwareSourceCode，沒有的用 CreativeWork。
+- 個人作品：有公開原始碼的用 SoftwareSourceCode，沒有的用 CreativeWork。SYNK ATELIER 頁在 `projects.ts` 的 `schema` 欄位放自己的 JSON-LD，取代自動產生的那一筆。
 
 ### 網站地圖
 - robots.txt 列三個：`/sitemap.xml`（個人網站）、`/studio/sitemap.xml`、`/web-highlighter-pro/sitemap.xml`。每個網址只出現一次，沒有轉址頁和 noindex 頁。
@@ -47,7 +47,7 @@
 - robots.txt：Content-Signal（search=yes, ai-input=yes, ai-train=no）原本只寫在最上面，不屬於任何一組，爬蟲可能讀不到。現在每一組都寫一次，政策沒變。允許的爬蟲加上 OAI-SearchBot、ChatGPT-User、Claude-SearchBot、Claude-User、Perplexity-User、Applebot、Applebot-Extended。
 
 ### 站內連結
-- 個人作品集加了兩個真實作品：SYNK ATELIER（`/projects/synk-atelier`）和 Weilspa 預約系統（`/projects/weilspa`），內容只取自 `cases.ts`。作品從 8 個變 10 個，`verify-site.mjs`、`verify-discovery.mjs` 的數量跟著改成讀清單長度。首頁「08 / SELECTED WORK」改成依實際數量顯示。
+- 個人作品集加了兩個真實作品：SYNK ATELIER（`/projects/synk-atelier`）和 Weilspa 預約系統（`/projects/weilspa`），Weilspa 頁的內容取自 `cases.ts`，SYNK ATELIER 長版頁的內容在 `projects.ts` 的 `sections`。作品從 8 個變 10 個，`verify-site.mjs`、`verify-discovery.mjs` 的數量跟著改成讀清單長度。首頁「08 / SELECTED WORK」改成依實際數量顯示。
 - Studio 作品頁連到個人網站的作品頁，反過來也有。
 - 每篇文章側欄加「相關頁面」，連到對應的價格、服務、作品頁。
 - 個人網站頁尾加了 Web Highlighter Pro 的連結（它原本沒有任何站內連結）。

@@ -21,11 +21,11 @@ Studio 是楊凱捷一個人接案，幫小店做網站與預約系統。北部�
 
 ## 主要功能
 
-- 個人作品集：10 個作品頁，另有履歷、Now、AI 筆記頁。
+- 個人作品集：10 個作品頁，另有履歷、Now、AI 筆記頁。SYNK ATELIER 是長版作品頁，有 8 張手機截圖，另有英文版 `/en/projects/synk-atelier`（非官方粉絲作品）。
 - Studio：服務、價格、流程、聯絡頁，6 篇文章，4 個產業範例網站（Demo library，不給搜尋引擎收錄）。
 - Studio 有 3 個真實案例頁：Weilspa 預約與排班系統、SYNK ATELIER、這個網站本身。
 - 文章由 14 篇整併成 6 篇，舊網址用 redirect 導向新頁面（對照表在 `astro.config.mjs`）。
-- 中英文內容、SEO metadata、結構化資料、網站地圖與給 AI 讀的 llms.txt。
+- 中英文內容、SEO metadata、結構化資料、網站地圖與給 AI 讀的 llms.txt。聯絡方式是 LINE ID 與 email。
 - Astro 靜態建置與 responsive layout。
 - GitHub Actions、Docker 與自架主機部署流程。
 
@@ -34,6 +34,7 @@ Studio 是楊凱捷一個人接案，幫小店做網站與預約系統。北部�
 ```text
 src/pages/           網站路由
 src/pages/studio/    Studio 頁面與 Demo
+src/pages/en/        英文履歷與英文作品頁
 src/data/            服務、案例、文章與 SEO 結構化內容
 src/components/      Navigation、layout、footer 與共用元件
 public/              品牌、圖片與靜態產品檔案
@@ -98,7 +99,7 @@ npm run preview
 | 指令 | 做什麼 | 什麼時候跑 |
 |---|---|---|
 | `npm run verify:studio` | 先 build，再檢查 `/studio` 的頁面結構、站內連結、舊網址 redirect，並依 [文案規範](docs/studio-writing-guide.md) 擋下禁用寫法 | 改了 Studio 的文字或頁面之後 |
-| `npm run verify:site` | 先 build，再檢查個人站路由、連結、資產、metadata、作品與 AI 主題完整性、sitemap | 改了個人站之後、部署前 |
+| `npm run verify:site` | 先 build，再檢查個人站路由、連結、資產、metadata、作品與 AI 主題完整性、sitemap，以及英文作品頁的 lang、canonical、hreflang 與語言切換連結 | 改了個人站之後、部署前 |
 | `npm run verify:seo` | 先 build，再檢查標題與說明長度、canonical、分享圖、結構化資料、sitemap、robots.txt、站內連結層數 | 改了 SEO 或頁面標題之後 |
 | `npm run verify:motion` | 不開瀏覽器，檢查線稿動畫的幾何與生命週期 | 改了動畫之後 |
 | `npm run og-images` | 產生分享用的 PNG（用 macOS 內建中文字型） | 改了價格或分享圖文字之後，要在 macOS 上跑 |
@@ -129,10 +130,11 @@ Studio 與四個中文產業 Demo 另採暖色編輯式設計；產品頁與既�
 
 - `/`：個人定位、代表作品互動、網站服務入口。
 - `/projects`：10 個作品的領域／語言篩選與可展開索引。
-- `/projects/[slug]`：作品問題、實作、資料流程、目前範圍、GitHub。
+- `/projects/[slug]`：作品問題、實作、資料流程、目前範圍、GitHub。有 `sections` 欄位的作品（目前是 SYNK ATELIER）改用 `ProjectStory.astro` 渲染成長版頁面，截圖放 `public/projects/<slug>/`，在 `gallery` 欄位列出。
 - `/about`：學習與交付經歷、開發觀點、個人興趣。
 - `/ai`：7 個 AI 入門主題與延伸閱讀。
 - `/contact`：個人交流管道與 Studio 服務入口。
+- `/en/projects/[slug]`：作品的英文版，目前只有 SYNK ATELIER。要替另一個作品加英文版，在 `src/data/projects.ts` 該作品的 `en` 欄位填英文標題、說明、`sections` 和 `gallery`（作品本身要有 `sections`），路由 `src/pages/en/projects/[slug].astro` 會自動產生頁面，網站地圖和 llms 清單也會帶上。中英文頁用 hreflang 互相指向，頁面有語言切換連結。新頁面要在 `src/data/lastmod.mjs` 補日期，並在 `scripts/verify-site.mjs` 加檢查。
 
 主要內容集中在 `src/data/projects.ts`，樣式位於 `src/styles/design-system.css`、`portfolio.css` 與 `exhibits.css`。
 個人站元件放在 `src/components/portfolio/`，不與原 Studio 的外觀元件共用。
