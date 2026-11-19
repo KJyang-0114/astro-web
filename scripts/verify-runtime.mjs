@@ -4,17 +4,37 @@
 //   npm run verify:runtime                         建映像 → 起容器 → 檢查 → 刪容器
 //   npm run verify:runtime -- --no-build           不 build，直接用已經建好的 kjyang-wbs-astro:verify（CI 先單獨 docker build）
 //   npm run verify:runtime -- --url=http://127.0.0.1:4321   改打一個已經在跑的本機伺服器（不用 Docker）
-import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+//   npm run verify:runtime -- --nginx              不用 Docker：以目前使用者身分起本機的 nginx，載入 repo 的
+//                                                  docker/nginx-site.conf 送現有的 dist/（先 npm run build）。
+//                                                  CI runner 裡沒有 Docker，ci-gate 跑這個模式。
+//
+// --nginx 和正式容器的差別：nginx 是 runner image 裡 Ubuntu 的版本，不是 nginx:alpine；dist/ 是 CI 用
+// Node 22 build 的，不是 Dockerfile 裡那一份；Dockerfile 本身（多階段 build、COPY 路徑）沒有被執行。
+// 站台設定（docker/nginx-site.conf）、Dockerfile 加的 text/markdown 類型、標頭與路由檢查都一樣。
+import { spawn, spawnSync } from "node:child_process";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync, existsSync } from "node:fs";
+import { createServer } from "node:net";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const IMAGE = "kjyang-wbs-astro:verify";
 const CONTAINER = "kjyang-wbs-astro-verify";
 const SITE = "https://kjyang0114.dev";
 const LOOPBACK = new Set(["127.0.0.1", "localhost", "[::1]"]);
+const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
 const docker = (args, opts = {}) => spawnSync("docker", args, { encoding: "utf8", ...opts });
 let containerStarted = false;
+let nginx = null; // { proc, dir }
 const cleanup = () => {
+  if (nginx) {
+    const { proc, dir } = nginx;
+    nginx = null;
+    if (proc.exitCode === null) proc.kill("SIGTERM");
+    rmSync(dir, { recursive: true, force: true });
+    console.log("已停止本機 nginx");
+  }
   if (!containerStarted) return;
   containerStarted = false;
   docker(["rm", "-f", CONTAINER]);
@@ -54,9 +74,79 @@ async function startContainer() {
   return `http://127.0.0.1:${port}`;
 }
 
+const freePort = () =>
+  new Promise((resolve, reject) => {
+    const server = createServer();
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", () => {
+      const { port } = server.address();
+      server.close(() => resolve(port));
+    });
+  });
+
+// 正式容器的 nginx.conf 是 nginx:alpine 的預設檔，加上 Dockerfile 插在 mime.types 之後的 text/markdown；
+// 站台本身是 docker/nginx-site.conf，只把 listen 換成 127.0.0.1 的空閒埠、root 換成本機的 dist/。
+async function startNginx() {
+  const dist = join(ROOT, "dist");
+  if (!existsSync(join(dist, "index.html"))) fail("--nginx 需要已經 build 好的 dist/（先跑 npm run build）");
+  const version = spawnSync("nginx", ["-V"], { encoding: "utf8" });
+  if (version.error || version.status !== 0) fail("找不到 nginx（--nginx 模式要用本機的 nginx；CI runner image 已內建）");
+  const confPath = version.stderr.match(/--conf-path=(\S+)/)?.[1] ?? "/etc/nginx/nginx.conf";
+  const mimeTypes = join(dirname(confPath), "mime.types");
+  if (!existsSync(mimeTypes)) fail(`找不到 ${mimeTypes}`);
+
+  const port = await freePort();
+  let site = readFileSync(join(ROOT, "docker/nginx-site.conf"), "utf8");
+  const listenRe = /^(\s*)listen\s+3000\s*;/m;
+  const rootRe = /^(\s*)root\s+\/usr\/share\/nginx\/html\s*;/m;
+  if (!listenRe.test(site) || !rootRe.test(site)) {
+    fail("docker/nginx-site.conf 的 listen 3000 或 root /usr/share/nginx/html 改了，--nginx 模式要跟著改");
+  }
+  site = site.replace(listenRe, `$1listen 127.0.0.1:${port};`).replace(rootRe, `$1root ${JSON.stringify(dist)};`);
+
+  const dir = mkdtempSync(join(tmpdir(), "verify-runtime-nginx-"));
+  const temp = (name) => `${name}_temp_path ${JSON.stringify(join(dir, name))};`;
+  writeFileSync(
+    join(dir, "nginx.conf"),
+    [
+      "worker_processes 1;",
+      `pid ${JSON.stringify(join(dir, "nginx.pid"))};`,
+      `error_log ${JSON.stringify(join(dir, "error.log"))} warn;`,
+      "daemon off;",
+      "events { worker_connections 256; }",
+      "http {",
+      `  include ${JSON.stringify(mimeTypes)};`,
+      "  types { text/markdown md; }",
+      "  default_type application/octet-stream;",
+      "  sendfile on;",
+      "  keepalive_timeout 65;",
+      "  access_log off;",
+      ...["client_body", "proxy", "fastcgi", "uwsgi", "scgi"].map((name) => `  ${temp(name)}`),
+      site,
+      "}",
+      "",
+    ].join("\n"),
+  );
+  const conf = join(dir, "nginx.conf");
+  const test = spawnSync("nginx", ["-t", "-q", "-p", dir, "-e", join(dir, "error.log"), "-c", conf], { encoding: "utf8" });
+  if (test.status !== 0) {
+    rmSync(dir, { recursive: true, force: true });
+    fail(`nginx -t 失敗：${(test.stderr || test.stdout).trim()}`);
+  }
+  const proc = spawn("nginx", ["-p", dir, "-e", join(dir, "error.log"), "-c", conf], { stdio: ["ignore", "inherit", "inherit"] });
+  nginx = { proc, dir };
+  proc.once("exit", (code) => {
+    if (nginx) console.error(`✗ nginx 提前結束（碼 ${code}）`);
+  });
+  console.log(`▶ 本機 nginx（${version.stderr.match(/nginx version: (\S+)/)?.[1] ?? "?"}）送 ${dist}`);
+  return `http://127.0.0.1:${port}`;
+}
+
 const urlArg = process.argv.find((arg) => arg.startsWith("--url="))?.slice("--url=".length);
 let base;
-if (urlArg) {
+if (process.argv.includes("--nginx")) {
+  base = await startNginx();
+} else if (urlArg) {
   base = new URL(urlArg).origin;
   if (!LOOPBACK.has(new URL(base).hostname)) {
     console.error(`✗ --url 只能是本機位址（127.0.0.1、localhost），收到 ${base}`);
