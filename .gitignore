@@ -27,6 +27,7 @@
 !/rebuild-docker.sh
 !/docs/
 !/docker/
+!/deploy/
 
 # --- Ignore generated/editor files inside whitelisted trees ---
 **/.DS_Store
