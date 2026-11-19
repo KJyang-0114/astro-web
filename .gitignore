@@ -20,6 +20,8 @@
 !/pnpm-lock.yaml
 !/yarn.lock
 !/tsconfig.json
+!/eslint.config.js
+!/AGENTS.md
 !/vite.config.js
 !/README.md
 !/rebuild-docker.sh
