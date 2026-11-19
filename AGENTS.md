@@ -6,7 +6,7 @@ kjyang0114.dev 的原始碼：Astro 靜態網站，個人作品集加上 `/studi
 
 - `npm run check:fast`：只檢查這次改到的檔案（`git diff HEAD` 加未追蹤檔）。改完先跑這個。
 - `npm run check`：完整檢查，CI 用。lint → `astro check` → build → 六支 `scripts/verify-*.mjs` → `rebuild-docker.sh` 的假指令測試（`npm run test:rebuild`）。
-- `npm run verify:runtime`：用 Dockerfile 在本機起測試容器，打 `/healthz`、sitemap 路由、轉址、404、Content-Type、快取標頭。要先開 Docker。只連 127.0.0.1。
+- `npm run verify:runtime`：用 Dockerfile 在本機起測試容器，打 `/healthz`、sitemap 路由、轉址、404、Content-Type、快取標頭。要先開 Docker。只連 127.0.0.1。加 `-- --nginx` 改用本機 nginx 送現有的 `dist/`，不用 Docker（CI 用這個）。
 
 ## 目錄
 
@@ -22,7 +22,9 @@ kjyang0114.dev 的原始碼：Astro 靜態網站，個人作品集加上 `/studi
 ## 不會被 lint 擋、但要遵守的事
 
 - `.gitignore` 是白名單（`/*` 忽略根目錄每一項）。根目錄新增檔案或資料夾要加 `!/名稱`，否則不會進 git，也不會部署。新增檔案後用 `git status` 確認。
-- push `main` 就是正式部署：GitHub Actions 先跑 `ci-gate`（`npm run check`、`docker build`、`verify:runtime`），通過後用 `rsync --delete` 同步到主機，再由 `rebuild-docker.sh` 重建容器（結束碼的意思寫在腳本開頭）。PR 只跑 `ci-gate`，不部署。主機上沒進 repo 的檔案下次部署會被刪掉，所以不要直接改主機上的檔案。
+- push `main` 就是正式部署：GitHub Actions 先跑 `ci-gate`（`npm ci`、`npm run check`、`verify:runtime -- --nginx`），通過後用 `rsync --delete` 同步到主機，再由 `rebuild-docker.sh` 重建容器（結束碼的意思寫在腳本開頭）。主機上沒進 repo 的檔案下次部署會被刪掉，所以不要直接改主機上的檔案。
+- PR 跑 `ci-gate` 與 `claude-gate`（Claude 審查）。審查沒問題、`ci-gate` 綠、作者是站長或 Claude App 就自動合併並觸發部署，所以開 PR 等於可能直接上線；要先自己看過的變更開成 draft。
+- CI 工作全部跑在 Mac mini 的 runner 容器（README「CI runner」）。`runs-on` 一律寫 `[self-hosted, astro-web-ci, astro-web-ci-build]`（跑 PR 程式碼）或 `[self-hosted, astro-web-ci, astro-web-ci-gate]`（部署、審查、合併，不跑 repo 程式碼），不要寫 `ubuntu-latest` 或只寫 `self-hosted`。工作裡沒有 Docker、沒有 sudo，連不到私有網段。
 - 這是公開 repo。不要把電話號碼、token、推播頻道名稱寫進檔案或 commit 訊息。聯絡方式只有 LINE ID 和 Email。
 - 新增頁面要同時處理：`src/data/lastmod.mjs` 的日期、`scripts/verify-site.mjs` 或 `verify-seo.mjs` 的檢查、需要的話 sitemap 與 llms 清單（由 `src/data/discovery.ts` 等資料檔產生，不要改輸出）。
 - 舊網址轉到新網址寫在 `astro.config.mjs` 的 `redirects`，sitemap 會自動排除。

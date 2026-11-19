@@ -41,7 +41,8 @@ public/              品牌、圖片與靜態產品檔案
 scripts/             驗證、分享圖與 IndexNow 腳本
 docs/                Studio 文案規範、SEO 整理紀錄
 docker/              正式環境 nginx 設定
-.github/workflows/   Build 與部署流程
+deploy/ci-runner/    CI runner 容器的 image（Mac mini）
+.github/workflows/   檢查、審查與部署流程
 ```
 
 ## 核心程式
@@ -65,9 +66,15 @@ Navigation、shell、section、card 與 footer 使用共用 components。頁面�
 
 ### 部署流程
 
-開 PR 時，`.github/workflows/ci-gate.yml` 會跑 `npm run check`、`docker build` 和 `npm run verify:runtime`。PR 和其他分支不會部署。
+所有 GitHub Actions 工作都跑在 Mac mini 上的兩個 runner 容器，不用 GitHub 代管機器（見下方「CI runner」）。
 
-推到 `main` 後，`.github/workflows/deploy-macmini.yml` 先呼叫同一份 `ci-gate`，檢查通過才部署：用 rsync 把原始碼同步到主機，再由主機上的 `rebuild-docker.sh` 重建 Docker container。檢查沒過就不部署。部署一次只跑一個，新的 push 會排在後面，不會把進行中的部署砍掉。
+開 PR 時，`.github/workflows/ci-gate.yml` 會跑 `npm ci`、`npm run check`，再用 `npm run verify:runtime -- --nginx` 以 runner 裡的 nginx 載入 `docker/nginx-site.conf` 送剛 build 好的 `dist/`，檢查路由與標頭。runner 裡沒有 Docker，所以 PR 上不再 `docker build`；Dockerfile 本身要到部署時才由主機上的 `rebuild-docker.sh` 建置並做健康檢查（失敗自動退回）。同一個 PR 再 push 時，舊的檢查會被取消。fork 的 PR 不跑任何工作。PR 和其他分支不會部署。
+
+`.github/workflows/claude-gate.yml` 會在 PR 上跑 Claude 的自動審查（官方 code-review plugin，以 Claude GitHub App 身分留言，只用 repo secret `CLAUDE_CODE_OAUTH_TOKEN`），審查沒有問題、`ci-gate` 通過、作者是站長或 Claude App 時自動 rebase 合併，接著觸發部署。審查有問題推播「審查沒過」；作者不符、Claude App 改了 `.github/`、審查略過或沒跑完，留言並推播「等你合併」。draft PR 不審查、不合併。沒設 `CLAUDE_CODE_OAUTH_TOKEN` 時這個流程什麼都不做。
+
+推到 `main` 後，`.github/workflows/deploy-macmini.yml` 先呼叫同一份 `ci-gate`，檢查通過才部署：用 rsync 把原始碼同步到主機，再由主機上的 `rebuild-docker.sh` 重建 Docker container。檢查沒過就不部署。部署一次只跑一個，新的 push 會排在後面，不會把進行中的部署砍掉。claude-gate 用 `GITHUB_TOKEN` 合併時 GitHub 不會產生 push 事件，所以合併後由 `.github/scripts/claude-gate-decide.sh` 以 `workflow_dispatch` 在 `main` 上觸發同一個部署流程（一樣先跑 `ci-gate`）。
+
+手動跑 Deploy to Mac mini 時勾 `dry_run`（任何分支都可以）只做 SSH 連線測試與 `rsync --dry-run`，不檢查、不同步、不重建，用來確認 runner 連得到主機。
 
 正式環境是多階段 Dockerfile：第一階段用 node 22 執行 `npm ci` 和 `npm run build`，第二階段用 nginx 送 `dist`，不再用 `astro preview` 當正式伺服器。容器聽 3000 埠，並提供 `/healthz`。主機上的看門狗會檢查這個網址，拿掉會報警。容器用 `--restart unless-stopped` 啟動。
 
@@ -98,6 +105,51 @@ Navigation、shell、section、card 與 footer 使用共用 components。頁面�
 - 直接在主機上加、沒進 git 的檔案，下次部署會消失。
 - 新增根目錄的檔案或資料夾，要同步加進 `.gitignore` 的白名單，否則不會進 git，也不會被部署。
 
+### CI runner
+
+架構與防火牆、清理 hook、`run-container.sh`、`register.sh` 都沿用 synk-atelier 的範本（那個 repo 的 `deploy/ci-runner/` 與 `docs/OPS-PIPELINE.md`「CI runner」一節）。這裡只有 `deploy/ci-runner/Dockerfile`：以 Mac mini 上的 `synk-ci-runner:latest` 為基底，加裝 rsync、nginx 與 Node 22，建成 `astro-web-ci-runner:latest`。
+
+| runner（容器名） | 標籤 | 跑什麼 | 上限 |
+|---|---|---|---|
+| `astro-web-ci-build` | `self-hosted, astro-web-ci, astro-web-ci-build` | `ci-gate`（會跑 PR 的程式碼，不拿 secret） | 2 CPU、1 GB（含 swap）、shm 64 MB |
+| `astro-web-ci-gate` | `self-hosted, astro-web-ci, astro-web-ci-gate` | 部署、dry-run、通知、claude-gate 的審查與合併（不跑 repo 的程式碼） | 1 CPU、768 MB（含 swap）、shm 64 MB |
+
+規則：
+- `runs-on` 一律寫滿三個標籤。不能只寫 `self-hosted`，也不能寫 `ubuntu-latest`。檢查：`grep -n "runs-on" .github/workflows/*.yml`。
+- 容器不掛 Docker socket、不掛主機路徑，只有具名 volume `<容器名>-runner`；網路是自己的 `astro-web-ci-net`。entrypoint 擋掉主機與所有私有網段（含 Tailscale 的 100.64/10），之後以 uid 1100 的 `runner`、沒有 capability 跑。工作裡沒有 Docker、沒有 sudo。
+- 部署要從容器 SSH 到主機：`MACMINI_HOST` 若是區網或 Tailscale 位址會被防火牆擋，先用 `dry_run` 測。
+- 這是公開 repo：fork 的 PR 會帶自己的 workflow 檔，`runs-on` 與 job 的 `if` 都擋不住。防線是 repo 設定 Settings → Actions → General 的「fork PR 的 workflow 要核准」，建議設成所有外部貢獻者都要核准。
+
+以下指令在 Mac mini 上以 kjyang 身分執行（不用 sudo），先 `export PATH=/Applications/Docker.app/Contents/Resources/bin:$PATH`。
+
+建 image（`~/astro-web-ci-runner-build/` 放這份 Dockerfile；`synk-ci-runner:latest` 重建後這裡也要重建）：
+
+```sh
+docker build -t astro-web-ci-runner:latest ~/astro-web-ci-runner-build
+```
+
+建容器（`run-container.sh` 是 synk-atelier 範本的那一份，Mac mini 上在 `~/synk-ci-runner-build/`；已存在的同名容器不會被動到）：
+
+```sh
+NAME=astro-web-ci-build CPUS=2 MEMORY=1g SHM=64m NETWORK=astro-web-ci-net IMAGE=astro-web-ci-runner:latest bash ~/synk-ci-runner-build/run-container.sh
+NAME=astro-web-ci-gate CPUS=1 MEMORY=768m SHM=64m NETWORK=astro-web-ci-net IMAGE=astro-web-ci-runner:latest bash ~/synk-ci-runner-build/run-container.sh
+```
+
+註冊、重新註冊（在已登入 `gh` 的筆電上跑；註冊碼經 ssh 的 stdin 進容器，不會出現在畫面或指令列；`--replace` 會沿用同名的舊登記，所以重新註冊是同一行）：
+
+```sh
+for r in astro-web-ci-build:astro-web-ci,astro-web-ci-build astro-web-ci-gate:astro-web-ci,astro-web-ci-gate; do gh api -X POST repos/KJyang-0114/astro-web/actions/runners/registration-token -q .token | ssh -o BatchMode=yes <Mac mini> "/Applications/Docker.app/Contents/Resources/bin/docker exec -i ${r%%:*} /usr/local/lib/ci-runner/register.sh KJyang-0114/astro-web ${r%%:*} ${r#*:}"; done
+gh api repos/KJyang-0114/astro-web/actions/runners --jq '.runners[] | "\(.name) \(.status) \([.labels[].name] | join(","))"'
+```
+
+改上限（不用重建）：`docker update --cpus N --memory Xg --memory-swap Xg astro-web-ci-build`。
+
+image 更新後重建容器（volume 留著，不用重新註冊）：`docker rm -f astro-web-ci-build`，再跑上面的建容器指令。
+
+拆掉：先在 GitHub 刪 runner（Settings → Actions → Runners），再 `docker rm -f astro-web-ci-build astro-web-ci-gate && docker volume rm astro-web-ci-build-runner astro-web-ci-gate-runner && docker network rm astro-web-ci-net`。
+
+量測（2026-11-20，`astro-web-ci-build` 註冊前以 runner 身分試跑，同時 synk-ci-build 也在跑工作）：`npm ci` 14 秒、`npm run check` 19 秒、`verify:runtime -- --nginx` 1 秒；記憶體取樣尖峰約 670 MB（含頁快取時頂到 1 GB 上限，回收正常、沒有 OOM），CPU 吃滿 2 核。試跑期間正式站 `/healthz` 全部 200。
+
 ## 本機執行
 
 ```bash
@@ -115,7 +167,7 @@ npm run preview
 |---|---|---|
 | `npm run check:fast` | 只檢查這次改到的檔案（`git diff HEAD` 加未追蹤檔）：lint、需要時型別檢查與 build、對應的驗證腳本 | 改完程式先跑這個 |
 | `npm run check` | 完整檢查：lint、`astro check`、build、六支驗證腳本、`rebuild-docker.sh` 的假指令測試。CI 跑的就是這個 | 開 PR 前 |
-| `npm run verify:runtime` | 用 Dockerfile 建映像，在本機起測試容器，打 `/healthz`、sitemap 的每個路由、轉址、404、Content-Type、快取標頭。只連 127.0.0.1，要先開 Docker | 改了 Dockerfile、nginx 設定或路由之後 |
+| `npm run verify:runtime` | 用 Dockerfile 建映像，在本機起測試容器，打 `/healthz`、sitemap 的每個路由、轉址、404、Content-Type、快取標頭。只連 127.0.0.1，要先開 Docker。加 `-- --nginx` 改用本機的 nginx 載入 `docker/nginx-site.conf` 送現有的 `dist/`，不用 Docker（CI 跑這個） | 改了 Dockerfile、nginx 設定或路由之後 |
 | `npm run test:rebuild` | 用假的 `docker`、`curl` 測 `rebuild-docker.sh` 各種情況的結束碼與指令順序，不碰真的 Docker | 改了 `rebuild-docker.sh` 之後 |
 | `npm run verify:studio` | 先 build，再檢查 `/studio` 的頁面結構、站內連結、舊網址 redirect，並依 [文案規範](docs/studio-writing-guide.md) 擋下禁用寫法 | 改了 Studio 的文字或頁面之後 |
 | `npm run verify:site` | 先 build，再檢查個人站路由、連結、資產、metadata、作品與 AI 主題完整性、sitemap，以及英文作品頁的 lang、canonical、hreflang 與語言切換連結 | 改了個人站之後、部署前 |
