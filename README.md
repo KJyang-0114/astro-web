@@ -111,10 +111,12 @@ Navigation、shell、section、card 與 footer 使用共用 components。頁面�
 
 | runner（容器名） | 標籤 | 跑什麼 | 上限 |
 |---|---|---|---|
-| `astro-web-ci-build` | `self-hosted, astro-web-ci, astro-web-ci-build` | `ci-gate`（會跑 PR 的程式碼，不拿 secret） | 0.5 CPU、1 GB（含 swap）、shm 64 MB |
+| `astro-web-ci-build` | `self-hosted, astro-web-ci, astro-web-ci-build` | `ci-gate`（會跑 PR 的程式碼，不拿 secret） | 1.5 CPU、1.5 GB（含 swap）、shm 64 MB |
 | `astro-web-ci-gate` | `self-hosted, astro-web-ci, astro-web-ci-gate` | 部署、dry-run、通知、claude-gate 的審查與合併（不跑 repo 的程式碼） | 0.5 CPU、768 MB（含 swap）、shm 64 MB（實測 Claude 審查尖峰約 660–669 MiB） |
 
 2026-11-20 晚上因 Mac mini 記憶體壓力，Docker VM 調回 4 CPU／4 GB，所有容器都設了上限，所有 runner 的 CPU 合計上限為 3。上表是調整後的現況，`ci-gate` 與 Claude 審查會比下面的實測慢。網站容器 `kjyang-wbs-astro-container` 的上限 0.5 CPU／64 MB（含 swap）由 `rebuild-docker.sh` 在每次部署建容器時設定，不要用 `docker update` 改（下次部署會被蓋回）。
+
+runner 的上限是在主機上用 `docker update` 設的，整台 Mac mini 的資源分配可能再調整，一切以 `docker inspect -f '{{.HostConfig.NanoCpus}} {{.HostConfig.Memory}}' <容器>` 的實際值為準；上表是 2026-11-20 晚上的值。
 
 規則：
 - `runs-on` 一律寫滿三個標籤，不能只寫 self-hosted 這一個標籤，也不能改回 GitHub 代管的機器。檢查：`grep -n "runs-on" .github/workflows/*.yml` 每一行都要有 `astro-web-ci-build` 或 `astro-web-ci-gate`。
@@ -135,7 +137,7 @@ docker build -t astro-web-ci-runner:latest ~/astro-web-ci-runner-build
 建容器（`run-container.sh` 是 synk-atelier 範本的那一份，Mac mini 上在 `~/synk-ci-runner-build/`；已存在的同名容器不會被動到）：
 
 ```sh
-NAME=astro-web-ci-build CPUS=0.5 MEMORY=1g SHM=64m NETWORK=astro-web-ci-net IMAGE=astro-web-ci-runner:latest bash ~/synk-ci-runner-build/run-container.sh
+NAME=astro-web-ci-build CPUS=1.5 MEMORY=1536m SHM=64m NETWORK=astro-web-ci-net IMAGE=astro-web-ci-runner:latest bash ~/synk-ci-runner-build/run-container.sh
 NAME=astro-web-ci-gate CPUS=0.5 MEMORY=768m SHM=64m NETWORK=astro-web-ci-net IMAGE=astro-web-ci-runner:latest bash ~/synk-ci-runner-build/run-container.sh
 ```
 
