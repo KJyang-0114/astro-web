@@ -18,6 +18,10 @@ printf '{}\n' > "$DOCKER_CONFIG/config.json"
 
 IMAGE="kjyang-wbs-astro"
 CONTAINER="kjyang-wbs-astro-container"
+# 網站容器的資源上限。Docker VM 只有 4 GB，所有容器都要有上限；
+# 每次部署都會重建容器，上限寫在這裡才不會在部署後消失（閒置約用 7 MB）。
+CONTAINER_CPUS="0.5"
+CONTAINER_MEMORY="64m"
 # 健康檢查輪詢次數，每次間隔 1 秒（測試會調小）
 HEALTH_TRIES="${REBUILD_HEALTH_TRIES:-30}"
 
@@ -98,7 +102,9 @@ start_container() {
     for attempt in 1 2 3; do
         stop_legacy_preview
         docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
-        run_output=$(docker run -d --restart unless-stopped -p 3000:3000 --name "$CONTAINER" "$run_image" 2>&1)
+        run_output=$(docker run -d --restart unless-stopped \
+            --cpus "$CONTAINER_CPUS" --memory "$CONTAINER_MEMORY" --memory-swap "$CONTAINER_MEMORY" \
+            -p 3000:3000 --name "$CONTAINER" "$run_image" 2>&1)
         run_status=$?
         printf '%s\n' "$run_output" >> "$LOG_FILE"
         if [ "$run_status" -eq 0 ]; then
