@@ -112,13 +112,15 @@ Navigation、shell、section、card 與 footer 使用共用 components。頁面�
 | runner（容器名） | 標籤 | 跑什麼 | 上限 |
 |---|---|---|---|
 | `astro-web-ci-build` | `self-hosted, astro-web-ci, astro-web-ci-build` | `ci-gate`（會跑 PR 的程式碼，不拿 secret） | 2 CPU、1.5 GB（含 swap）、shm 64 MB |
-| `astro-web-ci-gate` | `self-hosted, astro-web-ci, astro-web-ci-gate` | 部署、dry-run、通知、claude-gate 的審查與合併（不跑 repo 的程式碼） | 1 CPU、768 MB（含 swap）、shm 64 MB |
+| `astro-web-ci-gate` | `self-hosted, astro-web-ci, astro-web-ci-gate` | 部署、dry-run、通知、claude-gate 的審查與合併（不跑 repo 的程式碼） | 1 CPU、1 GB（含 swap）、shm 64 MB（實測 Claude 審查尖峰約 660 MiB，768 MB 太緊） |
 
 規則：
 - `runs-on` 一律寫滿三個標籤，不能只寫 self-hosted 這一個標籤，也不能改回 GitHub 代管的機器。檢查：`grep -n "runs-on" .github/workflows/*.yml` 每一行都要有 `astro-web-ci-build` 或 `astro-web-ci-gate`。
 - 容器不掛 Docker socket、不掛主機路徑，只有具名 volume `<容器名>-runner`；網路是自己的 `astro-web-ci-net`。entrypoint 擋掉主機與所有私有網段（含 Tailscale 的 100.64/10），之後以 uid 1100 的 `runner`、沒有 capability 跑。工作裡沒有 Docker、沒有 sudo。
 - 部署要從容器 SSH 到主機：`MACMINI_HOST` 若是區網或 Tailscale 位址會被防火牆擋，先用 `dry_run` 測。
 - 這是公開 repo：fork 的 PR 會帶自己的 workflow 檔，`runs-on` 與 job 的 `if` 都擋不住。防線是 repo 設定 Settings → Actions → General 的「fork PR 的 workflow 要核准」，建議設成所有外部貢獻者都要核准。
+- fork 的 PR 不要按「Approve and run」：那個核准是外人的 workflow 碰到 runner 之前唯一的防線。
+- 非 draft 的站長 PR 在 `ci-gate` 與 Claude 審查通過後會自動合併並部署正式站；想先自己看過的 PR 請開 draft。
 
 以下指令在 Mac mini 上以 kjyang 身分執行（不用 sudo），先 `export PATH=/Applications/Docker.app/Contents/Resources/bin:$PATH`。
 
@@ -132,7 +134,7 @@ docker build -t astro-web-ci-runner:latest ~/astro-web-ci-runner-build
 
 ```sh
 NAME=astro-web-ci-build CPUS=2 MEMORY=1536m SHM=64m NETWORK=astro-web-ci-net IMAGE=astro-web-ci-runner:latest bash ~/synk-ci-runner-build/run-container.sh
-NAME=astro-web-ci-gate CPUS=1 MEMORY=768m SHM=64m NETWORK=astro-web-ci-net IMAGE=astro-web-ci-runner:latest bash ~/synk-ci-runner-build/run-container.sh
+NAME=astro-web-ci-gate CPUS=1 MEMORY=1g SHM=64m NETWORK=astro-web-ci-net IMAGE=astro-web-ci-runner:latest bash ~/synk-ci-runner-build/run-container.sh
 ```
 
 註冊、重新註冊（在已登入 `gh` 的筆電上跑；註冊碼經 ssh 的 stdin 進容器，不會出現在畫面或指令列；`--replace` 會沿用同名的舊登記，所以重新註冊是同一行）：
