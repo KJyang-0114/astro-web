@@ -42,6 +42,18 @@ case "$1" in
     exit $had ;;
   run)
     image="${*: -1}"
+    # 記下這次 docker run 帶的資源上限，給 run_case 斷言
+    cpus=""; mem=""; swap=""
+    shift
+    while [ $# -gt 0 ]; do
+      case "$1" in
+        --cpus) cpus="$2"; shift ;;
+        --memory) mem="$2"; shift ;;
+        --memory-swap) swap="$2"; shift ;;
+      esac
+      shift
+    done
+    echo "cpus=$cpus memory=$mem swap=$swap" >> "$S/run_limits"
     key="$(printf '%s' "$image" | tr ':/' '__')"
     left=0; [ -f "$S/run_fail_$key" ] && left=$(cat "$S/run_fail_$key")
     if [ "$left" -gt 0 ]; then
@@ -117,13 +129,21 @@ run_case() {
   [ "${SETUP_PREVIOUS:-0}" = 1 ] && touch "$STATE/has_previous"
   [ -n "${SETUP_RUN_FAIL_NEW:-}" ] && echo "$SETUP_RUN_FAIL_NEW" > "$STATE/run_fail_kjyang-wbs-astro"
   : > "$STATE/trace"
+  : > "$STATE/run_limits"
 
   output="$(cd "$dir/site" && STATE="$STATE" REBUILD_PATH_PREFIX="$FAKE" REBUILD_HEALTH_TRIES=3 \
     bash "$SCRIPT" 2>&1)"
   code=$?
   got_trace="$(paste -sd ';' "$STATE/trace")"
 
-  if [ "$code" = "$want_code" ] && [ "$got_trace" = "$want_trace" ]; then
+  # 每次 docker run（含退回 previous、失敗重試）都要帶 --cpus 0.5 --memory 64m --memory-swap 64m
+  runs="$(grep -c '^run' "$STATE/trace")"
+  limited="$(grep -cx 'cpus=0.5 memory=64m swap=64m' "$STATE/run_limits")"
+  total="$(wc -l < "$STATE/run_limits" | tr -d ' ')"
+  limits_ok=1
+  if [ "$limited" != "$runs" ] || [ "$total" != "$runs" ]; then limits_ok=0; fi
+
+  if [ "$code" = "$want_code" ] && [ "$got_trace" = "$want_trace" ] && [ "$limits_ok" = 1 ]; then
     passed=$((passed + 1))
     echo "✓ $name（結束碼 $code）"
   else
@@ -132,6 +152,7 @@ run_case() {
     echo "    結束碼：$code，預期 $want_code"
     echo "    指令：$got_trace"
     echo "    預期：$want_trace"
+    [ "$limits_ok" = 1 ] || { echo "    docker run 資源上限不對（$limited/$runs 次正確）："; sed 's/^/      /' "$STATE/run_limits"; }
     printf '%s\n' "$output" | sed 's/^/    | /' | tail -n 15
   fi
   unset SETUP_CONTAINER SETUP_LATEST SETUP_PREVIOUS SETUP_RUN_FAIL_NEW FAKE_BUILD_FAIL FAKE_HEALTHY FAKE_PORT_FOREIGN
