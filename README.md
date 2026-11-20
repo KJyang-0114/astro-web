@@ -150,6 +150,8 @@ image 更新後重建容器（volume 留著，不用重新註冊）：`docker rm
 
 量測（2026-11-20，`astro-web-ci-build` 註冊前以 runner 身分試跑兩次，同時 synk-ci-build 也在跑工作）：`npm ci` 9–14 秒、`npm run check` 19–26 秒、`verify:runtime -- --nginx` 1 秒以內；匿名記憶體尖峰 532 MB（每 0.5 秒取樣），另有約 370 MB 頁快取，1 GB 時常頂到上限回收、沒有 OOM。註冊後 runner 本身還要約 150–300 MB，所以起始上限從 1 GB 調到 1.5 GB。CPU 吃滿 2 核。試跑期間正式站 `/healthz` 全部 200。
 
+第一次在 `main` 上正式部署（2026-11-20，合併 PR #2）：`ci-gate`（`astro-web-ci-build`）3 分 42 秒，`deploy`（`astro-web-ci-gate`）4 分 42 秒，整個 run 約 8 分 40 秒，`rebuild-docker.sh` 結束碼 0；GitHub 計費分鐘 0。
+
 ## 本機執行
 
 ```bash
